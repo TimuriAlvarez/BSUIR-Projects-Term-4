@@ -23,7 +23,7 @@ public class CalculatorController {
 	@GetMapping("/meters")
 	public String calculatorMeters(@RequestParam("value") double meters) {
 		// The length can't be negative
-		if (meters < 0) throw new NegativeParameterException("/meters", meters);
+		if (meters < 0) throw new RuntimeException();
 		LoggingController.infoLog(LoggingController.DefaultLogs.Meter2inch);
 		return "" + meters + " meter(s) is " + Calculator.meter2inch(meters) + " inch(es).";
 	}
@@ -35,7 +35,7 @@ public class CalculatorController {
 	@GetMapping("/inches")
 	public String calculatorInches(@RequestParam("value") double inches) {
 		// The length can't be negative
-		if (inches < 0) throw new NegativeParameterException("/inches", inches);
+		if (inches < 0) throw new RuntimeException();
 		LoggingController.infoLog(LoggingController.DefaultLogs.Inch2meter);
 		return "" + inches + " inch(s) is " + Calculator.inch2meter(inches) + " meter(s).";
 	}
