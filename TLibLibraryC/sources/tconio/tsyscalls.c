@@ -1,7 +1,4 @@
-#include "tsyscalls.h"
-#include "tconsole.h"
-
-#include <stdlib.h>
+#include "../tconio.h"
 
 void T_FUNCTION(syscall, pause)(void)
 {

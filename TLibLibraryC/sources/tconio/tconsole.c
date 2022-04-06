@@ -13,6 +13,10 @@
 
 #include "../tconio.h"
 #include "../tstring.h"
+#include "../tfilesystem.h"
+
+#define T_THROW_TINPUT_INIT T_THROW_EXCEPTION("TConio::TConsole", "TInput cannot be initialized as any of other streams", E_LOCATION, true, 0xCE00C1, )
+#define T_THROW_CLOSED_STREM T_THROW_EXCEPTION("TConio::TConsole", "Output stream is closed. Failed to print message", E_LOCATION, true, 0xCE00C0, )
 
 static TFlag is_initialized = false;
 
@@ -56,12 +60,7 @@ void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessag
 	if (t_input != nullptr && (T_CLASS(TMessage, equal)(t_input, t_output)
 		|| T_CLASS(TMessage, equal)(t_input, t_error)
 		|| T_CLASS(TMessage, equal)(t_input, t_log)))
-	{
-		//const TException exception = { t_input, E_LOCATION, kInputOutputFail, kInitializingInput, true };
-		//t_exception(exception);
-		exit(0xCE);
-		return;
-	}
+		T_THROW_TINPUT_INIT
 
 	TMessage file_paths[4] = { t_input, t_output, t_error, t_log }, file_modes[4] = { "r", "w", "w", "a" };
 	for (TConsoleId id = kInput; id <= kLog; ++id)
@@ -114,17 +113,8 @@ void T_CLASS(TConsole, unformat_stream)(const TConsoleId id)
 }
 void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... )
 {
-#ifndef T_DEBUG
-	if (id == kDebug) return;
-#endif
 	TFile const file = t_console.streams[id == kInput ? kOutput : id];
-	if (file == nullptr)
-	{
-		//const TException exception = { format, E_LOCATION, kInputOutputFail, kNullptrStream, false };
-		//t_exception(exception);
-		exit(0xCE);
-		return;
-	}
+	if (file == nullptr) T_THROW_CLOSED_STREM
 
 	T_CLASS(TConsole, format_stream)(id);
 	va_list ptr;
@@ -137,7 +127,7 @@ void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... )
 void T_CLASS(TConsole, echo)(const TFlag enabled)
 {
 #ifdef WIN32
-	HANDLE const h_std_in = GetStdHandle(STD_INPUT_HANDLE);  // NOLINT(misc-misplaced-const)
+	HANDLE const h_std_in = GetStdHandle(STD_INPUT_HANDLE);
 	DWORD mode;
 	GetConsoleMode(h_std_in, &mode);
 	if (enabled) mode |= ENABLE_ECHO_INPUT;
@@ -157,13 +147,7 @@ void T_CLASS(TConsole, scan)(TMessage format, ...)
 {
 	const TConsoleId id = kInput;
 	TFile const file = t_console.streams[id];
-	if (file == nullptr)
-	{
-		//const TException exception = { format, E_LOCATION, kInputOutputFail, kNullptrStream, false };
-		//t_exception(exception);
-		exit(0xCE);
-		return;
-	}
+	if (file == nullptr) T_THROW_CLOSED_STREM
 
 	T_CLASS(TConsole, format_stream)(id);
 	va_list ptr;
@@ -176,7 +160,6 @@ void T_CLASS(TConsole, clear)(void)
 {
 	int ch;
 	if (t_console.streams[kInput] == nullptr) return;
-	// TODO: add sync function
 	T_CLASS(TConsole, echo)(false);
 	while ((ch = fgetc(t_console.streams[kInput])) != '\n' && ch != EOF) {}
 	T_CLASS(TConsole, echo)(true);

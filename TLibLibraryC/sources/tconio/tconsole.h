@@ -10,8 +10,6 @@ typedef enum
 	kLog,
 	kDebug,
 } TConsoleId;
-void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessage t_error, TMessage t_log);
-
 typedef enum
 {
 	kBlack = '0',// \033[0; 30m
@@ -39,6 +37,8 @@ typedef enum
 	kHidden = '8', // Concealed
 	kCrossedOut = '9', // Strike
 } TAnsiSgr;
+
+void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessage t_error, TMessage t_log);
 void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, const TFlag fg_bright, const TAnsiColor foreground);
 void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... );
 void T_CLASS(TConsole, echo)(const TFlag enabled);

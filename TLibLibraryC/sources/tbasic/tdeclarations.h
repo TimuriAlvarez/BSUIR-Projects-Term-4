@@ -1,7 +1,6 @@
 #pragma once
 
 #define nullptr NULL
-#define E_LOCATION { __FILE__ , __LINE__ , __func__ }
 
 /*	The usage these definitions outside of safe zone is forbidden!
  *	Those who dare to risk will get plenty of errors and undefined behaviour situations.
@@ -36,7 +35,7 @@
 #define T_ELEMENT_POSTFIX Element
 
 #define FOR_EACH_ITERATOR_FROM(var_iterator, CONTAINER_TYPE, CONTAINER_DATA_TYPE, var_container)\
-    for (T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) var_iterator =\
-        T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_start)(var_container);\
-        var_iterator != T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_end)();\
-        var_iterator = T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_iterate)(var_container, var_iterator))
+	for (T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) var_iterator =\
+		T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_start)(var_container);\
+		var_iterator != T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_end)();\
+		var_iterator = T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_iterate)(var_container, var_iterator))

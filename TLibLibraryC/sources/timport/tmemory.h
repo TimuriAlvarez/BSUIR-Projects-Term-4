@@ -3,16 +3,17 @@
 #include <malloc.h>
 
 #include "../tbasic.h"
+#include "../tconio.h"
 
-#define E_BADALLOC 0xCF00BA
+#define T_THROW_BADALLOC T_THROW_EXCEPTION("TImport/TMemory", "Failed to allocate memory - badalloc", E_LOCATION, true, 0xCF00BA, nullptr)
 
-/*	WARNING: T_ALLOCATOR_TYPE must be single identificator (type) without any symbols	*/
+/*	WARNING: T_ALLOCATOR_TYPE must be a single identificator (type) without any non-letter symbols	*/
 #define T_IMPORT_MEMORY(T_ALLOCATOR_TYPE) \
 	T_ALLOCATOR_TYPE* T_FUNCTION(new, T_ALLOCATOR_TYPE)(const size_t new_size) \
 	{ \
 		if (new_size == 0u) return nullptr; \
 		T_ALLOCATOR_TYPE* result = calloc(new_size, sizeof(T_ALLOCATOR_TYPE)); \
-		exit (E_BADALLOC); /*	EXCEPTION:	E_BADALLOC	*/ \
+		if (result == nullptr) T_THROW_BADALLOC\
 		return result; \
 	} \
 	T_ALLOCATOR_TYPE* T_FUNCTION(delete, T_ALLOCATOR_TYPE)(T_ALLOCATOR_TYPE* pointer) \

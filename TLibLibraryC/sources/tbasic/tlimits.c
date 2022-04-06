@@ -1,6 +1,7 @@
 #pragma once
 
 #include <limits.h>
+#include <stdint.h>
 #include <float.h>
 
 #include "tlimits.h"
@@ -8,11 +9,11 @@
 #define LIMIT_IMPLEMENTATION(LIMIT_TYPE, LIMIT_MIN, LIMIT_MAX) \
 	LIMIT_TYPE T_FUNCTION(limit_min, LIMIT_TYPE)(void) \
 	{ \
-		return LIMIT_MIN;\
+		return LIMIT_MIN; \
 	} \
 	LIMIT_TYPE T_FUNCTION(limit_max, LIMIT_TYPE)(void) \
 	{ \
-		return LIMIT_MAX;\
+		return LIMIT_MAX; \
 	}
 
 LIMIT_IMPLEMENTATION(char, CHAR_MIN, CHAR_MAX)
