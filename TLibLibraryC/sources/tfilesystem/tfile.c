@@ -73,7 +73,7 @@ void T_CLASS(TFile, touch)(TMessage file_path)
 }
 void T_CLASS(TFile, copy)(TMessage old_file_path, TMessage new_file_path, const TFlag terminate)
 {
-	if (T_CLASS(TMessage, equal)(old_file_path, new_file_path)) T_THROW_SELF_COPYING
+	if (T_CLASS(TString, equal)(old_file_path, new_file_path)) T_THROW_SELF_COPYING
 	if (!T_CLASS(TFile, exists)(old_file_path)) T_THROW_EXISTANCE_EXPECTED()
 	if (T_CLASS(TFile, exists)(new_file_path)) T_THROW_EXISTANCE_UNEXPECTED()
 	T_CLASS(TFile, create)(new_file_path, terminate);

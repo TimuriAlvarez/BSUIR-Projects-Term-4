@@ -7,15 +7,15 @@
 static const size_t block_size = 16u;
 
 /*	Static Const part of TString (aka TMessage)	*/
-size_t T_CLASS(TMessage, size)(TMessage message)
+size_t T_CLASS(TString, size)(TMessage message)
 {
 	size_t counter = 0u;
 	if (message != nullptr) while (message[counter] != '\0') ++counter;
 	return counter;
 }
-TComparison T_CLASS(TMessage, compare)(TMessage message1, TMessage message2)
+TComparison T_CLASS(TString, compare)(TMessage message1, TMessage message2)
 {
-	const size_t size1 = T_CLASS(TMessage, size)(message1), size2 = T_CLASS(TMessage, size)(message2);
+	const size_t size1 = T_CLASS(TString, size)(message1), size2 = T_CLASS(TString, size)(message2);
 	for (size_t index = 0u; index < size1 && index < size2; ++index)
 	{
 		if (message1[index] > message2[index]) return kGreater;
@@ -25,17 +25,17 @@ TComparison T_CLASS(TMessage, compare)(TMessage message1, TMessage message2)
 	if (size1 < size2) return kLess;
 	return kEqual;
 }
-TFlag T_CLASS(TMessage, equal)(TMessage message1, TMessage message2)
+TFlag T_CLASS(TString, equal)(TMessage message1, TMessage message2)
 {
-	return T_CLASS(TMessage, compare)(message1, message2) == kEqual;
+	return T_CLASS(TString, compare)(message1, message2) == kEqual;
 }
-TFlag T_CLASS(TMessage, empty)(TMessage message)
+TFlag T_CLASS(TString, empty)(TMessage message)
 {
-	return T_CLASS(TMessage, size)(message) == 0u;
+	return T_CLASS(TString, size)(message) == 0u;
 }
-TFlag T_CLASS(TMessage, contains)(TMessage message, const char character)
+TFlag T_CLASS(TString, contains)(TMessage message, const char character)
 {
-	for (size_t index = 0u; index < T_CLASS(TMessage, size)(message); ++index)
+	for (size_t index = 0u; index < T_CLASS(TString, size)(message); ++index)
 		if (message[index] == character) return true;
 	return false;
 }
@@ -65,23 +65,23 @@ TString T_CLASS(TString, destructor)(TString const string)
 //	Memory manager
 TString T_CLASS(TString, resize)(TString const string)
 {
-	const size_t old_size = T_CLASS(TMessage, size)(string) + 1;
+	const size_t old_size = T_CLASS(TString, size)(string) + 1;
 	return T_FUNCTION(resize, char)(string, old_size, old_size + block_size);
 }
 
 TString T_CLASS(TString, append)(TString const string, const char character)
 {
 	TString result;
-	if (T_CLASS(TMessage, size)(string) % block_size == 0 || string == nullptr)
+	if (T_CLASS(TString, size)(string) % block_size == 0 || string == nullptr)
 		result = T_CLASS(TString, resize)(string);
 	else result = string;
-	result[T_CLASS(TMessage, size)(result)] = character;
+	result[T_CLASS(TString, size)(result)] = character;
 	return result;
 }
 TString T_CLASS(TString, multy_append)(TString const string, TMessage message)
 {
 	TString result = string;
-	for (size_t index = 0u; index < T_CLASS(TMessage, size)(message); ++index)
+	for (size_t index = 0u; index < T_CLASS(TString, size)(message); ++index)
 		result = T_CLASS(TString, append)(result, message[index]);
 	return result;
 }

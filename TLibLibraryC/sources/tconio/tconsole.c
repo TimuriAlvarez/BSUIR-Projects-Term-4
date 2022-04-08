@@ -59,16 +59,16 @@ void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessag
 		t_console.formats[id] = nullptr;
 	}
 
-	if (t_input != nullptr && (T_CLASS(TMessage, equal)(t_input, t_output)
-		|| T_CLASS(TMessage, equal)(t_input, t_error)
-		|| T_CLASS(TMessage, equal)(t_input, t_log)))
+	if (t_input != nullptr && (T_CLASS(TString, equal)(t_input, t_output)
+		|| T_CLASS(TString, equal)(t_input, t_error)
+		|| T_CLASS(TString, equal)(t_input, t_log)))
 		T_THROW_TINPUT_INIT
 
 	TMessage file_paths[4] = { t_input, t_output, t_error, t_log }, file_modes[4] = { "r", "w", "w", "a" };
 	for (TConsoleId id = kInput; id <= kLog; ++id)
 	{
 		if (id != kInput) T_CLASS(TFile, touch)(file_paths[id]);
-		if (id == kError && file_paths[kError] != nullptr && T_CLASS(TMessage, equal)(file_paths[kOutput], file_paths[kError]))
+		if (id == kError && file_paths[kError] != nullptr && T_CLASS(TString, equal)(file_paths[kOutput], file_paths[kError]))
 			t_console.streams[kError] = t_console.streams[kOutput];
 		else if (file_paths[id] != nullptr)
 			t_console.streams[id] = T_CLASS(TFile, open)(file_paths[id], file_modes[id], true);
@@ -101,7 +101,7 @@ void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, con
 
 	TString format = T_CLASS(TString, destructor)(t_console.formats[id]);
 	TMessage message0 = "\033[0;";
-	for (size_t i = 0u; i < T_CLASS(TMessage, size)(message0); ++i)
+	for (size_t i = 0u; i < T_CLASS(TString, size)(message0); ++i)
 		format = T_CLASS(TString, append)(format, message0[i]);
 	format = T_CLASS(TString, append)(format, (char)font);
 	format = T_CLASS(TString, append)(format, ';');
@@ -195,7 +195,7 @@ TString T_CLASS(TConsole, getline)(TMessage message, const TFlag can_be_empty)
 		while ((character = fgetc(t_console.streams[kInput])) != '\n' && character != EOF)
 			string = T_CLASS(TString, append)(string, (char)character);
 		T_CLASS(TConsole, unformat_stream)(kInput);
-	} while (can_be_empty == false && T_CLASS(TMessage, empty)(string));
+	} while (can_be_empty == false && T_CLASS(TString, empty)(string));
 	return string;
 }
 TFlag T_CLASS(TConsole, confirmation)(TMessage message)
@@ -208,8 +208,8 @@ TFlag T_CLASS(TConsole, confirmation)(TMessage message)
 	{
 		T_CLASS(TString, destructor)(string);
 		string = T_CLASS(TConsole, getline)(nullptr, true);
-		if (T_CLASS(TMessage, equal)(string, "Y") || T_CLASS(TMessage, equal)(string, "y")
-			|| T_CLASS(TMessage, equal)(string, "N") || T_CLASS(TMessage, equal)(string, "n"))
+		if (T_CLASS(TString, equal)(string, "Y") || T_CLASS(TString, equal)(string, "y")
+			|| T_CLASS(TString, equal)(string, "N") || T_CLASS(TString, equal)(string, "n"))
 			break;
 	}
 	const char c = string[0];
