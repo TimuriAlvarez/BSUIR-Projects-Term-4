@@ -1,0 +1,29 @@
+###
+
+GET http://localhost:8080/meters?value=100
+
+###
+
+GET http://localhost:8080/inches?value=100
+
+###
+
+GET http://localhost:8080/meters?value=100.001
+
+###
+
+GET http://localhost:8080/inches?value=100.001
+
+###
+
+GET http://localhost:8080/meters?value=-33.33
+
+###
+
+GET http://localhost:8080/inches?value=-33.33
+
+###
+
+GET http://localhost:8080/
+
+###
