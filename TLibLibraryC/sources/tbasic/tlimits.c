@@ -1,0 +1,40 @@
+#pragma once
+
+#include <limits.h>
+#include <stdint.h>
+#include <float.h>
+
+#include "tlimits.h"
+
+#define LIMIT_DEFINITION(LIMIT_TYPE, LIMIT_MIN, LIMIT_MAX) \
+	LIMIT_TYPE T_FUNCTION(limit_min, LIMIT_TYPE)(void) \
+	{ \
+		return LIMIT_MIN; \
+	} \
+	LIMIT_TYPE T_FUNCTION(limit_max, LIMIT_TYPE)(void) \
+	{ \
+		return LIMIT_MAX; \
+	}
+
+LIMIT_DEFINITION(char, CHAR_MIN, CHAR_MAX)
+LIMIT_DEFINITION(uchar, 0u, UCHAR_MAX)
+
+LIMIT_DEFINITION(int, INT_MIN, INT_MAX)
+LIMIT_DEFINITION(uint, 0u, UINT_MAX)
+LIMIT_DEFINITION(hint, SHRT_MIN, SHRT_MAX)
+LIMIT_DEFINITION(uhint, 0u, USHRT_MAX)
+
+LIMIT_DEFINITION(lint, LONG_MIN, LONG_MAX)
+LIMIT_DEFINITION(ulint, 0ul, ULONG_MAX)
+LIMIT_DEFINITION(llint, LLONG_MIN, LLONG_MAX)
+LIMIT_DEFINITION(ullint, 0ull, ULLONG_MAX)
+
+LIMIT_DEFINITION(float, FLT_MIN, FLT_MAX)
+LIMIT_DEFINITION(double, DBL_MIN, DBL_MAX)
+LIMIT_DEFINITION(ldouble, LDBL_MIN, LDBL_MAX)
+
+LIMIT_DEFINITION(size_t, 0ul, SIZE_MAX)
+LIMIT_DEFINITION(TFlag, false, true)
+LIMIT_DEFINITION(bool, false, true)
+
+#undef LIMIT_DEFINITION
