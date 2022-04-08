@@ -1,4 +1,4 @@
-#include "../tlib.h"
+#include "tlib.h"
 
 #ifndef CONTAINER_DATA_TYPE
 #define CONTAINER_DATA_TYPE int

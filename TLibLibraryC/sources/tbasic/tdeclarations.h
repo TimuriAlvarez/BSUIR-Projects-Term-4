@@ -23,7 +23,7 @@
 #define T_CONTAINER(T_CONTAINER_NAME, T_DATA_TYPE, T_CONTAINER_METHOD) T_DECLARE(T_CONTAINER_NAME, T_DATA_TYPE, T_CONTAINER_METHOD)
 #define T_CONVERTER(T_OLD_TYPE, T_NEW_TYPE) T_DECLARE(T_OLD_TYPE, to, T_NEW_TYPE)
 #define T_ARRAY_SIZE(arr) (size_t)(sizeof(arr) / sizeof((arr)[0]))
-#define T_POINTER(T_TYPE) CAT(T_TYPE, p)
+#define T_POINTER(T_TYPE) T_CAT(T_TYPE, p)
 
 /*	These definitions are actually literals, used for identifier generation.
  *	Can be supplemented with other ones if it is necessary.
@@ -32,6 +32,7 @@
 #define T_CONTAINER_POSTFIX Container
 #define T_ALLOCATOR_POSTFIX Allocator
 #define T_ITERATOR_POSTFIX Iterator
+#define T_IPRIVATE_POSTFIX PrivateIterator
 #define T_ELEMENT_POSTFIX Element
 
 #define FOR_EACH_ITERATOR_FROM(var_iterator, CONTAINER_TYPE, CONTAINER_DATA_TYPE, var_container)\
