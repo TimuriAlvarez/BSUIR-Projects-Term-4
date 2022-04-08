@@ -1,4 +1,4 @@
-#include "../tlib.h"
+#include "../../TLibLibraryC/tlib.h"
 
 #define CONTAINER_TYPE TDeQueue
 //#define ENTRANCE_POINT top	/*	or just:	entrance_point	*/

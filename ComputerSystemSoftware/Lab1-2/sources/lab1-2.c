@@ -2,10 +2,12 @@
 
 typedef struct dirent DirEnt;
 #define CONTAINER_DATA_POINTER DirEnt
-#include "../../../TLibLibraryC/timport/tlist.h"
+#include "../../../TContainersC/timport/tlist.h"
 
 #include <stdio.h>
 #include <string.h>
+
+extern struct DirWalkOptions flags;
 
 void special_sort(const struct T_CONTAINER(TList, DirEnt_p, T_CONTAINER_POSTFIX)* const list)
 {

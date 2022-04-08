@@ -1,12 +1,14 @@
-#include "lab1-2.c"  // NOLINT(bugprone-suspicious-include)
+#include "lab1-2.h"
+
 #include <locale.h>
+
+struct DirWalkOptions flags = { false, false, false, false };
 
 int main(const int argc, TMessage* const argv)
 {
-#ifdef LC_COLLATE
-	setlocale(LC_COLLATE, "ru_RU");  // NOLINT(concurrency-mt-unsafe)
-#endif
+	setlocale(LC_COLLATE, "ru_RU");
 	const char* directory = DEFAULT_DIRECTORY;
+
 	for (int index = 1; index < argc; ++index)
 	{
 		if (argv[index][0] == '-')
@@ -54,7 +56,7 @@ int main(const int argc, TMessage* const argv)
 		}
 	}
 	if (!flags.links && !flags.dirs && !flags.files) flags.links = flags.dirs = flags.files = true;		//	Print all
-	
+
 	if (flags.dirs) printf("%s\n", directory);
 	return dir_walk(directory);
 }

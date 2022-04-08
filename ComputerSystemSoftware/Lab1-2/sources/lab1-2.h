@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../../../TLibLibraryC/tlib.h"
+#include "../../../TLinuxInterfaceC/tlinux.h"
 
-#include "../../../TLibLibraryC/include/tlinux.h"
 #ifdef __linux__
 #include <dirent.h>
 #endif
@@ -20,4 +20,4 @@ struct DirWalkOptions
 	TFlag dirs;
 	TFlag files;
 	TFlag sort;
-} flags = { false, false, false, false };
+};
