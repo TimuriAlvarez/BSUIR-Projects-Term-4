@@ -26,6 +26,8 @@ static struct TConsole
 	TString formats[5];
 } t_console;
 
+static TFlag t_debug = false;
+
 TFile T_CLASS(TConsole, defaultof)(const TConsoleId id)
 {
 	const TFile defaults[] = { stdin, stdout, stderr, stdout, stdout };
@@ -123,6 +125,8 @@ void T_CLASS(TConsole, unformat_stream)(const TConsoleId id)
 }
 void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... )
 {
+	if (id == kDebug && t_debug == false) return;
+
 	TFile const file = t_console.streams[id == kInput ? kOutput : id];
 	if (file == nullptr) T_THROW_CLOSED_STREM
 
@@ -151,6 +155,11 @@ void T_CLASS(TConsole, echo)(const TFlag enabled)
 	else tty.c_lflag &= ~ECHO;
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 #endif
+}
+
+void T_CLASS(TConsole, debug)(const TFlag enabled)
+{
+	t_debug = enabled;
 }
 
 void T_CLASS(TConsole, scan)(TMessage format, ...)

@@ -43,6 +43,7 @@ void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessag
 void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, const TFlag fg_bright, const TAnsiColor foreground);
 void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... );
 void T_CLASS(TConsole, echo)(const TFlag enabled);
+void T_CLASS(TConsole, debug)(const TFlag enabled);
 void T_CLASS(TConsole, scan)(TMessage format, ...);
 void T_CLASS(TConsole, clear)(void);
 TString T_CLASS(TConsole, getline)(TMessage message, const TFlag can_be_empty);
