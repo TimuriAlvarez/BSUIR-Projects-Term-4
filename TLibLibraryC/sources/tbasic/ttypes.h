@@ -13,6 +13,11 @@ typedef enum
 	kEqual,
 	kGreater
 } TComparison;
+typedef enum
+{
+	kNormalIteration,
+	kRevercedIteration
+} TIterationDirection;
 
 typedef char* TString;
 typedef const char* const TMessage;

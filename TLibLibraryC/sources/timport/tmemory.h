@@ -2,13 +2,18 @@
 
 #include <malloc.h>
 
-#include "../tbasic.h"
 #include "../tconio.h"
 
 #define T_THROW_BADALLOC T_THROW_EXCEPTION("TImport/TMemory", "Failed to allocate memory - badalloc", E_LOCATION, true, 0xCF00BA, nullptr)
 
-/*	WARNING: T_ALLOCATOR_TYPE must be a single identificator (type) without any non-letter symbols	*/
-#define T_IMPORT_MEMORY(T_ALLOCATOR_TYPE) \
+/*	WARNING: T_ALLOCATOR_TYPE must be a single identificator (existing type) without any non-letter characters	*/
+
+#define T_IMPORT_MEMORY_DECLARATION(T_ALLOCATOR_TYPE) \
+	T_ALLOCATOR_TYPE* T_FUNCTION(new, T_ALLOCATOR_TYPE)(const size_t new_size); \
+	T_ALLOCATOR_TYPE* T_FUNCTION(delete, T_ALLOCATOR_TYPE)(T_ALLOCATOR_TYPE* pointer); \
+	T_ALLOCATOR_TYPE* T_FUNCTION(resize, T_ALLOCATOR_TYPE)(T_ALLOCATOR_TYPE* pointer, const size_t old_size, const size_t new_size);
+
+#define T_IMPORT_MEMORY_DEFINITION(T_ALLOCATOR_TYPE) \
 	T_ALLOCATOR_TYPE* T_FUNCTION(new, T_ALLOCATOR_TYPE)(const size_t new_size) \
 	{ \
 		if (new_size == 0u) return nullptr; \
@@ -21,8 +26,7 @@
 		if (pointer != nullptr) free(pointer); \
 		return nullptr; \
 	} \
-	T_ALLOCATOR_TYPE* T_FUNCTION(resize, T_ALLOCATOR_TYPE)(T_ALLOCATOR_TYPE* pointer, const size_t old_size, \
-							  const size_t new_size) \
+	T_ALLOCATOR_TYPE* T_FUNCTION(resize, T_ALLOCATOR_TYPE)(T_ALLOCATOR_TYPE* pointer, const size_t old_size, const size_t new_size) \
 	{ \
 		T_ALLOCATOR_TYPE* result = T_FUNCTION(new, T_ALLOCATOR_TYPE)(new_size); \
 		const size_t temp_size = (old_size < new_size ? old_size : new_size); \

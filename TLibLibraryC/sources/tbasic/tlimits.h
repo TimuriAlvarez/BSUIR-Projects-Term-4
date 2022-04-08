@@ -1,11 +1,10 @@
 #pragma once
 
-#include "ttypes.h"
-#include "tdeclarations.h"
+#include "../tbasic.h"
 
 #define LIMIT_DECLARATION(LIMIT_TYPE) \
-    LIMIT_TYPE T_FUNCTION(limit_min, LIMIT_TYPE)(void); \
-    LIMIT_TYPE T_FUNCTION(limit_max, LIMIT_TYPE)(void);
+	LIMIT_TYPE T_FUNCTION(limit_min, LIMIT_TYPE)(void); \
+	LIMIT_TYPE T_FUNCTION(limit_max, LIMIT_TYPE)(void);
 
 LIMIT_DECLARATION(char)
 LIMIT_DECLARATION(uchar)

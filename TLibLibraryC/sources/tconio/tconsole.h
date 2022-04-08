@@ -38,6 +38,7 @@ typedef enum
 	kCrossedOut = '9', // Strike
 } TAnsiSgr;
 
+void T_CLASS(TConsole, default_constructor)(void);
 void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessage t_error, TMessage t_log);
 void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, const TFlag fg_bright, const TAnsiColor foreground);
 void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... );

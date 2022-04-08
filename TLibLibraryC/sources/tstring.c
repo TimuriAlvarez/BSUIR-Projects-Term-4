@@ -1,7 +1,7 @@
 #include <string.h>
 
 #include "tstring.h"
-#include "timport/tmemory.h"
+#include "timport.h"
 
 //	Size of allocation block (number of characters to be allocated/reallocated int the string)
 static const size_t block_size = 16u;
@@ -42,8 +42,8 @@ TFlag T_CLASS(TMessage, contains)(TMessage message, const char character)
 
 /*	Dynamic Mutable part of TString (TString itself)	*/
 
-T_IMPORT_MEMORY(char)
-T_IMPORT_MEMORY(TString)
+T_IMPORT_MEMORY_DEFINITION(char)
+T_IMPORT_MEMORY_DEFINITION(TString)
 
 TString T_CLASS(TString, default_constructor)(void)
 {

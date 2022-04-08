@@ -1,14 +1,16 @@
 #pragma once
 
 #include "../tconio.h"
-#include "../tstring.h"
 
 #define T_IMPORT_MENU_DECLARATION(T_MENU_PARAMETERS) \
 	typedef void (*T_CONTAINER(TMenu, T_MENU_PARAMETERS, Action))(T_MENU_PARAMETERS*); \
 	void T_CONTAINER(TMenu, T_MENU_PARAMETERS, menu_bar)(T_MENU_PARAMETERS* parameters); \
 	void T_CONTAINER(TMenu, T_MENU_PARAMETERS, menu)(TMessage* const options, const T_CONTAINER(TMenu, T_MENU_PARAMETERS, Action)* const actions, T_MENU_PARAMETERS* const parameters);
 
-#define T_IMPORT_MENU_IMPLEMENTATION(T_MENU_PARAMETERS) \
+// Attention: T_CONTAINER(TMenu, T_MENU_PARAMETERS, menu_bar)(T_MENU_PARAMETERS* parameters);
+// Must be defined mannually!
+
+#define T_IMPORT_MENU_DEFINITION(T_MENU_PARAMETERS) \
 	void T_CONTAINER(TMenu, T_MENU_PARAMETERS, menu)(TMessage* const options, const T_CONTAINER(TMenu, T_MENU_PARAMETERS, Action)* const actions, T_MENU_PARAMETERS* const parameters) \
 	{ \
 		while (true) \

@@ -72,6 +72,16 @@ void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessag
 			t_console.streams[id] = T_CLASS(TFile, open)(file_paths[id], file_modes[id], true);
 	}
 }
+void T_CLASS(TConsole, default_constructor)(void)
+{
+	T_CLASS(TConsole, constructor)(nullptr, nullptr, nullptr, nullptr);
+	T_CLASS(TConsole, set_format)(kInput, kNormal, true, kYellow);
+	T_CLASS(TConsole, set_format)(kOutput, kNormal, true, kGreen);
+	T_CLASS(TConsole, set_format)(kError, kNormal, true, kRed);
+	T_CLASS(TConsole, set_format)(kLog, kNormal, true, kCyan);
+	T_CLASS(TConsole, set_format)(kDebug, kNormal, true, kPurple);
+}
+
 
 void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, const TFlag fg_bright, const TAnsiColor foreground)
 {
