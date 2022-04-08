@@ -35,6 +35,6 @@ LIMIT_DEFINITION(ldouble, LDBL_MIN, LDBL_MAX)
 
 LIMIT_DEFINITION(size_t, 0ul, SIZE_MAX)
 LIMIT_DEFINITION(TFlag, false, true)
-LIMIT_DEFINITION(_Bool, false, true)
+LIMIT_DEFINITION(bool, false, true)
 
 #undef LIMIT_DEFINITION
