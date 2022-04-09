@@ -5,7 +5,7 @@
 
 // Interface for DOS functions for MSVS/Qt/VSCode/etc.
 #ifdef _WIN64
-#include "dos_interface.h"
+#include "../../dos.h"
 #endif
 
 #define COLORS 7 // amount of counts for colors
