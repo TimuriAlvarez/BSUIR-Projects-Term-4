@@ -1,5 +1,11 @@
 #pragma once
 
+#include <fcntl.h>
+
+#ifndef O_NDELAY
+#define O_NDELAY 0
+#endif
+
 #include "sys/types.h"
 
 /*fcntl.h(0P)				 POSIX Programmer's Manual				fcntl.h(0P)
@@ -38,7 +44,7 @@ DESCRIPTION			top
 
 		#define F_GETFL	  //Get file status flags and file access modes.
 
-		#define F_SETFL	  //Set file status flags.
+		#define F_SETFL 0 //Set file status flags.
 
 		#define F_GETLK	  //Get record locking information.
 
@@ -79,20 +85,20 @@ DESCRIPTION			top
 		shall be suitable for use in #if preprocessing directives.*/
 
 		#define O_CLOEXEC	//The FD_CLOEXEC flag associated with the new
-					//descriptor shall be set to close the file descriptor
-					//upon execution of an exec family function.
+							//descriptor shall be set to close the file descriptor
+							//upon execution of an exec family function.
 
-		#define O_CREAT	    //Create file if it does not exist.
+		//O_CREAT			//Create file if it does not exist.
 
 		#define O_DIRECTORY //Fail if file is a non-directory file.
 
-		#define O_EXCL		//Exclusive use flag.
+		//#define O_EXCL	//Exclusive use flag.
 
-		#define O_NOCTTY	//Do not assign controlling terminal.
+		#define O_NOCTTY 0	//Do not assign controlling terminal.
 
 		#define O_NOFOLLOW  //Do not follow symbolic links.
 
-		#define O_TRUNC	    //Truncate flag.
+		//#define O_TRUNC	//Truncate flag.
 
 		#define O_TTY_INIT  //Set the termios structure terminal parameters to a
 							//state that provides conforming behavior; see Section
@@ -106,7 +112,7 @@ DESCRIPTION			top
 		fcntl().  The values shall be suitable for use in #if
 		preprocessing directives.*/
 
-		#define O_APPEND	 //Set append mode.
+		//#define O_APPEND	 //Set append mode.
 
 		#define O_DSYNC	     //Write according to synchronized I/O data integrity
 							 //completion.
@@ -122,7 +128,7 @@ DESCRIPTION			top
 		for use as the mask for file access modes. The value shall be
 		suitable for use in #if preprocessing directives.*/
 
-		#define O_ACCMODE	//Mask for file access modes.
+		//#define O_ACCMODE	//Mask for file access modes.
 
 /*		 The <fcntl.h> header shall define the following symbolic
 		constants for use as the file access modes for open(), openat(),
@@ -134,15 +140,15 @@ DESCRIPTION			top
 							//result is unspecified if this flag is applied to a
 							//directory.
 
-		#define O_RDONLY	//Open for reading only.
+		//#define O_RDONLY	//Open for reading only.
 
-		#define O_RDWR		//Open for reading and writing.
+		//#define O_RDWR		//Open for reading and writing.
 
 		#define O_SEARCH	//Open directory for search only. The result is
 							//unspecified if this flag is applied to a non-
 							//directory file.
 
-		#define O_WRONLY	//Open for writing only.
+		//#define O_WRONLY	//Open for writing only.
 
 /*		 The <fcntl.h> header shall define the symbolic constants for file
 		modes for use as values of mode_t as described in <sys/stat.h>.
@@ -180,43 +186,46 @@ DESCRIPTION			top
 					//Remove directory instead of file.
 
 /*		 The <fcntl.h> header shall define the following symbolic
-		constants for the advice argument used by posix_fadvise():
+		constants for the advice argument used by posix_fadvise():*/
 
-		POSIX_FADV_DONTNEED
-			 The application expects that it will not access the
-			 specified data in the near future.
+		#define POSIX_FADV_DONTNEED
+			 /*The application expects that it will not access the
+			 specified data in the near future.*/
 
-		POSIX_FADV_NOREUSE
-			 The application expects to access the specified data once
-			 and then not reuse it thereafter.
+		#define POSIX_FADV_NOREUSE
+			 /*The application expects to access the specified data once
+			 and then not reuse it thereafter.*/
 
-		POSIX_FADV_NORMAL
-			 The application has no advice to give on its behavior with
+		#define POSIX_FADV_NORMAL
+			 /*The application has no advice to give on its behavior with
 			 respect to the specified data. It is the default
-			 characteristic if no advice is given for an open file.
+			 characteristic if no advice is given for an open file.*/
 
-		POSIX_FADV_RANDOM
-			 The application expects to access the specified data in a
-			 random order.
+		#define POSIX_FADV_RANDOM
+			 /*The application expects to access the specified data in a
+			 random order.*/
 
-		POSIX_FADV_SEQUENTIAL
-			 The application expects to access the specified data
-			 sequentially from lower offsets to higher offsets.
+		#define POSIX_FADV_SEQUENTIAL
+			 /*The application expects to access the specified data
+			 sequentially from lower offsets to higher offsets.*/
 
-		POSIX_FADV_WILLNEED
-			 The application expects to access the specified data in the
+		#define POSIX_FADV_WILLNEED
+			 /*The application expects to access the specified data in the
 			 near future.
 
 		The <fcntl.h> header shall define the flock structure describing
-		a file lock. It shall include the following members:
+		a file lock. It shall include the following members:*/
 
-			short  l_type	Type of lock; F_RDLCK, F_WRLCK, F_UNLCK.
-			short  l_whence Flag for starting offset.
-			off_t  l_start  Relative offset in bytes.
-			off_t  l_len	 Size; if 0 then until EOF.
-			pid_t  l_pid	 Process ID of the process holding the lock; returned with F_GETLK.
+struct flock
+{
+			short  l_type;	 //Type of lock; F_RDLCK, F_WRLCK, F_UNLCK.
+			short  l_whence; //Flag for starting offset.
+			off_t  l_start;  //Relative offset in bytes.
+			off_t  l_len;	 //Size; if 0 then until EOF.
+			pid_t  l_pid;	 //Process ID of the process holding the lock; returned with F_GETLK.
+};
 
-		The <fcntl.h> header shall define the mode_t, off_t, and pid_t
+/*		The <fcntl.h> header shall define the mode_t, off_t, and pid_t
 		types as described in <sys/types.h>.
 
 		The following shall be declared as functions and may also be

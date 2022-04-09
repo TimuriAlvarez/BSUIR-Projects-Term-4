@@ -1,5 +1,7 @@
 #pragma once
 
+#include <time.h>
+
 #include "sys/types.h"
 #include "signal.h"
 

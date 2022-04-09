@@ -1,5 +1,7 @@
 #pragma once
 
+#include <signal.h>
+
 #include "sys/types.h"
 
 /*signal.h(0P)				POSIX Programmer's Manual			  signal.h(0P)
@@ -33,13 +35,13 @@ DESCRIPTION			top
 		return value of, the signal() function, and whose values shall
 		compare unequal to the address of any declarable function.*/
 
-#define SIG_DFL		// Request for default signal handling.
+//#define SIG_DFL		// Request for default signal handling.
 
-#define SIG_ERR		// Return value from signal() in case of error.
+//#define SIG_ERR		// Return value from signal() in case of error.
 
 #define SIG_HOLD	//Request that signal be held.
 
-#define SIG_IGN		// Request that signal be ignored.
+//#define SIG_IGN		// Request that signal be ignored.
 
 /*		The <signal.h> header shall define the pthread_t, size_t, and
 		uid_t types as described in <sys/types.h>.
@@ -192,6 +194,7 @@ struct sigevent
 
 //	Will be described lately......
 
+//			SIGNAL IMPLEMENTATION!
 //	 Signal			 x86/ARM     Alpha/   MIPS   PARISC   Notes
 //				   most others   SPARC
 //─────────────────────────────────────────────────────────────────
@@ -200,7 +203,7 @@ struct sigevent
 #define SIGQUIT          3     //      3       3       3
 #define SIGILL           4     //      4       4       4
 #define SIGTRAP          5     //      5       5       5
-#define SIGABRT          6     //      6       6       6
+//#define SIGABRT          6     //      6       6       6
 #define SIGIOT           6     //      6       6       6
 #define SIGBUS           7     //     10      10      10
 //#define SIGEMT         -     //      7       7       -
@@ -446,7 +449,7 @@ typedef struct ucontext_t
 			void	psiginfo(const siginfo_t *, const char *);
 			void	psignal(int, const char *);
 			int	 pthread_kill(pthread_t, int);
-			int	 pthread_sigmask(int, const sigset_t *restrict, sigset_t *restrict_2);
+			//int	 pthread_sigmask(int, const sigset_t *restrict, sigset_t *restrict_2);
 			int	 raise(int);
 			int	 sigaction(int, const struct sigaction *restrict, struct sigaction *restrict_2);
 			int	 sigaddset(sigset_t *, int);

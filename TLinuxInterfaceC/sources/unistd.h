@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unistd.h>
+
 #include "sys/types.h"
 
 /*unistd.h(0P)				POSIX Programmer's Manual			  unistd.h(0P)
@@ -934,9 +936,9 @@ DESCRIPTION			top
 			int			 execl(const char *, const char *, ...);
 			int			 execle(const char *, const char *, ...);
 			int			 execlp(const char *, const char *, ...);
-			int			 execv(const char *, char *const []);
-			int			 execve(const char *, char *const [], char *const []);
-			int			 execvp(const char *, char *const []);
+			//int			 execv(const char *, char *const []);
+			//int			 execve(const char *, char *const [], char *const []);
+			//int			 execvp(const char *, char *const []);
 			int			 faccessat(int, const char *, int, int);
 			int			 fchdir(int);
 			int			 fchown(int, uid_t, gid_t);
@@ -953,13 +955,13 @@ DESCRIPTION			top
 			gid_t		  getgid(void);
 			int			 getgroups(int, gid_t []);
 			long			gethostid(void);
-			int			 gethostname(char *, size_t);
+			//int			 gethostname(char *, size_t);
 			char		  *getlogin(void);
 			int			 getlogin_r(char *, size_t);
 			int			 getopt(int, char * const [], const char *);
 			pid_t		  getpgid(pid_t);
 			pid_t		  getpgrp(void);
-			pid_t		  getpid(void);
+			//pid_t		  getpid(void);
 			pid_t		  getppid(void);
 			pid_t		  getsid(pid_t);
 			uid_t		  getuid(void);

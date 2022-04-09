@@ -4,6 +4,7 @@
 #include "sources/sys.h"
 #include "sources/dirent.h"
 #include "sources/fcntl.h"
+#include "sources/semaphore.h"
 #include "sources/signal.h"
 #include "sources/termios.h"
 #include "sources/time.h"

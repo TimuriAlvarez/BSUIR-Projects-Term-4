@@ -2,6 +2,8 @@
 
 #include <sys/types.h>
 
+#include "time.h"
+
 /*sys_types.h(0P)			POSIX Programmer's Manual		  sys_types.h(0P)
 
 PROLOG			top
@@ -28,7 +30,7 @@ DESCRIPTION			top
 
 		typedef int blksize_t;		// Used for block sizes.
 
-		typedef int clock_t;			//Used for system times in clock ticks or
+		//typedef long clock_t;			//Used for system times in clock ticks or
 						//CLOCKS_PER_SEC; see <time.h>.
 
 		typedef int clockid_t;		// Used for clock ID type in the clock and timer
@@ -151,7 +153,7 @@ DESCRIPTION			top
 
 		//typedef int  blksize_t, pid_t;//, ssize_t; //shall be signed integer types.
 
-		typedef int  clock_t; //shall be an integer or real-floating type.  time_t
+		//typedef int  clock_t; //shall be an integer or real-floating type.  time_t
 			//shall be an integer type.
 
 /*		The type ssize_t shall be capable of storing values at least in

@@ -9,10 +9,11 @@ void handle_exception(const TException exception)
 	T_CLASS(TConsole, print)(kError, "\t\t\tLine:\t\t%zu,\n", exception.code_location.line);
 	T_CLASS(TConsole, print)(kError, "\t\t\tFunction:\t%s.\n", exception.code_location.function);
 	T_CLASS(TConsole, print)(kError, "Exception status:\t%s critical.\n", exception.terminate ? "Is" : "Isn't");
-	T_CLASS(TConsole, print)(kError, "The exception code:\t0x%X\t(%d).\n\n", exception.code, exception.code);
+	T_CLASS(TConsole, print)(kError, "The exception code:\t%d\t(0x%X).\n\n", exception.code, exception.code);
 	if (exception.terminate)
 	{
 		T_CLASS(TConsole, print)(kError, "Execution was terminated due to catching the critical exception.\n\n");
+		T_CLASS(TConsole, print)(kError, "[process exited with code %d (0x%X)]\n\n", exception.code, exception.code);
 		exit(exception.code);
 	}
 }

@@ -9,7 +9,9 @@ SOURCES += \
 HEADERS += \
 		*.h \
 		sources/*.h \
+		sources/semaphore.h \
 		sources/sys.h \
 		sources/sys/*.h \
 		sources/sys/ipc.h \
-		sources/sys/shm.h
+		sources/sys/shm.h \
+		sources/sys/stat.h
