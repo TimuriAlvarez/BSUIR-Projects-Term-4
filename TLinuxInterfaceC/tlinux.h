@@ -1,8 +1,7 @@
 #pragma once
 
 #ifndef __linux__
-#include "sources/sys/types.h"
-#include "sources/sys/wait.h"
+#include "sources/sys.h"
 #include "sources/dirent.h"
 #include "sources/fcntl.h"
 #include "sources/signal.h"

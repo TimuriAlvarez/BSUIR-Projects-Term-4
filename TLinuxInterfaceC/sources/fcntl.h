@@ -2,9 +2,6 @@
 
 #include "sys/types.h"
 
-#define T_TEMP 0x00		// For temp definition
-#define O_NDELAY T_TEMP	// Dunno where is it from, so I'll just leave it here, ok?
-
 /*fcntl.h(0P)				 POSIX Programmer's Manual				fcntl.h(0P)
 
 PROLOG			top
@@ -41,7 +38,7 @@ DESCRIPTION			top
 
 		#define F_GETFL	  //Get file status flags and file access modes.
 
-		#define F_SETFL T_TEMP	  //Set file status flags.
+		#define F_SETFL	  //Set file status flags.
 
 		#define F_GETLK	  //Get record locking information.
 
@@ -85,21 +82,21 @@ DESCRIPTION			top
 					//descriptor shall be set to close the file descriptor
 					//upon execution of an exec family function.
 
-		#define O_CREAT	  //Create file if it does not exist.
+		#define O_CREAT	    //Create file if it does not exist.
 
 		#define O_DIRECTORY //Fail if file is a non-directory file.
 
 		#define O_EXCL		//Exclusive use flag.
 
-		#define O_NOCTTY T_TEMP	 //Do not assign controlling terminal.
+		#define O_NOCTTY	//Do not assign controlling terminal.
 
 		#define O_NOFOLLOW  //Do not follow symbolic links.
 
-		#define O_TRUNC	  //Truncate flag.
+		#define O_TRUNC	    //Truncate flag.
 
 		#define O_TTY_INIT  //Set the termios structure terminal parameters to a
-					//state that provides conforming behavior; see Section
-					//11.2, Parameters that Can be Set.
+							//state that provides conforming behavior; see Section
+							//11.2, Parameters that Can be Set.
 
 /*		 The O_TTY_INIT flag can have the value zero and in this case it
 		need not be bitwise-distinct from the other flags.
@@ -111,15 +108,15 @@ DESCRIPTION			top
 
 		#define O_APPEND	 //Set append mode.
 
-		#define O_DSYNC	  //Write according to synchronized I/O data integrity
-					//completion.
+		#define O_DSYNC	     //Write according to synchronized I/O data integrity
+							 //completion.
 
 		#define O_NONBLOCK  //Non-blocking mode.
 
-		#define O_RSYNC	  //Synchronized read I/O operations.
+		#define O_RSYNC	    //Synchronized read I/O operations.
 
 		#define O_SYNC		//Write according to synchronized I/O file integrity
-					//completion.
+							//completion.
 
 /*		 The <fcntl.h> header shall define the following symbolic constant
 		for use as the mask for file access modes. The value shall be
@@ -134,18 +131,18 @@ DESCRIPTION			top
 		use in #if preprocessing directives.*/
 
 		#define O_EXEC		//Open for execute only (non-directory files). The
-					//result is unspecified if this flag is applied to a
-					//directory.
+							//result is unspecified if this flag is applied to a
+							//directory.
 
-		#define O_RDONLY	 //Open for reading only.
+		#define O_RDONLY	//Open for reading only.
 
-		#define O_RDWR T_TEMP		//Open for reading and writing.
+		#define O_RDWR		//Open for reading and writing.
 
-		#define O_SEARCH	 //Open directory for search only. The result is
-					//unspecified if this flag is applied to a non-
-					//directory file.
+		#define O_SEARCH	//Open directory for search only. The result is
+							//unspecified if this flag is applied to a non-
+							//directory file.
 
-		#define O_WRONLY	 //Open for writing only.
+		#define O_WRONLY	//Open for writing only.
 
 /*		 The <fcntl.h> header shall define the symbolic constants for file
 		modes for use as values of mode_t as described in <sys/stat.h>.
@@ -155,8 +152,8 @@ DESCRIPTION			top
 		*at() functions which take a directory file descriptor as a
 		parameter:*/
 
-		#define AT_FDCWD	 //Use the current working directory to determine the
-					//target of relative file paths.
+		#define AT_FDCWD	//Use the current working directory to determine the
+							//target of relative file paths.
 
 /*		 The <fcntl.h> header shall define the following symbolic constant
 		as a value for the flag used by faccessat():*/

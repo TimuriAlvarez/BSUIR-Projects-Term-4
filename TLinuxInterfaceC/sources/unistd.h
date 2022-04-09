@@ -976,8 +976,8 @@ DESCRIPTION			top
 			ssize_t		pread(int, void *, size_t, off_t);
 			ssize_t		pwrite(int, const void *, size_t, off_t);
 			//ssize_t		read(int, void *, size_t);
-			ssize_t		readlink(const char *restrict, char *restrict, size_t);
-			ssize_t		readlinkat(int, const char *restrict, char *restrict, size_t);
+			ssize_t		readlink(const char *restrict, char *restrict_2, size_t);
+			ssize_t		readlinkat(int, const char *restrict, char *restrict_2, size_t);
 			int			 rmdir(const char *);
 			int			 setegid(gid_t);
 			int			 seteuid(uid_t);
