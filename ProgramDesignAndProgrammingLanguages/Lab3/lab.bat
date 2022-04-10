@@ -1,3 +1,3 @@
-tasm Lab2.asm l2.obj
-tlink l2.obj l2
-l2.exe
+tasm Lab3.asm l3.obj
+tlink l3.obj l3
+l3.exe

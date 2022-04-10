@@ -1,17 +1,21 @@
-; Lab 2
+; Lab 3
 	.model small
 	.stack 100h
 	.386
 
 ; Macro declarations
 	BUF_SIZE	EQU	200			; Size of the string buffer
+	ARR_SIZE	EQU 5			; Size of the array of numbers REPLACE with 30
 	CR			EQU	0Dh			; Carrige return character
 	NL			EQU 0Ah			; New line charecter
 	NUL			EQU 00h			; Null character
 	BCKSPC		EQU	08h			; Backspace character
 	SPC			EQU	' '			; Space character
+	ESCP		EQU 
+	MINUS		EQU	'-'			; Minus character
+	PLUS		EQU	'+'			; Plus character
 	ENDL		EQU	CR, NL		; End of line: "\r\n" characters
-; Advanced macros
+; Common macros
 	macro_set_ds macro
 		mov EAX, DGROUP
 		mov DS, EAX
@@ -46,55 +50,50 @@
 		mov macro_param_destination, AX
 		pop AX
 		endm
-	macro_offset_to_index macro macro_param_string, macro_param_offset
-		mov AX, macro_param_offset
-		sub AX, offset macro_param_string
-		endm
-	macro_get_offsets macro macro_param_string, macro_param_basic_offset, macro_param_offset_start, macro_param_offset_end
-		macro_string_function_call proc_get_offsets, macro_param_basic_offset
-		send macro_param_offset_start, var_temp1
-		send macro_param_offset_end, var_temp2
-
-		mov macro_param_basic_offset, macro_param_offset_end
-		inc macro_param_basic_offset
-		endm
-	macro_validation macro macro_param_offset_start, macro_param_validation_fail_label
-		push AX SI
-		mov SI, macro_param_offset_start
-		lodsb
-		cmp AL, NUL
-		pop SI AX
-		je macro_param_validation_fail_label
-		endm
-	macro_set_di macro
-		mov DI, var_offset_string_end
-		inc DI
+	;macro_offset_to_index macro macro_param_string, macro_param_offset
+		;mov AX, macro_param_offset
+		;sub AX, offset macro_param_string
+		;endm
+; Specific macros
+	macro_num_validator macro macro_param_label_validation_failed
+		macro_string_function_call proc_num_to_string_validate, var_temp_string
+		push AX
+		mov AX, var_temp
+		cmp AX, 00h
+		pop AX
+		jne macro_param_label_validation_failed
 		endm
 .data
 	; Variables
+		arr_num					dw	ARR_SIZE dup(0)
+		var_min					dw	?
+		var_max					dw	?
+		var_result				dw	?
 		var_temp				dw	?
-		var_temp1				dw	?
-		var_temp2				dw	?
-		var_offset_word_start	dw	?
-		var_offset_word_end		dw	?
-		var_offset_string_start	dw	?
-		var_offset_string_end	dw	?
+		;var_temp1				dw	?
+		;var_temp2				dw	?
+		;var_offset_word_start	dw	?
+		;var_offset_word_end		dw	?
+		;var_offset_string_start	dw	?
+		;var_offset_string_end	dw	?
 	; Strings
-		var_string_string		db	BUF_SIZE+02h	dup(?)
-		var_string_word			db	BUF_SIZE+02h	dup(?)
+		var_temp_string			db	BUF_SIZE+01h	dup(?)
 	; Messages
 		message_start			db	ENDL, "Process started...", ENDL, NUL
-		message_string_enter	db	"Enter the string: ", NUL
-		message_string_print	db	"The string: ", NUL
-		message_word_enter		db	ENDL, "Enter the word: ", NUL
-		message_word_print		db	"The word: ", NUL
+		message_enter_number	db	"Enter the number: ", NUL
+		message_print_number0	db	ENDL, "Array[ ", NUL
+		message_print_number1	db	" ]: ", NUL
+		
+		message_min_number		db	"Min number: ", NUL
+		message_max_number		db	"Max number: ", NUL
+		message_minmax_number	db	"Max - min = ", NUL
 		message_result_print	db	ENDL, "The result: ", NUL
 		message_end				db	ENDL, "Process ended...", ENDL, NUL
 	; Warnings (exceptions)
-		warning_string_is_empty	db	ENDL, "The string was not provided! Try again.", ENDL, NUL
-		warning_word_is_empty	db	ENDL, "The word was not provided! Try again.", ENDL, NUL
-		warning_multiple_words	db	ENDL, "You provided more than one word! Enter the one and only word.", ENDL, NUL
-		warning_no_changes		db	ENDL, "No changes can be applied to this string.", ENDL, "Leaving it untouched as it is.", ENDL, NUL
+		warning_string_is_empty	db	"The input is empty! Try  again: ", NUL
+		warning_invalid_char	db	"Invalid character's detected! Try again: ", NUL
+		;warning_multiple_words	db	ENDL, "You provided more than one word! Enter the one and only word.", ENDL, NUL
+		;warning_no_changes		db	ENDL, "No changes can be applied to this string.", ENDL, "Leaving it untouched as it is.", ENDL, NUL
 ; End of .data segment
 
 .code
@@ -143,8 +142,6 @@
 						mov DL, NL
 						call proc_char_print
 					proc_string_scan_end:
-						mov AL, SPC
-						stosb
 						mov AL, NUL
 						stosb
 				; Restore registers
@@ -266,156 +263,139 @@
 	;;
 	;; Specific procedures:
 	;;
-		; Get offsets (MEMORY -> var_temp1-2) > <
-			proc_get_offsets proc near
+		; String Validation
+			proc_num_to_string_validate proc
 				; Start
 					push BP
 					mov BP, SP
 				; Save registers
-					push AX CX DI
+					push AX DX SI
+					clear AX
+					clear DX
 				; Load parameters
-					mov DI, [BP+04h]
-					push DI
-					call proc_string_size
-					mov CX, var_temp
-					inc CX
-					mov AL, SPC
+					mov SI, [BP+4h]
+					send var_temp 00h
 				; Procedure
-					repe scasb
-					dec DI
-					mov var_temp1, DI
-					repne scasb
-					cmp DI, var_temp1
-					je proc_get_offsets_skip
-					dec DI
-					cmp DI, var_temp1
-					je proc_get_offsets_skip
-					dec DI
-					proc_get_offsets_skip:
-					mov var_temp2, DI
+					; First character
+						lodsb
+					; Is null
+						cmp AL, NUL
+						je proc_num_to_string_empty_label
+					; Is minus or plus
+						cmp AL, MINUS
+						je proc_num_to_string_plus_minus_label
+						cmp AL, PLUS
+						je proc_num_to_string_plus_minus_label
+					proc_num_to_string_validate_loop:
+						cmp AL, NUL
+						je proc_num_to_string_validate_end
+						cmp AL, '0'
+						jnge proc_num_to_string_invalid_label
+						cmp AL, '9'
+						jnle proc_num_to_string_invalid_label
+						lodsb
+						jmp proc_num_to_string_validate_loop
 				; Restore registers
-					pop DI CX AX
+					proc_num_to_string_validate_end:
+						pop SI DX AX
 				; Return
 					pop BP
 					ret 02h
-			proc_get_offsets endp
-		; Compare strings (words)
-			proc_compare_words proc near
+				; Minus or plus
+					proc_num_to_string_plus_minus_label:
+					; Second character
+						lodsb
+					; Is null
+						cmp AL, NUL
+						je proc_num_to_string_empty_label
+					jmp proc_num_to_string_validate_loop
+				; Failes
+					; Empty
+						proc_num_to_string_empty_label:
+						macro_string_print warning_string_is_empty
+						send var_temp 01h
+						jmp proc_num_to_string_validate_end
+					; Invalid character
+						proc_num_to_string_invalid_label:
+							send var_temp 02h
+							mov DL, AL
+							call proc_char_print
+							mov DL, ':'
+							call proc_char_print
+							macro_string_print warning_invalid_char
+							jmp proc_num_to_string_validate_end
+			proc_num_to_string_validate endp
+		; String -> number (temp_var)
+			proc_num_to_string proc
 				; Start
+					push BP
+					mov BP, SP
 				; Save registers
-					push AX CX SI DI
+					push AX DX SI
 				; Load parameters
-					mov SI, var_offset_string_start
-					mov DI, var_offset_word_start
-					mov CX, var_offset_string_end
-					sub CX, var_offset_string_start
-					inc CX
-					inc CX
+					mov SI, [BP+4h]
 				; Procedure
-					repe cmpsb
+					mov AX, 1
+					mov var_temp, AX
 				; Restore registers
-					pop DI SI CX AX
+						pop SI DX AX
 				; Return
-					ret
-			proc_compare_words endp
-		; Shift the string
-			proc_string_shift proc near
-				; Start
-				; Save registers
-					push AX SI DI
-				; Load parameters
-					mov SI, var_temp1
-					mov DI, var_offset_string_start
-				; Procedure
-					proc_string_shift_loop:
-					lodsb
-					stosb
-					cmp AL, NUL
-					jne proc_string_shift_loop
-				; Restore registers
-					pop DI SI AX
-				; Return
-					ret
-			proc_string_shift endp
+					pop BP
+					ret 02h
+			proc_num_to_string endp
+		; Find min
+			proc_find_min proc
+			proc_find_min endp
+		; Find max
+			proc_find_max proc
+			proc_find_max endp
+		; Get result
+			proc_get_result proc
+			proc_get_result endp
 	;;
 	;; Main Code:
 	;;
 	start:
-		; Move DGROP address to the DS ES
+		; Move DGROP address to the DS ES. Clear Direction Flag
 			macro_set_ds
-		; Clear Direction Flag
 			cld
 		; Message start
 			macro_string_print message_start
-		; Initialize string
-			label_initialize_string:
-				macro_string_print message_string_enter
-				macro_string_scan var_string_string
-				macro_string_print message_string_print
-				macro_string_print var_string_string
-		; Get string's offsets
-			mov DI, offset var_string_string
-			macro_get_offsets var_string_string, DI, var_offset_string_start, var_offset_string_end
-		; Validate string
-			macro_validation var_offset_string_start, exception_string_is_empty
-		; Save DI in SI
-			mov SI, DI
-		; Initialize word
-			label_initialize_word:
-				macro_string_print message_word_enter
-				macro_string_scan var_string_word
-				macro_string_print message_word_print
-				macro_string_print var_string_word
-		; Get word's offsets
-			mov DI, offset var_string_word
-			macro_get_offsets var_string_word, DI, var_offset_word_start, var_offset_word_end
-		; Validate word
-			macro_validation var_offset_word_start, exception_word_is_empty
-		; Get next word in the var_strig_word
-		; (must be "\0", because only one word is acceptable in input)
-			macro_get_offsets var_string_word, DI, var_temp1, var_temp2
-		; Check if "\0"
-			macro_validation var_temp1, label_word_is_good
-			jmp exception_multiple_words
-		; Recover DI from SI
-			label_word_is_good:
-				mov DI, SI
-		; "Infinite" loop
-			infinite_loop:
-				; Comparing selected words
-					call proc_compare_words
-					pushf
-				; Iteration (move to the next word)
-					macro_get_offsets var_string_string, DI, var_offset_string_start, var_offset_string_end
-				; Validation (isn't it "\0"?)
-					macro_validation var_offset_string_start, exception_no_changes
-				; Iterate again
-					popf
-					jne infinite_loop
-		; Skipping spaces untill the next word
-			macro_get_offsets var_string_string, DI, var_temp1, var_temp2
-		; Shift string
-			call proc_string_shift
-		; Print  result and quit
+		; Number entering
+			mov CX, ARR_SIZE
+			entering_loop:
+				macro_string_print message_enter_number
+				macro_string_scan var_temp_string
+				macro_num_validator entering_loop
+				macro_string_function_call proc_num_to_string, var_temp_string
+				mov arr_num[6], 9
+				loop entering_loop
+		; Array printing:
+			mov CX, ARR_SIZE
+			clear DI
+			printing_loop:
+				inc DI
+				macro_print_num message_print_number0, DI
+				macro_print_num message_print_number1, arr_num[DI]
+				loop printing_loop
+		; Quit
 			label_main_process_end:
-				macro_string_print message_result_print
-				macro_string_print var_string_string
 				macro_string_print message_end
 				macro_return NUL
 		;;
 		;; Exceptions:
 		;;
-			exception_word_is_empty:
-				macro_string_print warning_word_is_empty
-				jmp label_initialize_word
-			exception_multiple_words:
-				macro_string_print warning_multiple_words
-				jmp label_initialize_word
-			exception_string_is_empty:
-				macro_string_print warning_string_is_empty
-				jmp label_initialize_string
-			exception_no_changes:
-				macro_string_print warning_no_changes
-				jmp label_main_process_end
+			;exception_word_is_empty:
+				;macro_string_print warning_word_is_empty
+				;jmp label_initialize_word
+			;exception_multiple_words:
+				;macro_string_print warning_multiple_words
+				;jmp label_initialize_word
+			;exception_string_is_empty:
+				;macro_string_print warning_string_is_empty
+				;jmp label_initialize_string
+			;exception_no_changes:
+				;macro_string_print warning_no_changes
+				;jmp label_main_process_end
 	end start
 ; End of .code Segment
