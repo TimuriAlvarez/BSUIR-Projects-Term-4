@@ -29,7 +29,7 @@ typedef struct _SYSTIMER_
 int bcd1bin(char *bcd);
 int bcd2bin(char *bcd);
 void bin1bcd(int bin, char *bcd);
-void _interrupt _far alarm(void);
+//void _interrupt _far alarm(void);
 int timer(char fn, SYSTIMER *tm);
 
 // Выключаем проверку стека и указателей
@@ -38,63 +38,62 @@ int timer(char fn, SYSTIMER *tm);
 
 // Макро для выдачи звукового сигнала
 
-#define BEEP _asm { \
-	_asm mov bx,0 \
-	_asm mov ax, 0E07h \
-	_asm int 10h }
-
-// Отменим макрос BEEP
-#undef BEEP
-#define BEEP /*	Тут был бип.	*/
-
+#define BEEP printf("\nALARM\n");
 
 // Прототип программы-обработчика прерывания
 // будильника
-void _interrupt _far alarm(void);
+void _interrupt _far alarm(...);
 
 // Переменная для хранения старого
 // вектора будильника
-void (_interrupt _far *old_4a)(void);
+void _interrupt (_far *old_4a)(...);
 
 union REGS reg;
+
+int date_to_index(SYSTIMER* tmr)
+{
+	const int months_codes[] = { 1,4,4,0,2,5,0,3,6,1,4,6 };
+	const int year_code = (6 + tmr->year + tmr->year / 4) % 7;
+	return (tmr->day + months_codes[bcd1bin(&(tmr->month)) - 1] + year_code) % 7;
+}
 
 int main(void)
 {
 	const char *month_to_text[] =
 	{
-	"январь",
-	"февраль",
-	"март",
-	"апрель",
-	"май",
-	"июнь",
-	"июль",
-	"август",
-	"сентябрь",
-	"октябрь",
-	"ноябрь",
-	"декабрь"
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December"
 	};
-
+	const char *date_to_text[] =
+	{
+		"Saturday",
+		"Sunday",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday"
+	};
 	SYSTIMER tmr;
-
 	// Определяем текущие дату и время
 	timer(RTC_GET_DATE, &tmr);
 	timer(RTC_GET_TIME, &tmr);
-
 	// Выводим дату и время на экран
-	printf("\nСейчас %d год, %s, %d число."
-	"\n",
-	bcd2bin((char*)&(tmr.year)),
-	month_to_text[bcd1bin(&(tmr.month)) - 1],
-	bcd1bin(&(tmr.day)));
-
-	printf("\nВремя - %02.2d:%02.2d:%02.2d"
-	"\n",
-	bcd1bin(&(tmr.hour)),
-	bcd1bin(&(tmr.min)),
-	bcd1bin(&(tmr.sec)));
-
+	printf("\nToday is a year %d, month %s, day %d: %s. \n", bcd2bin((char*)&(tmr.year)),
+		   month_to_text[bcd1bin(&(tmr.month)) - 1], bcd1bin(&(tmr.day)),
+			date_to_text[date_to_index(&tmr)]);
+	printf("\nTime - %02.2d:%02.2d:%02.2d \n", bcd1bin(&(tmr.hour)),
+		   bcd1bin(&(tmr.min)), bcd1bin(&(tmr.sec)));
 	// Для установки будильника увеличиваем
 	// счетчик минут на единицу. Для упрощения
 	// программы мы не проверяем счетчик на
@@ -103,17 +102,13 @@ int main(void)
 	// будильник не сработает. Вы можете сами
 	// немного усовершенствовать программу для
 	// проверки переполнения
-	bin1bcd(bcd1bin(&(tmr.min)) + 1, &(tmr.min));
+
+	bin1bcd(bcd1bin(&(tmr.sec)) + 5, &(tmr.sec));
 
 	// Выводим на экран время, когда сработает
 	// будильник.
-	printf("\nВремя срабатывания будильника"
-	"- %02.2d:%02.2d:%02.2d"
-	"\n",
-	bcd1bin(&(tmr.hour)),
-	bcd1bin(&(tmr.min)),
-	bcd1bin(&(tmr.sec)));
-
+	printf("\nAlarm triggering time - %02.2d:%02.2d:%02.2d\n",
+		   bcd1bin(&(tmr.hour)), bcd1bin(&(tmr.min)), bcd1bin(&(tmr.sec)));
 	// Подключаем свой обработчик прерывания
 	// будильника, старое значение вектора
 	// 0x4a сохраняем
@@ -124,15 +119,14 @@ int main(void)
 	// Устанавливаем будильник
 	timer(RTC_SET_ALARM, &tmr);
 
-	printf("\nБудильник установлен. Для отмены "
-	"и завершения программы нажмите"
-	"\nлюбую клавишу...");
+	printf("\nAlarm clock set. To cancel and end the program press any key...");
 
 	getch();
 
 	// Сбрасываем будильник и восстанавливаем
 	// вектор прерывания будильника
 	timer(RTC_CLEAR_ALARM, &tmr);
+	alarm();
 
 	_dos_setvect(0x4a, old_4a);
 
@@ -222,29 +216,21 @@ int timer(char fn, SYSTIMER *tm)
 	switch (fn)
 	{
 	case RTC_SET_TIME:
-	{
 		reg.h.ch = tm->hour;
 		reg.h.cl = tm->min;
 		reg.h.dh = tm->sec;
 		reg.h.dl = tm->daylight_savings;
 		break;
-	}
-
 	case RTC_SET_DATE:
-	{
 		reg.x.cx = tm->year;
 		reg.h.dh = tm->month;
 		reg.h.dl = tm->day;
 		break;
-	}
-
 	case RTC_SET_ALARM:
-	{
 		reg.h.ch = tm->hour;
 		reg.h.cl = tm->min;
 		reg.h.dh = tm->sec;
 		break;
-	}
 	}
 
 	int86(0x1a,&reg,&reg);
@@ -255,20 +241,15 @@ int timer(char fn, SYSTIMER *tm)
 	switch (fn)
 	{
 	case RTC_GET_TIME:
-	{
 		tm->hour = reg.h.ch;
 		tm->min = reg.h.cl;
 		tm->sec = reg.h.dh;
 		break;
-	}
-
 	case RTC_GET_DATE:
-	{
 		tm->year = reg.x.cx;
 		tm->month = reg.h.dh;
 		tm->day = reg.h.dl;
 		break;
-	}
 	}
 	return 0;
 }

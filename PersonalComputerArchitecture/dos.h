@@ -18,7 +18,7 @@ void setvect(int, vect_t);
 
 #define _interrupt
 #define _far
-typedef void (_interrupt _far *vect_t_2)(void);
+typedef void _interrupt (_far *vect_t_2)(...);
 vect_t_2 _dos_getvect(int);
 void _dos_setvect(int, vect_t_2);
 

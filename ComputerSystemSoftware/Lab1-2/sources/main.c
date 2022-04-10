@@ -11,6 +11,7 @@ struct DirWalkOptions flags = { false, false, false, false };
 
 int main(const int argc, TMessage* const argv)
 {
+	T_FUNCTION(syscall, clear)();
 	T_CLASS(TConsole, default_constructor)();
 	setlocale(LC_COLLATE, "ru_RU");
 	const char* directory = DEFAULT_DIRECTORY;

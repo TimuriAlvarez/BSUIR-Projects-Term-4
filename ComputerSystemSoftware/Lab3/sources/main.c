@@ -2,6 +2,7 @@
 
 int main(const int argc, TMessage argv[])
 {
+	T_FUNCTION(syscall, clear)();
 	T_CLASS(TConsole, default_constructor)();
 
 	T_CLASS(TConsole, print)(kOutput, "Parent process has started.\n");
