@@ -1,4 +1,2 @@
-cd BIN
-bcc.exe lab.cpp
+bcc lab.cpp
 lab.exe
-cd ..
