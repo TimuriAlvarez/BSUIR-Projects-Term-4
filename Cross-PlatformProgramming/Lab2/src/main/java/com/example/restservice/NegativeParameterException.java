@@ -1,9 +1,9 @@
 package com.example.restservice;
 
 public class NegativeParameterException extends RuntimeException {
-	private String message;
+	final private String message;
 	public NegativeParameterException(String source, double parameter) {
-		this.message = "Negative input parameter '" + parameter + "' was caught in " + source;
+		this.message = "EXCEPTION: Negative input parameter '" + parameter + "' was caught in " + source;
 	}
 	public String getMessage() {
 		return message;

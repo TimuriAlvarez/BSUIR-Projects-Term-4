@@ -1,10 +1,25 @@
 package com.example.restservice;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Service class that contains mathematical rules of meter-inch and inch-meter conversions.
  */
 public final class Calculator {
-	private static final double coefficient = 39.37007874;
+	private static final double coefficient = 39.370_078_74;
+	public static double String2double(@NotNull String sender, String value) {
+		if (value == null) throw new AbsentParameterException(sender);
+		if (value.isEmpty()) throw new EmptyParameterException(sender);
+
+		double result;
+		try { result = Double.parseDouble(value); }
+		catch (Exception exception) { throw new InappropriateParameterException(sender, value); }
+		if (result < 0) throw new NegativeParameterException(sender, result);
+
+		LoggingController.infoLog(LoggingController.DefaultLogs.String2doubleConversion);
+
+		return result;
+	}
 	/**
 	 * From meter to inch converter
 	 * @param meters Value of meters
