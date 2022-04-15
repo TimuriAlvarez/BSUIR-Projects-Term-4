@@ -4,7 +4,7 @@ package com.example.restservice;
  * Service class that contains mathematical rules of meter-inch and inch-meter conversions.
  */
 public final class Calculator {
-	private static final double coefficient = 39.37007874;
+	private static final double coefficient = 39.370_078_74;
 	/**
 	 * From meter to inch converter
 	 * @param meters Value of meters
