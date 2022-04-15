@@ -6,6 +6,7 @@ default:
 	sudo cp scripts/* bin
 	make unmount
 	echo "In VB DOS type: cd bin and run.bat"
+	VirtualBoxVM --startvm DOS
 
 clean:
 	sudo touch bin/tmpfile
