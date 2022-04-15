@@ -19,25 +19,25 @@ public class CalculatorController {
 		return "Greetings, traveller. Here you can convert meters to inches and vice versa: all you, need is a right page and the value. Available pages: /, /meters, /inches. Good luck there.";
 	}
 	/**
-	 * From meter to inch converter.
+	 * From meter to inch converter page.
 	 * @param value real, not negative value of meters.
 	 * @return String that contains meters and their value in inches.
 	 */
 	@GetMapping("/meters")
 	public String calculatorMeters(@RequestParam(value = "value", required = false) String value) {
-		double meters = Calculator.String2double("/meters", value);
+		double inches = Calculator.meters2inches("/meters", value);
 		LoggingController.infoLog(LoggingController.DefaultLogs.Meter2inch);
-		return "" + meters + " meter(s) is " + Calculator.meter2inch(meters) + " inch(es).";
+		return value + " meter(s) is " + inches + " inch(es).";
 	}
 	/**
-	 * From inch to meter converter.
+	 * From inch to meter converter page.
 	 * @param value real, not negative value of inches.
 	 * @return String that contains inches and their value in meters.
 	 */
 	@GetMapping("/inches")
 	public String calculatorInches(@RequestParam(value = "value", required = false) String value) {
-		double inches = Calculator.String2double("/inches", value);
+		double meters = Calculator.inches2meters("/inches", value);
 		LoggingController.infoLog(LoggingController.DefaultLogs.Inch2meter);
-		return "" + inches + " inch(s) is " + Calculator.inch2meter(inches) + " meter(s).";
+		return value + " inch(s) is " + meters + " meter(s).";
 	}
 }

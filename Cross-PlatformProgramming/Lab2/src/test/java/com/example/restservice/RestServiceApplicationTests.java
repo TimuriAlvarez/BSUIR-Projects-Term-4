@@ -28,52 +28,52 @@ public class RestServiceApplicationTests {
 	@Test
 	public void testInches0() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/inches",
-			String.class)).contains("EXCEPTION: ");
+			String.class)).contains("Run-time exception: ");
 	}
 	@Test
 	public void testInches1() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/inches?value",
-			String.class)).contains("EXCEPTION: ");
+			String.class)).contains("Run-time exception: ");
 	}
 	@Test
 	public void testInches2() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/inches?value=a",
-			String.class)).contains("EXCEPTION: ");
+			String.class)).contains("Run-time exception: ");
 	}
 	@Test
 	public void testInches3() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/inches?value=-1",
-			String.class)).contains("EXCEPTION: ");
+			String.class)).contains("Run-time exception: ");
 	}
 	@Test
 	public void testInches4() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/inches?value=1",
-			String.class)).doesNotContain("EXCEPTION: ");
+			String.class)).doesNotContain("Run-time exception: ");
 	}
 
 	@Test
 	public void testMeters0() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/meters",
-			String.class)).contains("EXCEPTION: ");
+			String.class)).contains("Run-time exception: ");
 	}
 	@Test
 	public void testMeters1() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/meters?value",
-			String.class)).contains("EXCEPTION: ");
+			String.class)).contains("Run-time exception: ");
 	}
 	@Test
 	public void testMeters2() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/meters?value=a",
-			String.class)).contains("EXCEPTION: ");
+			String.class)).contains("Run-time exception: ");
 	}
 	@Test
 	public void testMeters3() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/meters?value=-1",
-			String.class)).contains("EXCEPTION: ");
+			String.class)).contains("Run-time exception: ");
 	}
 	@Test
 	public void testMeters4() throws Exception {
 		assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/meters?value=1",
-			String.class)).doesNotContain("EXCEPTION: ");
+			String.class)).doesNotContain("Run-time exception: ");
 	}
 }
