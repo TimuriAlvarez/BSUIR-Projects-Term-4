@@ -23,7 +23,7 @@ class CalculatorException extends RuntimeException {
 	 * @param location Exception location.
 	 */
 	public CalculatorException(String type, String location) {
-		LoggingRestController.debug("CalculatorException.CalculatorException");
+		LoggingRestController.logDebug("CalculatorException.CalculatorException");
 		this.type = type;
 		this.location = location;
 	}
@@ -34,7 +34,7 @@ class CalculatorException extends RuntimeException {
 	 */
 	@Override
 	public String getMessage() {
-		LoggingRestController.debug("CalculatorException.getMessage");
+		LoggingRestController.logDebug("CalculatorException.getMessage");
 		return getType() + " was caught in " + location + ".";
 	}
 	/**
@@ -42,7 +42,7 @@ class CalculatorException extends RuntimeException {
 	 * @return Exception type.
 	 */
 	public String getType() {
-		LoggingRestController.debug("CalculatorException.getType");
+		LoggingRestController.logDebug("CalculatorException.getType");
 		return exception + type;
 	}
 }
@@ -53,7 +53,7 @@ class CalculatorException extends RuntimeException {
 class ParameterAbsenceException extends CalculatorException {
 	public ParameterAbsenceException(String location) {
 		super("The absence of input parameter", location);
-		LoggingRestController.debug("ParameterAbsenceException.ParameterAbsenceException");
+		LoggingRestController.logDebug("ParameterAbsenceException.ParameterAbsenceException");
 	}
 }
 
@@ -63,7 +63,7 @@ class ParameterAbsenceException extends CalculatorException {
 class EmptyParameterException extends CalculatorException {
 	EmptyParameterException(String location) {
 		super("Empty input parameter", location);
-		LoggingRestController.debug("EmptyParameterException.EmptyParameterException");
+		LoggingRestController.logDebug("EmptyParameterException.EmptyParameterException");
 	}
 }
 
@@ -73,7 +73,7 @@ class EmptyParameterException extends CalculatorException {
 class InappropriateParameterException extends CalculatorException  {
 	public InappropriateParameterException(String location, String parameter) {
 		super("Inappropriate input parameter '" + parameter + "'", location);
-		LoggingRestController.debug("InappropriateParameterException.InappropriateParameterException");
+		LoggingRestController.logDebug("InappropriateParameterException.InappropriateParameterException");
 	}
 }
 
@@ -83,7 +83,7 @@ class InappropriateParameterException extends CalculatorException  {
 class NegativeParameterException extends CalculatorException {
 	public NegativeParameterException(String location, String parameter) {
 		super("Negative input parameter '" + parameter + "'", location);
-		LoggingRestController.debug("NegativeParameterException.NegativeParameterException");
+		LoggingRestController.logDebug("NegativeParameterException.NegativeParameterException");
 	}
 }
 
@@ -93,6 +93,6 @@ class NegativeParameterException extends CalculatorException {
 class HashMapKeyAbsenceException extends CalculatorException {
 	public HashMapKeyAbsenceException(double value) {
 		super("The absence of HashMap key for value '" + value + "'", "application cache");
-		LoggingRestController.debug("HashMapKeyAbsenceException.HashMapKeyAbsenceException");
+		LoggingRestController.logDebug("HashMapKeyAbsenceException.HashMapKeyAbsenceException");
 	}
 }

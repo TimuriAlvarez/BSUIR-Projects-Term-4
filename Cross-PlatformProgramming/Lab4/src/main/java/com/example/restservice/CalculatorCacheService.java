@@ -1,17 +1,27 @@
 package com.example.restservice;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 
 /**
  * Service class that provides application caching.
  */
+@Component
 @Service(value = "CalculatorCacheService")
 public final class CalculatorCacheService {
 	/**
 	 * HashMap that contains cache.
 	 */
-	static final HashMap<Double, Double> hashMap = new HashMap<>();
+	HashMap<Double, Double> hashMap;
+
+	/**
+	 * Calculator Cache Service constructor.
+	 * Initializes HashMap with a new HashMap() value.
+	 */
+	CalculatorCacheService() {
+		this.hashMap = new HashMap<>();
+	}
 
 	/**
 	 * Cache checker for meters.
@@ -20,7 +30,7 @@ public final class CalculatorCacheService {
 	 * @return Inches.
 	 */
 	public double meters2inches(String value) {
-		LoggingRestController.debug("CalculatorCacheMap.meters2inches");
+		LoggingRestController.logDebug("CalculatorCacheMap.meters2inches");
 		double meters = CalculatorLogicService.String2double("/meters", value);
 		if (!hashMap.containsKey(meters))
 			hashMap.put(meters, CalculatorLogicService.meters2inches(meters));
@@ -32,7 +42,7 @@ public final class CalculatorCacheService {
 	 * @return Key value.
 	 */
 	private double getHashMapKey(double value) {
-		LoggingRestController.warn("CalculatorCacheMap.getHashMapKey");
+		LoggingRestController.logMethod("CalculatorCacheMap.getHashMapKey");
 		for (double key:
 			hashMap.keySet()) {
 			if (hashMap.get(key).equals(value)) return key;
@@ -46,7 +56,7 @@ public final class CalculatorCacheService {
 	 * @return Meters.
 	 */
 	public double inches2meters(String value) {
-		LoggingRestController.debug("CalculatorCacheMap.inches2meters");
+		LoggingRestController.logDebug("CalculatorCacheMap.inches2meters");
 		double inches = CalculatorLogicService.String2double("/inches", value);
 		if (!hashMap.containsValue(inches))
 			hashMap.put(CalculatorLogicService.inches2meters(inches), inches);

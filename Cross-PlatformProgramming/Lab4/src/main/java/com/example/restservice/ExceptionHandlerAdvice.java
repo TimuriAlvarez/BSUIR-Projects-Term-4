@@ -18,7 +18,7 @@ public class ExceptionHandlerAdvice {
 	 */
 	@ExceptionHandler(value = CalculatorException.class)
 	public ResponseEntity<String> CalculatorExceptionHandler(@NotNull CalculatorException exception) {
-		LoggingRestController.error(exception.getType());
+		LoggingRestController.logError(exception.getType());
 		return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 
@@ -29,8 +29,8 @@ public class ExceptionHandlerAdvice {
 	 */
 	@ExceptionHandler(value = Exception.class)
 	public ResponseEntity<String> DefaultExceptionHandler(@NotNull Exception exception) {
-		LoggingRestController.error("Unknown Exception");
-		LoggingRestController.warn("Exception may be left unhandled!");
+		LoggingRestController.logError("Unknown Exception");
+		LoggingRestController.logError("Exception may be left unhandled!");
 		return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

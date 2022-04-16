@@ -6,31 +6,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller that's responsible for application logging.
- *
- * Page logs:                   start() & end().
- * Unimportant methods logs:    debug();
- * Important methods logs:      warn();
- * Error (exception) logs:      error();
- *
- * All of them accept String with message as input parameter.
+ *  <p>
+ * logStartPage, logStartThread     -       Log the starting of pages and threads.<br>
+ * logEnd                           -       Log the ending of pages and threads.<br>
+ * logMethod, logDebug              -       Log different methods.<br>
+ * logError                         -       Log errors (exceptions).<br>
+ * </p>
  */
 @RestController(value = "LoggingRestController")
 public class LoggingRestController {
 	private static final Logger logger = LoggerFactory.getLogger(LoggingRestController.class);
-
-	public static void start(String location) {
-		logger.info("Start: " + location);
+	public static void logStartPage(String name) {
+		logger.info("");
+		logger.info("Start: " + name);
 	}
-	public static void end(String location) {
+	public static void logStartThread(String name) {
+		logger.info("Start: " + name);
+	}
+	public static void logEnd(String location) {
 		logger.info("Successful end: " + location);
 	}
-	public static void warn(String alarm) {
+	public static void logMethod(String alarm) {
 		logger.warn(alarm + "()");
 	}
-	public static void error(String error) {
-		logger.error(error);
-	}
-	public static void debug(String debug) {
+	public static void logDebug(String debug) {
 		logger.debug(debug + "()");
+	}
+	public static void logError(String error) {
+		logger.error(error);
 	}
 }
