@@ -5,3 +5,5 @@
 #include "sources/tstring.h"
 #include "sources/tfilesystem.h"
 #include "sources/tconio.h"
+
+#undef NULL

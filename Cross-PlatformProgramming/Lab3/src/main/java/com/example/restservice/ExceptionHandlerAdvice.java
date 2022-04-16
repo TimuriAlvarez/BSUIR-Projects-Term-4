@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
- * Service class that handles all application exceptions.
+ * Controller class that handles all application exceptions.
  */
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class ExceptionHandlerAdvice {
 	/**
 	 * The handler for all exceptions from Calculator Exception class.
 	 * @param exception Any of Calculator Exception class children.
@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(value = CalculatorException.class)
 	public ResponseEntity<String> CalculatorExceptionHandler(@NotNull CalculatorException exception) {
-		LoggingController.error(exception.getType());
+		LoggingRestController.error(exception.getType());
 		return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 
@@ -29,8 +29,8 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(value = Exception.class)
 	public ResponseEntity<String> DefaultExceptionHandler(@NotNull Exception exception) {
-		LoggingController.error("Unknown Exception");
-		LoggingController.warn("Exception may be left unhandled!");
+		LoggingRestController.error("Unknown Exception");
+		LoggingRestController.warn("Exception may be left unhandled!");
 		return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

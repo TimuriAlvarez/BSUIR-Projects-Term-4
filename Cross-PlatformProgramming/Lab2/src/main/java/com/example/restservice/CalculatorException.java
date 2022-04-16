@@ -23,6 +23,7 @@ class CalculatorException extends RuntimeException {
 	 * @param location Exception location.
 	 */
 	public CalculatorException(String type, String location) {
+		LoggingRestController.debug("CalculatorException.CalculatorException");
 		this.type = type;
 		this.location = location;
 	}
@@ -31,7 +32,9 @@ class CalculatorException extends RuntimeException {
 	 * Method for getting exception message.
 	 * @return Exception message.
 	 */
+	@Override
 	public String getMessage() {
+		LoggingRestController.debug("CalculatorException.getMessage");
 		return getType() + " was caught in " + location + ".";
 	}
 	/**
@@ -39,6 +42,7 @@ class CalculatorException extends RuntimeException {
 	 * @return Exception type.
 	 */
 	public String getType() {
+		LoggingRestController.debug("CalculatorException.getType");
 		return exception + type;
 	}
 }
@@ -49,6 +53,7 @@ class CalculatorException extends RuntimeException {
 class ParameterAbsenceException extends CalculatorException {
 	public ParameterAbsenceException(String location) {
 		super("The absence of input parameter", location);
+		LoggingRestController.debug("ParameterAbsenceException.ParameterAbsenceException");
 	}
 }
 
@@ -58,6 +63,7 @@ class ParameterAbsenceException extends CalculatorException {
 class EmptyParameterException extends CalculatorException {
 	EmptyParameterException(String location) {
 		super("Empty input parameter", location);
+		LoggingRestController.debug("EmptyParameterException.EmptyParameterException");
 	}
 }
 
@@ -67,13 +73,16 @@ class EmptyParameterException extends CalculatorException {
 class InappropriateParameterException extends CalculatorException  {
 	public InappropriateParameterException(String location, String parameter) {
 		super("Inappropriate input parameter '" + parameter + "'", location);
+		LoggingRestController.debug("InappropriateParameterException.InappropriateParameterException");
 	}
 }
+
 /**
  * Exception class for negative input parameter.
  */
 class NegativeParameterException extends CalculatorException {
 	public NegativeParameterException(String location, String parameter) {
 		super("Negative input parameter '" + parameter + "'", location);
+		LoggingRestController.debug("NegativeParameterException.NegativeParameterException");
 	}
 }

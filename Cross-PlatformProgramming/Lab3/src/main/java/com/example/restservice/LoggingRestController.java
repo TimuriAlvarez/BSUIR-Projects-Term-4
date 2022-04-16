@@ -6,17 +6,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller that's responsible for application logging.
+ *
+ * Page logs:                   start() & end().
+ * Unimportant methods logs:    debug();
+ * Important methods logs:      warn();
+ * Error (exception) logs:      error();
+ *
+ * All of them accept String with message as input parameter.
  */
-@RestController(value = "LoggingController")
-public class LoggingController {
-	/**
-	 * Controller logger.
-	 */
-	private static final Logger logger = LoggerFactory.getLogger(LoggingController.class);
+@RestController(value = "LoggingRestController")
+public class LoggingRestController {
+	private static final Logger logger = LoggerFactory.getLogger(LoggingRestController.class);
 
-	/**
-	 * Public logging methods.
-	 */
 	public static void start(String location) {
 		logger.info("Start: " + location);
 	}

@@ -7,15 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Controller that gets user's url-request and sends appropriate response.
  */
-@RestController
-public class CalculatorController {
+@RestController(value = "CalculatorRestController")
+public class CalculatorRestController {
 	/**
 	 * Greetings page. Implemented just for fun.
 	 * @return Greetings message.
 	 */
 	@GetMapping("/")
 	public String calculatorGreetings() {
-		LoggingController.infoLog(LoggingController.DefaultLogs.IndexLog);
 		return "Greetings, traveller. Here you can convert meters to inches and vice versa: all you, need is a right page and the value. Available pages: /, /meters, /inches. Good luck there.";
 	}
 	/**
@@ -24,10 +23,8 @@ public class CalculatorController {
 	 * @return String that contains meters and their value in inches.
 	 */
 	@GetMapping("/meters")
-	public String calculatorMeters(@RequestParam(value = "value", required = false) String value) {
-		double inches = Calculator.meters2inches("/meters", value);
-		LoggingController.infoLog(LoggingController.DefaultLogs.Meter2inch);
-		return value + " meter(s) is " + inches + " inch(es).";
+	public String calculator2inches(@RequestParam(value = "value", required = false) String value) {
+		return value + " meter(s) is " + CalculatorLogicService.meters2inches(CalculatorLogicService.String2double(value)) + " inch(es).";
 	}
 	/**
 	 * From inch to meter converter page.
@@ -35,9 +32,7 @@ public class CalculatorController {
 	 * @return String that contains inches and their value in meters.
 	 */
 	@GetMapping("/inches")
-	public String calculatorInches(@RequestParam(value = "value", required = false) String value) {
-		double meters = Calculator.inches2meters("/inches", value);
-		LoggingController.infoLog(LoggingController.DefaultLogs.Inch2meter);
-		return value + " inch(s) is " + meters + " meter(s).";
+	public String calculator2meters(@RequestParam(value = "value", required = false) String value) {
+		return value + " inch(s) is " + CalculatorLogicService.inches2meters(CalculatorLogicService.String2double(value)) + " meter(s).";
 	}
 }

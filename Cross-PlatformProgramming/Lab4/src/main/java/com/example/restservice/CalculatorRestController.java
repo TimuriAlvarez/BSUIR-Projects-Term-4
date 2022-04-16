@@ -4,14 +4,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.restservice.LoggingController.*;
+import static com.example.restservice.LoggingRestController.*;
 
 /**
  * Controller that gets user's url-request and sends appropriate response.
  */
-@RestController(value = "CalculatorController")
-public class CalculatorController {
-	static final CalculatorCache cache = new CalculatorCache();
+@RestController(value = "CalculatorRestController")
+public class CalculatorRestController {
+	static final CalculatorCacheService cache = new CalculatorCacheService();
 	String message = CounterService.getMessage();
 	/**
 	 * Greetings page. Implemented just for fun.

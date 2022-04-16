@@ -1,6 +1,7 @@
 #pragma once
 
-#define nullptr NULL
+#define nullptr ((void *)0)
+#undef NULL
 
 /*	The usage these definitions outside of safe zone is forbidden!
  *	Those who dare to risk will get plenty of errors and undefined behaviour situations.

@@ -13,5 +13,6 @@ HEADERS += \
 		sources/sys.h \
 		sources/sys/*.h \
 		sources/sys/ipc.h \
+		sources/sys/mman.h \
 		sources/sys/shm.h \
 		sources/sys/stat.h

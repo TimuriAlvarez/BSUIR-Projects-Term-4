@@ -47,23 +47,23 @@ struct  ipc_perm
 
 	   Mode bits:*/
 
-#define IPC_CREAT   //Create entry if key does not exist.
+#define IPC_CREAT 0xFFFF  //Create entry if key does not exist.
 
-#define IPC_EXCL    //Fail if key exists.
+#define IPC_EXCL 0xFFFF   //Fail if key exists.
 
-#define IPC_NOWAIT  //Error if request must wait.
+#define IPC_NOWAIT 0xFFFF //Error if request must wait.
 
 //	   Keys:
 
-#define IPC_PRIVATE //Private key.
+#define IPC_PRIVATE 0xFFFF //Private key.
 
 //	   Control commands:
 
-#define IPC_RMID    //Remove identifier.
+#define IPC_RMID 0xFFFF   //Remove identifier.
 
-#define IPC_SET     //Set options.
+#define IPC_SET 0xFFFF    //Set options.
 
-#define IPC_STAT    //Get options.
+#define IPC_STAT 0xFFFF   //Get options.
 
 /*	   The following shall be declared as a function and may also be
 	   defined as a macro. A function prototype shall be provided.*/

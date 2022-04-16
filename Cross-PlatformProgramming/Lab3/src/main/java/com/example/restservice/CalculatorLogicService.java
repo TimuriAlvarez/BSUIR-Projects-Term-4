@@ -1,13 +1,16 @@
 package com.example.restservice;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Service class that contains mathematical and logical rules of "meter-to-inch" and "inch-to-meter" conversions.
  */
-public final class CalculatorService {
+@Service(value = "CalculatorLogicService")
+public final class CalculatorLogicService {
 	/**
 	 * Service constant: conversion coefficient.
 	 */
-	private static final double coefficient = 39.370_078_74;
+	private static final double coefficient = 39.37007874;
 	/**
 	 * Service method for conversion from String to double.
 	 * Also validates parameter value, provided by parameter sender.
@@ -16,7 +19,7 @@ public final class CalculatorService {
 	 * @return The value converted to double.
 	 */
 	public static double String2double(String location, String value) {
-		LoggingController.debug("CalculatorService.String2double");
+		LoggingRestController.debug("CalculatorLogicService.String2double");
 		if (value == null) throw new ParameterAbsenceException(location);
 		if (value.isEmpty()) throw new EmptyParameterException(location);
 
@@ -33,7 +36,7 @@ public final class CalculatorService {
 	 * @return Value of inches.
 	 */
 	public static double meters2inches(double meters) {
-		LoggingController.warn("CalculatorService.meters2inches");
+		LoggingRestController.warn("CalculatorLogicService.meters2inches");
 		return meters * coefficient;
 	}
 	/**
@@ -42,7 +45,7 @@ public final class CalculatorService {
 	 * @return Value of meters.
 	 */
 	public static double inches2meters(double inches) {
-		LoggingController.warn("CalculatorService.inches2meters");
+		LoggingRestController.warn("CalculatorLogicService.inches2meters");
 		return inches / coefficient;
 	}
 }

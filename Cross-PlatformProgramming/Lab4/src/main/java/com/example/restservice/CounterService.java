@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 public class CounterService {
 	private static long counter = 0;
 	synchronized public static void incrementCounter() {
-		LoggingController.debug("CounterService.incrementCounter");
+		LoggingRestController.debug("CounterService.incrementCounter");
 		++counter;
 	}
-	public static @NotNull String getMessage() {
-		LoggingController.warn("CounterService.getMessage");
+	synchronized public static @NotNull String getMessage() {
+		LoggingRestController.warn("CounterService.getMessage");
 		return counter + " request(s) has already been registered.";
 	}
 }
