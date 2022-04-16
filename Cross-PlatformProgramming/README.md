@@ -34,7 +34,7 @@ Flow:
 
 Update: using JSON files is explicitly excluded from the terms, replaced by String class.
 
-## Tests
+### Tests
 
 The lab can be tested using Spring Boot Tests that are located [here](https://github.com/TimuriAlvarez/BSUIR-Projects-Term-4/blob/main/Cross-PlatformProgramming/Lab1/src/test/java/com/example/restservice/RestServiceApplicationTests.java "Lab 1 Tests").
 
@@ -49,7 +49,7 @@ The lab can be tested using Spring Boot Tests that are located [here](https://gi
 3. Add logging of all process steps and errors (use different log levels for errors and debug messages)
 4. Add unit test for your service checking happy path and exceptional cases
 
-## Tests
+### Tests
 
 The lab can be tested using Spring Boot Tests that are located [here](https://github.com/TimuriAlvarez/BSUIR-Projects-Term-4/blob/main/Cross-PlatformProgramming/Lab2/src/test/java/com/example/restservice/RestServiceApplicationTests.java "Lab 2 Tests").
 
@@ -62,7 +62,7 @@ The lab can be tested using Spring Boot Tests that are located [here](https://gi
 1. Add simple cache for your service as in-memory Map where key is an input parameter and value is calculation results. This Map (cache) should be stored as a separate class (bean). Use dependencies injection mechanism of Spring Framework (autowiring) for adding cache to your service.
 2. Web service should check cache to get calculation results from it first, if there are no calculation results for input parameter yet, do the calculation and put it into the cache before returning results in response.
 
-## Tests
+### Tests
 
 The lab can be tested using Spring Boot Tests that are located [here](https://github.com/TimuriAlvarez/BSUIR-Projects-Term-4/blob/main/Cross-PlatformProgramming/Lab3/src/test/java/com/example/restservice/RestServiceApplicationTests.java "Lab 3 Tests").
 
@@ -75,7 +75,7 @@ The lab can be tested using Spring Boot Tests that are located [here](https://gi
 1. Add a new service (Counter) which calculates number of your main service calls and returns the number when requested. Counter should be implemented as a separate thread safe bean with synchronized access.
 2. Create high load test for your main service using JMeter, Postman or any other tool. The load test should make thousands of calls in short period of time. Then make sure that Counter correctly calculates number of service calls done by the load test.
 
-## Tests
+### Tests
 
 The lab can be tested using Spring Boot Tests that are located [here](https://github.com/TimuriAlvarez/BSUIR-Projects-Term-4/blob/main/Cross-PlatformProgramming/Lab4/src/test/java/com/example/restservice/RestServiceApplicationTests.java "Lab 4 Tests").
 
@@ -90,7 +90,7 @@ In scope of this practical task we need to try functional programming approach u
 * Update initial service created in first practical task to have ability to process sequence (stream) of input parameters. Stream API and lambdas should be used for this.
 * Add new POST method which should get sequence of input parameters (they can be passed as JSON data in request body, or as simple CSV file), validate them and call new service for processing bulk data. Result can be returned as JSON or CSV file.
 
-## Tests
+### Tests
 
 The lab can be tested using Spring Boot Tests that are located [here](https://github.com/TimuriAlvarez/BSUIR-Projects-Term-4/blob/main/Cross-PlatformProgramming/Lab5/src/test/java/com/example/restservice/RestServiceApplicationTests.java "Lab 5 Tests").
 
@@ -107,7 +107,7 @@ In previous task we did bulk operation for a stream of input data. In this task 
 * Maximum and minimum values from results calculated
 * Result which was returned most times (most popular)
 
-## Tests
+### Tests
 
 The lab can be tested using Spring Boot Tests that are located [here](https://github.com/TimuriAlvarez/BSUIR-Projects-Term-4/blob/main/Cross-PlatformProgramming/Lab6/src/test/java/com/example/restservice/RestServiceApplicationTests.java "Lab 6 Tests").
 
@@ -120,7 +120,7 @@ The lab can be tested using Spring Boot Tests that are located [here](https://gi
 * We are going to wire persistence layer for storage of inbound request data and outbound response. Feel free to pick whatever database that will satisfy your needs but be ready to explain your choice.
 * Adjust your web service with ability to store all calculation results of the service in database or file using one of standard persistence framework (Spring Data/Hibernate/MyBatis).
 
-## Tests
+### Tests
 
 The lab can be tested using Spring Boot Tests that are located [here](https://github.com/TimuriAlvarez/BSUIR-Projects-Term-4/blob/main/Cross-PlatformProgramming/Lab7/src/test/java/com/example/restservice/RestServiceApplicationTests.java "Lab 7 Tests").
 
@@ -133,7 +133,7 @@ The lab can be tested using Spring Boot Tests that are located [here](https://gi
 * Improve your web-service by adding asynchronous call for main calculation service and providing REST call response containing auto-generated processID (random number, which should be used as a key to store calculation results in database) without waiting for the calculation results.
 * All calculation results should be written into database (storage) within asynchronously called service. Add a rest endpoint to get calculation results from database by processID provided.
 
-## Tests
+### Tests
 
 The lab can be tested using Spring Boot Tests that are located [here](https://github.com/TimuriAlvarez/BSUIR-Projects-Term-4/blob/main/Cross-PlatformProgramming/Lab8/src/test/java/com/example/restservice/RestServiceApplicationTests.java "Lab 8 Tests").
 
