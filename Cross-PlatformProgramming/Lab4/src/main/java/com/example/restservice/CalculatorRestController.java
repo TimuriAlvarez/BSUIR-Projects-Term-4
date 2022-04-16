@@ -22,7 +22,6 @@ public class CalculatorRestController {
 		LoggingRestController.logMethod("CalculatorRestController.setCalculatorCache");
 		this.cache = new CalculatorCacheService();
 	}
-
 	/**
 	 * Message that stores the output result before returning it  as  a  response.
 	 */
@@ -65,7 +64,6 @@ public class CalculatorRestController {
 		LoggingRestController.logEnd("/inches");
 		return message;
 	}
-
 	/**
 	 * Counter display page.
 	 * Visiting this page doesn't affect counter value.

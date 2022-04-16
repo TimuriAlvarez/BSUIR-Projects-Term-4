@@ -21,7 +21,6 @@ public class ExceptionHandlerAdvice {
 		LoggingRestController.logError(exception.getType());
 		return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 	}
-
 	/**
 	 * The handler for all exceptions except of Calculator Exception class.
 	 * @param exception Any exception.

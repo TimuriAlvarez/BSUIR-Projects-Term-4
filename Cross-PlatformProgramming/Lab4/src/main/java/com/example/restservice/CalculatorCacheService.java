@@ -14,7 +14,6 @@ public final class CalculatorCacheService {
 	 * HashMap that contains cache.
 	 */
 	HashMap<Double, Double> hashMap;
-
 	/**
 	 * Calculator Cache Service constructor.
 	 * Initializes HashMap with a new HashMap() value.
@@ -22,7 +21,6 @@ public final class CalculatorCacheService {
 	CalculatorCacheService() {
 		this.hashMap = new HashMap<>();
 	}
-
 	/**
 	 * Cache checker for meters.
 	 * Calls a conversion from CalculatorService class and puts the result as a record in HashMap.
@@ -37,19 +35,6 @@ public final class CalculatorCacheService {
 		return hashMap.get(meters);
 	}
 	/**
-	 * Getter for key from HashMap.
-	 * @param value Actual HashMap value that must already be in the HashMap.
-	 * @return Key value.
-	 */
-	private double getHashMapKey(double value) {
-		LoggingRestController.logMethod("CalculatorCacheMap.getHashMapKey");
-		for (double key:
-			hashMap.keySet()) {
-			if (hashMap.get(key).equals(value)) return key;
-		}
-		throw new HashMapKeyAbsenceException(value);
-	}
-	/**
 	 * Cache checker for inches.
 	 * Calls a conversion from CalculatorService class and puts the result as a record in HashMap.
 	 * @param value Inches.
@@ -61,5 +46,18 @@ public final class CalculatorCacheService {
 		if (!hashMap.containsValue(inches))
 			hashMap.put(CalculatorLogicService.inches2meters(inches), inches);
 		return getHashMapKey(inches);
+	}
+	/**
+	 * Getter for key from HashMap.
+	 * @param value Actual HashMap value that must already be in the HashMap.
+	 * @return Key value.
+	 */
+	private double getHashMapKey(double value) {
+		LoggingRestController.logMethod("CalculatorCacheMap.getHashMapKey");
+		for (double key:
+			hashMap.keySet()) {
+			if (hashMap.get(key).equals(value)) return key;
+		}
+		throw new HashMapKeyAbsenceException(value);
 	}
 }

@@ -16,7 +16,6 @@ class CalculatorException extends RuntimeException {
 	 * Exception location field.
 	 */
 	final private String location;
-
 	/**
 	 * Exception constructor.
 	 * @param type Exception type.
@@ -27,7 +26,6 @@ class CalculatorException extends RuntimeException {
 		this.type = type;
 		this.location = location;
 	}
-
 	/**
 	 * Method for getting exception message.
 	 * @return Exception message.
@@ -88,7 +86,7 @@ class NegativeParameterException extends CalculatorException {
 }
 
 /**
- * Exception class for negative input parameter.
+ * Exception class for HashMap key absence.
  */
 class HashMapKeyAbsenceException extends CalculatorException {
 	public HashMapKeyAbsenceException(double value) {
