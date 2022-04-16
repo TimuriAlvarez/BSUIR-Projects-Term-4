@@ -6,31 +6,47 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller that's responsible for application logging.
- *
- * Page logs:                   start() & end().
- * Unimportant methods logs:    debug();
- * Important methods logs:      warn();
- * Error (exception) logs:      error();
- *
- * All of them accept String with message as input parameter.
  */
 @RestController(value = "LoggingRestController")
 public class LoggingRestController {
+	/**
+	 * Actual logger used to log everything.
+	 */
 	private static final Logger logger = LoggerFactory.getLogger(LoggingRestController.class);
-
-	public static void start(String location) {
-		logger.info("Start: " + location);
+	/**
+	 * Log the starting of pages.
+	 * @param name Page's name
+	 */
+	public static void logStart(String name) {
+		logger.info("");
+		logger.info("Start: " + name);
 	}
-	public static void end(String location) {
-		logger.info("Successful end: " + location);
+	/**
+	 * Log the ending of pages.
+	 * @param name  Page's name
+	 */
+	public static void logEnd(String name) {
+		logger.info("Successful end: " + name);
 	}
-	public static void warn(String alarm) {
-		logger.warn(alarm + "()");
+	/**
+	 * Log an important method.
+	 * @param name  Method's name
+	 */
+	public static void logMethod(String name) {
+		logger.warn(name + "()");
 	}
-	public static void error(String error) {
+	/**
+	 * Log an unimportant method.
+	 * @param name  Method's name
+	 */
+	public static void logDebug(String name) {
+		logger.debug(name + "()");
+	}
+	/**
+	 * Log an error or an exception.
+	 * @param error  Error's or exception's name
+	 */
+	public static void logError(String error) {
 		logger.error(error);
-	}
-	public static void debug(String debug) {
-		logger.debug(debug + "()");
 	}
 }

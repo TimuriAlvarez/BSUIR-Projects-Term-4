@@ -10,12 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController(value = "CalculatorRestController")
 public class CalculatorRestController {
 	/**
+	 * Message that stores the output result before returning it  as  a  response.
+	 */
+	private String message;
+	/**
 	 * Greetings page. Implemented just for fun.
 	 * @return Greetings message.
 	 */
 	@GetMapping("/")
 	public String calculatorGreetings() {
-		return "Greetings, traveller. Here you can convert meters to inches and vice versa: all you, need is a right page and the value. Available pages: /, /meters, /inches. Good luck there.";
+		message = "Greetings, traveller. Here you can convert meters to inches and vice versa: all you, need is a right page and the value. Available pages: /, /meters, /inches. Good luck there.";
+		return message;
 	}
 	/**
 	 * From meter to inch converter page.
@@ -24,7 +29,8 @@ public class CalculatorRestController {
 	 */
 	@GetMapping("/meters")
 	public String calculator2inches(@RequestParam(value = "value", required = false) String value) {
-		return value + " meter(s) is " + CalculatorLogicService.meters2inches(CalculatorLogicService.String2double(value)) + " inch(es).";
+		message = value + " meter(s) is " + CalculatorLogicService.meters2inches(CalculatorLogicService.String2double("/meters", value)) + " inch(es).";
+		return message;
 	}
 	/**
 	 * From inch to meter converter page.
@@ -33,6 +39,7 @@ public class CalculatorRestController {
 	 */
 	@GetMapping("/inches")
 	public String calculator2meters(@RequestParam(value = "value", required = false) String value) {
-		return value + " inch(s) is " + CalculatorLogicService.inches2meters(CalculatorLogicService.String2double(value)) + " meter(s).";
+		message = value + " inch(s) is " + CalculatorLogicService.inches2meters(CalculatorLogicService.String2double("/inches", value)) + " meter(s).";
+		return message;
 	}
 }

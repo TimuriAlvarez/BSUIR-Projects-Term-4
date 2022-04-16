@@ -19,7 +19,7 @@ public final class CalculatorLogicService {
 	 * @return The value converted to double.
 	 */
 	public static double String2double(String location, String value) {
-		LoggingRestController.debug("CalculatorLogicService.String2double");
+		LoggingRestController.logDebug("CalculatorLogicService.String2double");
 		if (value == null) throw new ParameterAbsenceException(location);
 		if (value.isEmpty()) throw new EmptyParameterException(location);
 
@@ -36,7 +36,7 @@ public final class CalculatorLogicService {
 	 * @return Value of inches.
 	 */
 	public static double meters2inches(double meters) {
-		LoggingRestController.warn("CalculatorLogicService.meters2inches");
+		LoggingRestController.logMethod("CalculatorLogicService.meters2inches");
 		return meters * coefficient;
 	}
 	/**
@@ -45,7 +45,7 @@ public final class CalculatorLogicService {
 	 * @return Value of meters.
 	 */
 	public static double inches2meters(double inches) {
-		LoggingRestController.warn("CalculatorLogicService.inches2meters");
+		LoggingRestController.logMethod("CalculatorLogicService.inches2meters");
 		return inches / coefficient;
 	}
 }

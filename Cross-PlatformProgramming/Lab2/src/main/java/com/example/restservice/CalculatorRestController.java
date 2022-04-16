@@ -4,23 +4,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.restservice.LoggingRestController.*;
-
 /**
  * Controller that gets user's url-request and sends appropriate response.
  */
 @RestController(value = "CalculatorRestController")
 public class CalculatorRestController {
-	String message;
+	/**
+	 * Message that stores the output result before returning it  as  a  response.
+	 */
+	private String message;
 	/**
 	 * Greetings page. Implemented just for fun.
 	 * @return Greetings message.
 	 */
 	@GetMapping("/")
 	public String calculatorGreetings() {
-		start("Greeting");
+		LoggingRestController.logStart("Greetings");
 		message = "Greetings, traveller. Here you can convert meters to inches and vice versa: all you, need is a right page and the value. Available pages: /, /meters, /inches. Good luck there.";
-		end("Greeting");
+		LoggingRestController.logEnd("Greetings");
 		return message;
 	}
 	/**
@@ -30,9 +31,9 @@ public class CalculatorRestController {
 	 */
 	@GetMapping("/meters")
 	public String calculator2inches(@RequestParam(value = "value", required = false) String value) {
-		start("/meters");
+		LoggingRestController.logStart("/meters");
 		message = value + " meter(s) is " + CalculatorLogicService.meters2inches(CalculatorLogicService.String2double("/meters", value)) + " inch(es).";
-		end("/meters");
+		LoggingRestController.logEnd("/meters");
 		return message;
 	}
 	/**
@@ -42,9 +43,9 @@ public class CalculatorRestController {
 	 */
 	@GetMapping("/inches")
 	public String calculator2meters(@RequestParam(value = "value", required = false) String value) {
-		start("/inches");
+		LoggingRestController.logStart("/inches");
 		message = value + " inch(s) is " + CalculatorLogicService.inches2meters(CalculatorLogicService.String2double("/inches", value)) + " meter(s).";
-		end("/inches");
+		LoggingRestController.logEnd("/inches");
 		return message;
 	}
 }

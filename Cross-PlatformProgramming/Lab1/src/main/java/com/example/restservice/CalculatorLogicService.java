@@ -14,15 +14,18 @@ public final class CalculatorLogicService {
 	/**
 	 * Service method for conversion from String to double.
 	 * Also validates parameter value, provided by parameter sender.
+	 * @param location Location for exceptions.
 	 * @param value Value that should be converted.
 	 * @return The value converted to double.
 	 */
-	public static double String2double(String value) {
-		if (value == null) throw new RuntimeException();
-		if (value.isEmpty()) throw new RuntimeException();
+	public static double String2double(String location, String value) {
+		if (value == null) throw new RuntimeException(location);
+		if (value.isEmpty()) throw new RuntimeException(location);
 
-		double result = Double.parseDouble(value);
-		if (result < 0) throw new RuntimeException();
+		double result;
+		try { result = Double.parseDouble(value); }
+		catch (Exception exception) { throw new RuntimeException(location + " " + value); }
+		if (result < 0) throw new RuntimeException(location + " " + value);
 
 		return result;
 	}
