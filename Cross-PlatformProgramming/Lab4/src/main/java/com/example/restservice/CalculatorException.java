@@ -32,6 +32,7 @@ class CalculatorException extends RuntimeException {
 	 * Method for getting exception message.
 	 * @return Exception message.
 	 */
+	@Override
 	public String getMessage() {
 		LoggingController.debug("CalculatorException.getMessage");
 		return getType() + " was caught in " + location + ".";

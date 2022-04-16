@@ -1,19 +1,21 @@
 package com.example.restservice;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 
+@Service(value = "CalculatorCache")
 public final class CalculatorCache {
-	@Autowired
-	static HashMap<Double, Double> hashMap = new HashMap<>();
-	public static double meters2inches(String value) {
+
+	static final HashMap<Double, Double> hashMap = new HashMap<>();
+	public double meters2inches(String value) {
 		LoggingController.debug("CalculatorCacheMap.meters2inches");
 		double meters = CalculatorService.String2double("/meters", value);
 		if (!hashMap.containsKey(meters))
 			hashMap.put(meters, CalculatorService.meters2inches(meters));
 		return hashMap.get(meters);
 	}
-	private static double getHashMapKey(double value) {
+	private double getHashMapKey(double value) {
 		LoggingController.warn("CalculatorCacheMap.getHashMapKey");
 		for (double key:
 			hashMap.keySet()) {
@@ -21,7 +23,7 @@ public final class CalculatorCache {
 		}
 		throw new HashMapKeyAbsenceException(value);
 	}
-	public static double inches2meters(String value) {
+	public double inches2meters(String value) {
 		LoggingController.debug("CalculatorCacheMap.inches2meters");
 		double inches = CalculatorService.String2double("/inches", value);
 		if (!hashMap.containsValue(inches))

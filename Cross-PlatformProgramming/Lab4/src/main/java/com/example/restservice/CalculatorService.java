@@ -1,8 +1,11 @@
 package com.example.restservice;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Service class that contains mathematical and logical rules of "meter-to-inch" and "inch-to-meter" conversions.
  */
+@Service(value = "CalculatorService")
 public final class CalculatorService {
 	/**
 	 * Service constant: conversion coefficient.

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Controller that's responsible for application logging.
  */
-@RestController
+@RestController(value = "LoggingController")
 public class LoggingController {
 	/**
 	 * Controller logger.
@@ -30,6 +30,6 @@ public class LoggingController {
 		logger.error(error);
 	}
 	public static void debug(String debug) {
-		logger.debug(debug);
+		logger.debug(debug + "()");
 	}
 }
