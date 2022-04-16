@@ -15,51 +15,21 @@ public class LoggingController {
 	private static final Logger logger = LoggerFactory.getLogger(LoggingController.class);
 
 	/**
-	 * Common (default) log messages.
+	 * Public logging methods.
 	 */
-	public static final class DefaultLogs {
-		public static final String IndexLog = "IndexPage";
-		public static final String Meter2inch = "Meters to inches conversion";
-		public static final String Inch2meter = "Inches to meters conversion";
-		public static final String String2doubleConversion = "String to double conversion";
+	public static void start(String location) {
+		logger.info("Start: " + location);
 	}
-
-	/**
-	 * Logging method for trace log.
-	 * @param traceMessage Message for logging.
-	 */
-	public static void traceLog (final String traceMessage) {
-		logger.trace(traceMessage);
+	public static void end(String location) {
+		logger.info("Successful end: " + location);
 	}
-	/**
-	 * Logging method for trace debug.
-	 * @param debugMessage Message for logging.
-	 */
-	public static void debugLog (final String debugMessage) {
-		logger.debug(debugMessage);
+	public static void warn(String alarm) {
+		logger.warn(alarm + "()");
 	}
-	/**
-	 * Logging method for information log.
-	 * @param informationMessage Message for logging.
-	 */
-	public static void infoLog (final String informationMessage) {
-		traceLog(informationMessage);
-		logger.info(informationMessage);
+	public static void error(String error) {
+		logger.error(error);
 	}
-	/**
-	 * Logging method for warning log.
-	 * @param warningMessage Message for logging.
-	 */
-	public static void warnLog (final String warningMessage) {
-		debugLog(warningMessage);
-		logger.warn(warningMessage);
-	}
-	/**
-	 * Logging method for error log.
-	 * @param errorMessage Message for logging.
-	 */
-	public static void errorLog (final String errorMessage) {
-		debugLog(errorMessage);
-		logger.error(errorMessage);
+	public static void debug(String debug) {
+		logger.debug(debug);
 	}
 }

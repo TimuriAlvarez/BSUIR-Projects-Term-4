@@ -23,6 +23,7 @@ class CalculatorException extends RuntimeException {
 	 * @param location Exception location.
 	 */
 	public CalculatorException(String type, String location) {
+		LoggingController.debug("CalculatorException.CalculatorException");
 		this.type = type;
 		this.location = location;
 	}
@@ -32,6 +33,7 @@ class CalculatorException extends RuntimeException {
 	 * @return Exception message.
 	 */
 	public String getMessage() {
+		LoggingController.debug("CalculatorException.getMessage");
 		return getType() + " was caught in " + location + ".";
 	}
 	/**
@@ -39,6 +41,7 @@ class CalculatorException extends RuntimeException {
 	 * @return Exception type.
 	 */
 	public String getType() {
+		LoggingController.debug("CalculatorException.getType");
 		return exception + type;
 	}
 }
@@ -49,6 +52,7 @@ class CalculatorException extends RuntimeException {
 class ParameterAbsenceException extends CalculatorException {
 	public ParameterAbsenceException(String location) {
 		super("The absence of input parameter", location);
+		LoggingController.debug("ParameterAbsenceException.ParameterAbsenceException");
 	}
 }
 
@@ -58,6 +62,7 @@ class ParameterAbsenceException extends CalculatorException {
 class EmptyParameterException extends CalculatorException {
 	EmptyParameterException(String location) {
 		super("Empty input parameter", location);
+		LoggingController.debug("EmptyParameterException.EmptyParameterException");
 	}
 }
 
@@ -67,13 +72,26 @@ class EmptyParameterException extends CalculatorException {
 class InappropriateParameterException extends CalculatorException  {
 	public InappropriateParameterException(String location, String parameter) {
 		super("Inappropriate input parameter '" + parameter + "'", location);
+		LoggingController.debug("InappropriateParameterException.InappropriateParameterException");
 	}
 }
+
 /**
  * Exception class for negative input parameter.
  */
 class NegativeParameterException extends CalculatorException {
 	public NegativeParameterException(String location, String parameter) {
 		super("Negative input parameter '" + parameter + "'", location);
+		LoggingController.debug("NegativeParameterException.NegativeParameterException");
+	}
+}
+
+/**
+ * Exception class for negative input parameter.
+ */
+class HashMapKeyAbsenceException extends CalculatorException {
+	public HashMapKeyAbsenceException(double value) {
+		super("The absence of HashMap key for value '" + value + "'", "application cache");
+		LoggingController.debug("HashMapKeyAbsenceException.HashMapKeyAbsenceException");
 	}
 }

@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(value = CalculatorException.class)
 	public ResponseEntity<String> CalculatorExceptionHandler(@NotNull CalculatorException exception) {
-		LoggingController.errorLog(exception.getType());
+		LoggingController.error(exception.getType());
 		return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 
@@ -29,8 +29,8 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(value = Exception.class)
 	public ResponseEntity<String> DefaultExceptionHandler(@NotNull Exception exception) {
-		LoggingController.errorLog("Unknown Exception");
-		LoggingController.warnLog("Exception may be left unhandled!");
+		LoggingController.error("Unknown Exception");
+		LoggingController.warn("Exception may be left unhandled!");
 		return new ResponseEntity<>(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
