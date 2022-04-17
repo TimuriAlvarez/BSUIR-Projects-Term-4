@@ -49,7 +49,7 @@ void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessag
 {
 	if (!is_initialized)
 	{
-		register_at_exit(T_CLASS(TConsole, destructor));
+		T_FUNCTION(syscall, atexit)(T_CLASS(TConsole, destructor));
 		is_initialized = true;
 	}
 	else T_CLASS(TConsole, destructor)();

@@ -22,7 +22,8 @@ void T_FUNCTION(syscall, update)(void)
 	T_FUNCTION(syscall, pause)();
 	T_FUNCTION(syscall, clear)();
 }
-int register_at_exit(void(*parameter)(void))
+
+int T_FUNCTION(syscall, atexit)(void(*function)(void))
 {
-	return atexit(parameter);
+	return atexit(function);
 }

@@ -61,7 +61,7 @@ DESCRIPTION         top
 	   MAP_FAILED which shall have type void * and shall be used to
 	   indicate a failure from the mmap() function .*/
 
-#define MAP_FAILED 0x0D
+#define MAP_FAILED ((void*)(0))
 
 /*	   If the Advisory Information option is supported, the <sys/mman.h>
 	   header shall define symbolic constants for the advice argument to
