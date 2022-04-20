@@ -138,6 +138,21 @@ void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... )
 	T_CLASS(TConsole, unformat_stream)(id);
 }
 
+TString T_CLASS(TConsole, sprint)(TMessage format, ... )
+{
+	TString result = T_CLASS(TString, default_constructor)();
+	int quantity;
+	do
+	{
+		T_CLASS(TString, resize)(result);
+		va_list ptr;
+		va_start(ptr, format);
+		quantity = vsnprintf(result, (T_CLASS(TString, size)(result) / 16 + 1) * 16, format, ptr);
+		va_end(ptr);
+	} while (quantity < 0 || (size_t)quantity != T_CLASS(TString, size)(result));
+	return result;
+}
+
 void T_CLASS(TConsole, echo)(const TFlag enabled)
 {
 #ifdef WIN32

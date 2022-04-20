@@ -28,3 +28,5 @@ TString* T_CLASS(TString, split)(TString message, TMessage splitters);
 TString T_CONVERTER(TFlag, TString)(const TFlag flag);
 size_t T_CONVERTER(TString, size_t)(TMessage message);
 int T_CONVERTER(TString, int)(TString message);
+
+TString T_CONVERTER(int, TString)(const int value);

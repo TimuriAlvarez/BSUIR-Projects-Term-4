@@ -4,7 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-		sources/*.c
+		sources/*.c \
+		sources/ring.c
 
 HEADERS += \
 		sources/*.h

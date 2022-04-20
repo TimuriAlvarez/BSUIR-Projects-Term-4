@@ -72,7 +72,7 @@ TString T_CLASS(TString, resize)(TString const string)
 TString T_CLASS(TString, append)(TString const string, const char character)
 {
 	TString result;
-	if (T_CLASS(TString, size)(string) % block_size == 0 || string == nullptr)
+	if (T_CLASS(TString, size)(string) % block_size == 0)
 		result = T_CLASS(TString, resize)(string);
 	else result = string;
 	result[T_CLASS(TString, size)(result)] = character;
@@ -115,6 +115,21 @@ TString* T_CLASS(TString, split)(TString message, TMessage splitters)
 	return result;
 }
 
+#define T_THROW_OUT_OF_RANGE(T_CLASS_NAME, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Invalid index in " T_CLASS_NAME, E_LOCATION, T_CRITICAL, 0xFE000101, T_RETURN_VALUE)
+
+TString T_CLASS(TString, insert)(TString const container, const size_t index, const char value)
+{
+	if (index > T_CLASS(TString, size)(container) + 1) T_THROW_OUT_OF_RANGE("TString", false, nullptr);
+	T_CLASS(TString, append)(container, value);
+	if (index != T_CLASS(TString, size)(container))
+		for (size_t i = T_CLASS(TString, size)(container) - 1u; i > index; --i)
+			container[i] = container[i - 1u];
+	container[index] = value;
+	return container;
+}
+
+#define T_THROW_BAD_CONVERTION(T_CLASS_NAME, T_NEW_TYPE, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Invalid index in " T_CLASS_NAME, E_LOCATION, T_CRITICAL, 0xFE0001CF, T_RETURN_VALUE)
+
 /*	Conversions for TMessage (can be used to convert TStrings as well):	*/
 // Not message because 'const' is ignored by gcc. But it is still const!
 TString T_CONVERTER(TFlag, TString)(const TFlag flag)
@@ -125,7 +140,21 @@ size_t T_CONVERTER(TString, size_t)(TMessage message)
 {
 	size_t result = 0u;
 	for (size_t i = 0u; message[i] != '\0'; ++i)
+	{
+		if (message[i] < '0' || message[i] > '9') T_THROW_BAD_CONVERTION("TSting", "size_t", false, 0u);
 		result = result * 10 + (message[i] % '0');
+	}
 	return result;
 }
-//int T_CONVERTER(TString, int)(TString message);
+
+T_IMPORT_MATH_DEFINITION(int)
+
+TString T_CONVERTER(int, TString)(const int value)
+{
+	TString result = T_CLASS(TString, default_constructor)();
+	TFlag is_negative = value < 0;
+	for (int temp = abs__int(value); temp > 0; temp /= 10)
+		result = T_CLASS(TString, insert)(result, 0u, temp % 10 + '0');
+	if (is_negative) result = T_CLASS(TString, insert)(result, 0u, '-');
+	return result;
+}

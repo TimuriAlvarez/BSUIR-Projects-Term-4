@@ -58,3 +58,11 @@ T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) T_CONTAINE
 		T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, push)(new_container, iterator->data, true);
 	return new_container;
 }*/
+
+#ifndef T_SOURCE_FILE
+
+#undef CONTAINER_TYPE
+#undef CONTAINER_DATA_TYPE
+#undef T_SOURCE_FILE
+
+#endif
