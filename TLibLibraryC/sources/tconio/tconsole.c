@@ -144,12 +144,13 @@ TString T_CLASS(TConsole, sprint)(TMessage format, ... )
 	int quantity;
 	do
 	{
+		T_CLASS(TString, destructor)(result);
 		T_CLASS(TString, resize)(result);
 		va_list ptr;
 		va_start(ptr, format);
 		quantity = vsnprintf(result, (T_CLASS(TString, size)(result) / 16 + 1) * 16, format, ptr);
 		va_end(ptr);
-	} while (quantity < 0 || (size_t)quantity != T_CLASS(TString, size)(result));
+	} while ((size_t)quantity > T_CLASS(TString, size)(result));
 	return result;
 }
 
