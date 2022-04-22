@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-typedef bool TFlag;
+typedef bool TBool;
 
 typedef FILE* TFile;
 typedef int TFileDescriptor;

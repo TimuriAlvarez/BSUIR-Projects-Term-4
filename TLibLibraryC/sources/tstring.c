@@ -1,4 +1,4 @@
-#include <string.h>
+#include <stdarg.h>
 
 #include "tstring.h"
 #include "timport.h"
@@ -25,15 +25,15 @@ TComparison T_CLASS(TString, compare)(TMessage message1, TMessage message2)
 	if (size1 < size2) return kLess;
 	return kEqual;
 }
-TFlag T_CLASS(TString, equal)(TMessage message1, TMessage message2)
+TBool T_CLASS(TString, equal)(TMessage message1, TMessage message2)
 {
 	return T_CLASS(TString, compare)(message1, message2) == kEqual;
 }
-TFlag T_CLASS(TString, empty)(TMessage message)
+TBool T_CLASS(TString, empty)(TMessage message)
 {
 	return T_CLASS(TString, size)(message) == 0u;
 }
-TFlag T_CLASS(TString, contains)(TMessage message, const char character)
+TBool T_CLASS(TString, contains)(TMessage message, const char character)
 {
 	for (size_t index = 0u; index < T_CLASS(TString, size)(message); ++index)
 		if (message[index] == character) return true;
@@ -49,10 +49,27 @@ TString T_CLASS(TString, default_constructor)(void)
 {
 	return nullptr;
 }
-TString T_CLASS(TString, constructor)(TMessage message)
+TString T_CLASS(TString, constructor)(TMessage format, ... )
 {
-	return T_CLASS(TString, multy_append)(nullptr, message);
+	TString result = T_CLASS(TString, default_constructor)();
+	size_t size, quantity;
+	va_list ptr;
+
+	va_start(ptr, format);
+	size = vsnprintf(result, 0, format, ptr) + 1;
+	va_end(ptr);
+
+	for (size_t i = 0u; i < size; ++i)
+		result = T_CLASS(TString, append)(result, '_');
+
+	va_start(ptr, format);
+	quantity = vsnprintf(result, size, format, ptr) + 1;
+	va_end(ptr);
+
+	if (size != quantity) T_CLASS(TConsole, print)(kDebug, "Error while constructing the string!");
+	return result;
 }
+
 TString T_CLASS(TString, clear)(TString const string)
 {
 	return T_FUNCTION(delete, char)(string);
@@ -115,7 +132,7 @@ TString* T_CLASS(TString, split)(TString message, TMessage splitters)
 	return result;
 }
 
-#define T_THROW_OUT_OF_RANGE(T_CLASS_NAME, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Invalid index in " T_CLASS_NAME, E_LOCATION, T_CRITICAL, 0xFE000101, T_RETURN_VALUE)
+#define T_THROW_OUT_OF_RANGE(T_CLASS_NAME, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Invalid index in " T_CLASS_NAME, T_CRITICAL, 0xFE000101, return T_RETURN_VALUE;)
 
 TString T_CLASS(TString, insert)(TString const container, const size_t index, const char value)
 {
@@ -128,11 +145,11 @@ TString T_CLASS(TString, insert)(TString const container, const size_t index, co
 	return container;
 }
 
-#define T_THROW_BAD_CONVERTION(T_CLASS_NAME, T_NEW_TYPE, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Bad convertion from " T_CLASS_NAME " to " T_NEW_TYPE, E_LOCATION, T_CRITICAL, 0xFE0001CF, T_RETURN_VALUE)
+#define T_THROW_BAD_CONVERTION(T_CLASS_NAME, T_NEW_TYPE, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Bad convertion from " T_CLASS_NAME " to " T_NEW_TYPE, T_CRITICAL, 0xFE0001CF, return T_RETURN_VALUE;)
 
 /*	Conversions for TMessage (can be used to convert TStrings as well):	*/
 // Not message because 'const' is ignored by gcc. But it is still const!
-TString T_CONVERTER(TFlag, TString)(const TFlag flag)
+TString T_CONVERTER(TFlag, TString)(const TBool flag)
 {
 	return flag == true ? "true" : "false";
 }
@@ -152,7 +169,7 @@ T_IMPORT_MATH_DEFINITION(int)
 TString T_CONVERTER(int, TString)(const int value)
 {
 	TString result = T_CLASS(TString, default_constructor)();
-	TFlag is_negative = value < 0;
+	TBool is_negative = value < 0;
 	for (int temp = abs__int(value); temp > 0; temp /= 10)
 		result = T_CLASS(TString, insert)(result, 0u, temp % 10 + '0');
 	if (is_negative) result = T_CLASS(TString, insert)(result, 0u, '-');

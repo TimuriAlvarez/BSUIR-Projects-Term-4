@@ -8,23 +8,26 @@
  *	Can be supplemented with new useful definitions.
  */
 
-#define T_CAT(T_TOKEN_1, T_TOKEN_2) T_TOKEN_1##_##T_TOKEN_2
-#define T_CONCATENATION(T_TOKEN_1, T_TOKEN_2) T_TOKEN_1##__##T_TOKEN_2
-#define T_DEFINE(T_TOKEN_1, T_TOKEN_2) T_CAT(T_TOKEN_1, T_TOKEN_2)
-#define T_DECL(T_TOKEN_1, T_TOKEN_2) T_CONCATENATION(T_TOKEN_1, T_TOKEN_2)
-#define T_DECLARE(T_TOKEN_1, T_TOKEN_2, T_TOKEN_3) T_DECL(T_TOKEN_1, T_DECL(T_TOKEN_2, T_TOKEN_3))
+#define T_CAT2(T_TOKEN_1, T_TOKEN_2) T_TOKEN_1##T_TOKEN_2
+#define T_CAT3(T_TOKEN_1, T_TOKEN_2, T_TOKEN_3) T_TOKEN_1##T_TOKEN_2##T_TOKEN_3
+#define T_DEFINE_2(T_TOKEN_1, T_TOKEN_2) T_CONCATENATION2(T_TOKEN_1, T_TOKEN_2)
+#define T_DEFINE_3(T_TOKEN_1, T_TOKEN_2, T_TOKEN_3) T_DECLARE_2(T_TOKEN_1, T_DECLARE_2(T_TOKEN_2, T_TOKEN_3))
+
+#define T_CONCATENATION_2(T_TOKEN_1, T_TOKEN_2) T_TOKEN_1##__##T_TOKEN_2
+#define T_CONCATENATION_3(T_TOKEN_1, T_TOKEN_2, T_TOKEN_3) T_TOKEN_1##__##T_TOKEN_2##__##T_TOKEN_3
+#define T_DECLARE_2(T_TOKEN_1, T_TOKEN_2) T_CONCATENATION_2(T_TOKEN_1, T_TOKEN_2)
+#define T_DECLARE_3(T_TOKEN_1, T_TOKEN_2, T_TOKEN_3) T_CONCATENATION_3(T_TOKEN_1, T_TOKEN_2, T_TOKEN_3)
 
 /*	These definitions can (and should) be used anywhere you want to!
  *	Just be careful and keep in mind what you are doing.
  *	Do not spawn duplicates here, unless it is essential for organizing the logic of the lib.
  */
 
-#define T_FUNCTION(T_FUNCTION_NAME, T_FUNCTION_TYPE) T_DECL(T_FUNCTION_NAME, T_FUNCTION_TYPE)
-#define T_CLASS(T_CLASS_NAME, T_CLASS_METHOD) T_DECL(T_CLASS_NAME, T_CLASS_METHOD)
-#define T_CONTAINER(T_CONTAINER_NAME, T_DATA_TYPE, T_CONTAINER_METHOD) T_DECLARE(T_CONTAINER_NAME, T_DATA_TYPE, T_CONTAINER_METHOD)
-#define T_CONVERTER(T_OLD_TYPE, T_NEW_TYPE) T_DECLARE(T_OLD_TYPE, to, T_NEW_TYPE)
+#define T_FUNCTION(T_FUNCTION_NAME, T_FUNCTION_TYPE) T_DECLARE_2(T_FUNCTION_NAME, T_FUNCTION_TYPE)
+#define T_CLASS(T_CLASS_NAME, T_CLASS_METHOD) T_DECLARE_2(T_CLASS_NAME, T_CLASS_METHOD)
+#define T_CONTAINER(T_CONTAINER_NAME, T_DATA_TYPE, T_CONTAINER_METHOD) T_DECLARE_3(T_CONTAINER_NAME, T_DATA_TYPE, T_CONTAINER_METHOD)
+#define T_CONVERTER(T_OLD_TYPE, T_NEW_TYPE) T_DECLARE_3(T_OLD_TYPE, to, T_NEW_TYPE)
 #define T_ARRAY_SIZE(arr) (size_t)(sizeof(arr) / sizeof((arr)[0]))
-#define T_POINTER(T_TYPE) T_CAT(T_TYPE, p)
 
 /*	These definitions are actually literals, used for identifier generation.
  *	Can be supplemented with other ones if it is necessary.
@@ -33,7 +36,6 @@
 #define T_CONTAINER_POSTFIX Container
 #define T_ALLOCATOR_POSTFIX Allocator
 #define T_ITERATOR_POSTFIX Iterator
-#define T_IPRIVATE_POSTFIX PrivateIterator
 #define T_ELEMENT_POSTFIX Element
 
 #define FOR_EACH_ITERATOR_FROM(var_iterator, CONTAINER_TYPE, CONTAINER_DATA_TYPE, var_container)\

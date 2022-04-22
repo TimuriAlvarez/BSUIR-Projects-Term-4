@@ -4,7 +4,7 @@
 
 #include "../tconio.h"
 
-#define T_THROW_BADALLOC T_THROW_EXCEPTION("TImport/TMemory", "Failed to allocate memory - badalloc", E_LOCATION, true, 0xCF00BA, nullptr)
+#define T_THROW_BADALLOC T_THROW_EXCEPTION("TImport::TMemory::new", "Failed to allocate memory - badalloc", true, 0xCF00BA, { return nullptr; })
 
 /*	WARNING: T_ALLOCATOR_TYPE must be a single identificator (existing type) without any non-letter characters	*/
 

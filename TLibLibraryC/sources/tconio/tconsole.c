@@ -15,28 +15,29 @@
 #include "../tstring.h"
 #include "../tfilesystem.h"
 
-#define T_THROW_TINPUT_INIT T_THROW_EXCEPTION("TConio::TConsole", "TInput cannot be initialized as any of other streams", E_LOCATION, true, 0xCE00C1, )
-#define T_THROW_CLOSED_STREM T_THROW_EXCEPTION("TConio::TConsole", "Output stream is closed. Failed to print message", E_LOCATION, true, 0xCE00C0, )
+#define T_THROW_TINPUT_INIT T_THROW_EXCEPTION("TConio::TConsole", "TInput cannot be initialized as any of other streams", true, 0xCE00C1, )
+#define T_THROW_CLOSED_STREM T_THROW_EXCEPTION("TConio::TConsole", "Output stream is closed. Failed to print message", true, 0xCE00C0, )
 
-static TFlag is_initialized = false;
+static TBool is_initialized = false;
 
 static struct TConsole
 {
-	TFile streams[5];
-	TString formats[5];
+	TFile streams[6];
+	TString formats[6];
 } t_console;
 
-static TFlag t_debug = false;
+static TBool t_debug = false;
+static TBool t_library = false;
 
 TFile T_CLASS(TConsole, defaultof)(const TConsoleId id)
 {
-	const TFile defaults[] = { stdin, stdout, stderr, stdout, stdout };
+	const TFile defaults[] = { stdin, stdout, stderr, stdout, stdout, stdout };
 	return defaults[id];
 }
 
 void T_CLASS(TConsole, destructor)(void)
 {
-	for (TConsoleId id = kInput; id <= kDebug; ++id)
+	for (TConsoleId id = kInput; id <= kLibrary; ++id)
 	{
 		if (t_console.streams[id] != T_CLASS(TConsole, defaultof)(id))
 			if (id != kOutput || t_console.streams[kOutput] != t_console.streams[kError])
@@ -53,7 +54,7 @@ void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessag
 		is_initialized = true;
 	}
 	else T_CLASS(TConsole, destructor)();
-	for (TConsoleId id = kInput; id <= kDebug; ++id)
+	for (TConsoleId id = kInput; id <= kLibrary; ++id)
 	{
 		t_console.streams[id] = T_CLASS(TConsole, defaultof)(id);
 		t_console.formats[id] = nullptr;
@@ -82,10 +83,10 @@ void T_CLASS(TConsole, default_constructor)(void)
 	T_CLASS(TConsole, set_format)(kError, kNormal, true, kRed);
 	T_CLASS(TConsole, set_format)(kLog, kNormal, true, kCyan);
 	T_CLASS(TConsole, set_format)(kDebug, kNormal, true, kPurple);
+	T_CLASS(TConsole, set_format)(kLibrary, kNormal, true, kBlue);
 }
 
-
-void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, const TFlag fg_bright, const TAnsiColor foreground)
+void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, const TBool fg_bright, const TAnsiColor foreground)
 {
 	if (t_console.streams[id == kInput ? kOutput : id] != T_CLASS(TConsole, defaultof)(id == kInput ? kOutput : id)) return;
 
@@ -125,36 +126,23 @@ void T_CLASS(TConsole, unformat_stream)(const TConsoleId id)
 }
 void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... )
 {
-	if (id == kDebug && t_debug == false) return;
+	if ((id == kDebug && t_debug == false) || (id == kLibrary && t_library == false)) return;
 
 	TFile const file = t_console.streams[id == kInput ? kOutput : id];
 	if (file == nullptr) T_THROW_CLOSED_STREM
 
 	T_CLASS(TConsole, format_stream)(id);
+	if (id == kDebug) fprintf(file, "T_DEBUG{");
+	else if (id == kLibrary) fprintf(file, "T_LIBRARY{ ");
 	va_list ptr;
 	va_start(ptr, format);
 	vfprintf(file, format, ptr);
 	va_end(ptr);
+	if (id == kDebug || id == kLibrary) fprintf(file, " }\n");
 	T_CLASS(TConsole, unformat_stream)(id);
 }
 
-TString T_CLASS(TConsole, sprint)(TMessage format, ... )
-{
-	TString result = T_CLASS(TString, default_constructor)();
-	int quantity;
-	do
-	{
-		T_CLASS(TString, destructor)(result);
-		T_CLASS(TString, resize)(result);
-		va_list ptr;
-		va_start(ptr, format);
-		quantity = vsnprintf(result, (T_CLASS(TString, size)(result) / 16 + 1) * 16, format, ptr);
-		va_end(ptr);
-	} while ((size_t)quantity > T_CLASS(TString, size)(result));
-	return result;
-}
-
-void T_CLASS(TConsole, echo)(const TFlag enabled)
+void T_CLASS(TConsole, echo)(const TBool enabled)
 {
 #ifdef WIN32
 	HANDLE const h_std_in = GetStdHandle(STD_INPUT_HANDLE);
@@ -173,9 +161,13 @@ void T_CLASS(TConsole, echo)(const TFlag enabled)
 #endif
 }
 
-void T_CLASS(TConsole, debug)(const TFlag enabled)
+void T_CLASS(TConsole, debug)(const TBool enabled)
 {
 	t_debug = enabled;
+}
+void T_CLASS(TConsole, library)(const TBool enabled)
+{
+	t_library = enabled;
 }
 
 void T_CLASS(TConsole, scan)(TMessage format, ...)
@@ -199,7 +191,7 @@ void T_CLASS(TConsole, clear)(void)
 	while ((ch = fgetc(t_console.streams[kInput])) != '\n' && ch != EOF) {}
 	T_CLASS(TConsole, echo)(true);
 }
-TString T_CLASS(TConsole, getline)(TMessage message, const TFlag can_be_empty)
+TString T_CLASS(TConsole, getline)(TMessage message, const TBool can_be_empty)
 {
 	TString string = nullptr;
 	int character = '\0';
@@ -214,7 +206,7 @@ TString T_CLASS(TConsole, getline)(TMessage message, const TFlag can_be_empty)
 	} while (can_be_empty == false && T_CLASS(TString, empty)(string));
 	return string;
 }
-TFlag T_CLASS(TConsole, confirmation)(TMessage message)
+TBool T_CLASS(TConsole, confirmation)(TMessage message)
 {
 	if (message != nullptr) T_CLASS(TConsole, print)(kOutput, "Are you sure you want to %s? [Y/N] ", message);
 	T_CLASS(TConsole, echo)(false);

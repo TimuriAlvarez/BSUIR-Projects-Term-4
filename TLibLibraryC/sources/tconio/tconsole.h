@@ -9,6 +9,7 @@ typedef enum
 	kError,
 	kLog,
 	kDebug,
+	kLibrary,
 } TConsoleId;
 typedef enum
 {
@@ -38,16 +39,16 @@ typedef enum
 	kCrossedOut = '9', // Strike
 } TAnsiSgr;
 
-void T_CLASS(TConsole, default_constructor)(void);
+//makevoid T_CLASS(TConsole, default_constructor)(void);
 void T_CLASS(TConsole, constructor)(TMessage t_input, TMessage t_output, TMessage t_error, TMessage t_log);
-void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, const TFlag fg_bright, const TAnsiColor foreground);
+void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, const TBool fg_bright, const TAnsiColor foreground);
 void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... );
 void T_CLASS(TConsole, format_stream)(const TConsoleId id);
 void T_CLASS(TConsole, unformat_stream)(const TConsoleId id);
-TString T_CLASS(TConsole, sprint)(TMessage format, ... );
-void T_CLASS(TConsole, echo)(const TFlag enabled);
-void T_CLASS(TConsole, debug)(const TFlag enabled);
+void T_CLASS(TConsole, echo)(const TBool enabled);
+void T_CLASS(TConsole, debug)(const TBool enabled);
+void T_CLASS(TConsole, library)(const TBool enabled);
 void T_CLASS(TConsole, scan)(TMessage format, ...);
 void T_CLASS(TConsole, clear)(void);
-TString T_CLASS(TConsole, getline)(TMessage message, const TFlag can_be_empty);
-TFlag T_CLASS(TConsole, confirmation)(TMessage message);
+TString T_CLASS(TConsole, getline)(TMessage message, const TBool can_be_empty);
+TBool T_CLASS(TConsole, confirmation)(TMessage message);

@@ -12,17 +12,15 @@ typedef struct
 		size_t line;
 		TMessage function;
 	} code_location;
-	TFlag terminate;
+	TBool terminate;
 	size_t code;
 } TException;
 
 void handle_exception(const TException exception);
 
-#define T_THROW_EXCEPTION(E_TYPE, E_DESCRIPTION, C_LOCATION, E_TERMINATE, E_CODE, E_RETURN) \
+#define T_THROW_EXCEPTION(E_TYPE, E_DESCRIPTION, E_TERMINATE, E_CODE, E_HANDLER_ACTION) \
 	{ \
-	const TException exception = { E_TYPE, E_DESCRIPTION, C_LOCATION, E_TERMINATE, E_CODE }; \
+	const TException exception = { E_TYPE, E_DESCRIPTION, { __FILE__ , __LINE__ , __func__ }, E_TERMINATE, E_CODE }; \
 	handle_exception(exception); \
-	return E_RETURN; \
+	E_HANDLER_ACTION \
 	}
-
-#define E_LOCATION { __FILE__ , __LINE__ , __func__ }
