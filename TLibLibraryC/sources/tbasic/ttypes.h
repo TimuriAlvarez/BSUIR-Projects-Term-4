@@ -2,11 +2,8 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <uchar.h>
 
-typedef bool TBool;
-
-typedef FILE* TFile;
-typedef int TFileDescriptor;
 typedef enum
 {
 	kLess = -1,
@@ -19,18 +16,36 @@ typedef enum
 	kRevercedIteration
 } TIterationDirection;
 
-typedef char* TString;
-typedef const char* const TMessage;
-//typedef wchar_t* TStringW;
-//typedef const wchar_t* const TMessageW;
-
-typedef unsigned char uchar;
+				//Fundamental arithmetic types:
+	//Integral types:
+typedef bool TBool;
+//char
+typedef char16_t char16;
+typedef char32_t char32;
+typedef wchar_t wchar;
+typedef signed char schar;
 typedef short int hint;
+//int
+typedef long int lint;
+typedef long long int llint;
+typedef unsigned char uchar;
 typedef unsigned short int uhint;
 typedef unsigned int uint;
-
-typedef long int lint;
 typedef unsigned long int ulint;
-typedef long long int llint;
 typedef unsigned long long int ullint;
+	//Floating point types:
+//float
+//double
 typedef long double ldouble;
+				//Additional types:
+
+				//My types:
+typedef uchar byte;
+typedef int TFileDescriptor;
+
+				//Pointers:
+typedef FILE* TFile;
+typedef char* TString;
+typedef const char* const TMessage;
+typedef wchar* TWideString;
+typedef const wchar* const TWideMessage;

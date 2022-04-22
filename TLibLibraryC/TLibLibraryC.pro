@@ -10,6 +10,7 @@ HEADERS += \
 		*.h \
 		sources/*.h \
 		sources/tbasic/*.h \
+		sources/tbasic/tnumeric.h \
 		sources/tconio/*.h \
 		sources/tfilesystem/*.h \
 		sources/timport/*.h
