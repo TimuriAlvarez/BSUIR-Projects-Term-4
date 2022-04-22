@@ -4,11 +4,16 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-	sources/*.c
+	sources/*.c \
+	sources/threads.c
 
 DISTFILES += \
 	README.md \
 	Makefile
 
 HEADERS += \
-	sources/*.h
+	sources/*.h \
+	sources/threads.h
+
+RESOURCES += \
+	resources/*

@@ -22,4 +22,5 @@ HEADERS += \
 		sources/timport/*.h \
 		sources/timport/tcontainer/*.h \
 		sources/tconio/*.h \
-		sources/tfilesystem/*.h
+		sources/tfilesystem/*.h \
+		sources/ttimer.h

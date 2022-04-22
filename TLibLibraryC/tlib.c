@@ -2,3 +2,4 @@
 #include "sources/tstring.c"
 #include "sources/tfilesystem.c"
 #include "sources/tconio.c"
+#include "sources/ttimer.c"

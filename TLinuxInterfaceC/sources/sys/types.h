@@ -3,6 +3,7 @@
 #include <sys/types.h>
 
 #include "time.h"
+#include <pthread.h>
 
 /*sys_types.h(0P)			POSIX Programmer's Manual		  sys_types.h(0P)
 
@@ -59,38 +60,38 @@ DESCRIPTION			top
 
 		//typedef int pid_t;			//  Used for process IDs and process group IDs.
 
-		typedef int pthread_attr_t;  //Used to identify a thread attribute object.
+		//typedef int pthread_attr_t;  //Used to identify a thread attribute object.
 
-		typedef int pthread_barrier_t;
+		//typedef int pthread_barrier_t;
 						//Used to identify a barrier.
 
-		typedef int pthread_barrierattr_t;
+		//typedef int pthread_barrierattr_t;
 						//Used to define a barrier attributes object.
 
-		typedef int pthread_cond_t;  //Used for condition variables.
+		//typedef int pthread_cond_t;  //Used for condition variables.
 
 		typedef int pthread_condattr_t;
 						//Used to identify a condition attribute object.
 
-		typedef int pthread_key_t;	//Used for thread-specific data keys.
+		//typedef int pthread_key_t;	//Used for thread-specific data keys.
 
-		typedef int pthread_mutex_t; //Used for mutexes.
+		//typedef int pthread_mutex_t; //Used for mutexes.
 
-		typedef int pthread_mutexattr_t;
+		//typedef int pthread_mutexattr_t;
 						//Used to identify a mutex attribute object.
 
-		typedef int pthread_once_t;  //Used for dynamic package initialization.
+		//typedef int pthread_once_t;  //Used for dynamic package initialization.
 
-		typedef int pthread_rwlock_t;
+		//typedef int pthread_rwlock_t;
 						//Used for read-write locks.
 
 		typedef int pthread_rwlockattr_t;
 						//Used for read-write lock attributes.
 
-		typedef int pthread_spinlock_t;
+		//typedef int pthread_spinlock_t;
 						//Used to identify a spin lock.
 
-		typedef int pthread_t;		// Used to identify a thread.
+		//typedef int pthread_t;		// Used to identify a thread.
 
 		//typedef unsigned int size_t;			// Used for sizes of objects.
 
@@ -117,19 +118,19 @@ DESCRIPTION			top
 /*		All of the types shall be defined as arithmetic types of an
 		appropriate length, with the following exceptions:*/
 
-		typedef int pthread_attr_t;
-		typedef int pthread_barrier_t;
-		typedef int pthread_barrierattr_t;
-		typedef int pthread_cond_t;
+		//typedef int pthread_attr_t;
+		//typedef int pthread_barrier_t;
+		//typedef int pthread_barrierattr_t;
+		//typedef int pthread_cond_t;
 		typedef int pthread_condattr_t;
-		typedef int pthread_key_t;
-		typedef int pthread_mutex_t;
-		typedef int pthread_mutexattr_t;
-		typedef int pthread_once_t;
-		typedef int pthread_rwlock_t;
+		//typedef int pthread_key_t;
+		//typedef int pthread_mutex_t;
+		//typedef int pthread_mutexattr_t;
+		//typedef int pthread_once_t;
+		//typedef int pthread_rwlock_t;
 		typedef int pthread_rwlockattr_t;
-		typedef int pthread_spinlock_t;
-		typedef int pthread_t;
+		//typedef int pthread_spinlock_t;
+		//typedef int pthread_t;
 		typedef int timer_t;
 		typedef int trace_attr_t;
 		typedef int trace_event_id_t;
@@ -171,16 +172,16 @@ DESCRIPTION			top
 		There are no defined comparison or assignment operators for the
 		following types:*/
 
-		typedef int pthread_attr_t;
-		typedef int pthread_barrier_t;
-		typedef int pthread_barrierattr_t;
-		typedef int pthread_cond_t;
+		//typedef int pthread_attr_t;
+		//typedef int pthread_barrier_t;
+		//typedef int pthread_barrierattr_t;
+		//typedef int pthread_cond_t;
 		typedef int pthread_condattr_t;
-		typedef int pthread_mutex_t;
-		typedef int pthread_mutexattr_t;
-		typedef int pthread_rwlock_t;
+		//typedef int pthread_mutex_t;
+		//typedef int pthread_mutexattr_t;
+		//typedef int pthread_rwlock_t;
 		typedef int pthread_rwlockattr_t;
-		typedef int pthread_spinlock_t;
+		//typedef int pthread_spinlock_t;
 		typedef int timer_t;
 		typedef int trace_attr_t;
 

@@ -128,7 +128,7 @@ TString T_CLASS(TString, insert)(TString const container, const size_t index, co
 	return container;
 }
 
-#define T_THROW_BAD_CONVERTION(T_CLASS_NAME, T_NEW_TYPE, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Invalid index in " T_CLASS_NAME, E_LOCATION, T_CRITICAL, 0xFE0001CF, T_RETURN_VALUE)
+#define T_THROW_BAD_CONVERTION(T_CLASS_NAME, T_NEW_TYPE, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Bad convertion from " T_CLASS_NAME " to " T_NEW_TYPE, E_LOCATION, T_CRITICAL, 0xFE0001CF, T_RETURN_VALUE)
 
 /*	Conversions for TMessage (can be used to convert TStrings as well):	*/
 // Not message because 'const' is ignored by gcc. But it is still const!

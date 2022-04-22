@@ -2,7 +2,7 @@ default:
 	clear && make build && make run
 
 build:
-	gcc -std=gnu11 -pedantic -W -Wall -Wextra sources/*.c -o bin/lab
+	gcc -std=gnu11 -pedantic -W -Wall -Wextra sources/*.c -o bin/lab -lpthread
 
 run:
 	bin/lab
@@ -12,7 +12,7 @@ debug:
 	clear && make dbuild && make drun
 
 dbuild:
-	gcc -g -std=gnu11 -pedantic -W -Wall -Wextra sources/*.c -o bin/lab_debug
+	gcc -g -std=gnu11 -pedantic -W -Wall -Wextra sources/*.c -o bin/lab_debug -lpthread
 
 drun:
 	gdb bin/lab_debug
