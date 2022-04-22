@@ -1,5 +1,8 @@
 default:
-	clear && make build && make run
+	make clean
+	make build
+	read T_ARG
+	make run
 
 build:
 	gcc -std=gnu11 -pedantic -W -Wall -Wextra sources/*.c -o bin/lab -lpthread
@@ -19,4 +22,7 @@ drun:
 
 
 clean:
-	clear && rm bin/*
+	clear
+	rm -f bin/*
+	rm -f resources/grey_plain_*.bmp
+	rm -f resources/grey_threads_*.bmp

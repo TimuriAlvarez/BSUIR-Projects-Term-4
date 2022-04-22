@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <pthread.h>
 
 #include "tlib.h"
@@ -9,18 +10,17 @@ typedef struct
 
 typedef struct
 {
+	//Timer:
+	TTimer timer;
+	//Files:
 	TString file_name;
 	TFile fp, fo;
-	TTimer timer;
 	uchar imageHeader[54];
 	uchar colorTable[1024];
 	TFlag colorTableFlag;
 	ullint imgDataSize;
 	rgb_t* buffer;
-		//buffer[2] = getc(fp);                   //blue
-		//buffer[1] = getc(fp);                   //green
-		//buffer[0] = getc(fp);                   //red
-	// Threads:
+	//Threads:
 	uint quantity;
 } Parameters;
 
@@ -112,7 +112,8 @@ void* rgb_greyshale(void *tid)
 	for(ullint i = (ullint)tid * BLCK; i < parameters.imgDataSize && i < ((ullint)tid + 1) * BLCK; ++i)
 		parameters.buffer[i].red = parameters.buffer[i].green = parameters.buffer[i].blue =
 				(parameters.buffer[i].red*0.299083) + (parameters.buffer[i].green*0.585841) + (parameters.buffer[i].blue*0.114076); //conversion formula of rgb to gray;
-	T_CLASS(TConsole, print)(kLog, "Thread No.%Lu finished\n", (ullint)tid);
+	//T_CLASS(TConsole, print)(kLog, "Thread No.%Lu finished\n", pthread_self());
+	pthread_yield();
 	pthread_exit(nullptr);
 	return nullptr;
 }
@@ -124,9 +125,9 @@ void rgb_thread_calc(void)
 		pthread_t* threads = T_FUNCTION(new, pthread_t)(parameters.quantity);
 		for (ullint i = 0u; i < parameters.quantity; ++i)
 		{
-			T_CLASS(TConsole, print)(kLog, "Creating thread No %lu...\n", i);
 			// thread's id, default attributes, procedure
 			int status = pthread_create(&threads[i], nullptr, rgb_greyshale, (void *)i);
+			//T_CLASS(TConsole, print)(kLog, "Creating thread No %Lu (%Lu)...\n", i, threads[i]);
 			if (status != 0)
 			{
 				T_FUNCTION(delete, pthread_t)(threads);
@@ -162,8 +163,9 @@ int main(void)
 				T_CLASS(TString, destructor)(quantity);
 				quantity = T_CLASS(TConsole, getline)("new threads quantity", false);
 				parameters.quantity = T_CONVERTER(TString, size_t)(quantity);
-				if (parameters.quantity != 0) break;
-				T_CLASS(TConsole, print)(kError, "Quantity must be greater than zero!\n");
+				if (parameters.quantity > PTHREAD_THREADS_MAX) T_CLASS(TConsole, print)(kError, "Quantity must be smaller than %Lu!\n", PTHREAD_THREADS_MAX);
+				else if (parameters.quantity != 0) break;
+				else T_CLASS(TConsole, print)(kError, "Quantity must be diffrent from zero!\n");
 			}
 			T_CLASS(TString, destructor)(quantity);
 		}
