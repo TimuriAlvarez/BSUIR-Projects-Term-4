@@ -72,7 +72,7 @@ TString T_CLASS(TString, constructor)(TMessage format, ... )
 
 TString T_CLASS(TString, clear)(TString const string)
 {
-	return T_FUNCTION(delete, char)(string);
+	return T_MEMORY_MANAGER(deallocate, char)(string);
 }
 TString T_CLASS(TString, destructor)(TString const string)
 {
@@ -83,7 +83,7 @@ TString T_CLASS(TString, destructor)(TString const string)
 TString T_CLASS(TString, resize)(TString const string)
 {
 	const size_t old_size = T_CLASS(TString, size)(string) + 1;
-	return T_FUNCTION(resize, char)(string, old_size, old_size + block_size);
+	return T_MEMORY_MANAGER(reallocate, char)(string, old_size, old_size + block_size);
 }
 
 TString T_CLASS(TString, append)(TString const string, const char character)
@@ -95,13 +95,13 @@ TString T_CLASS(TString, append)(TString const string, const char character)
 	result[T_CLASS(TString, size)(result)] = character;
 	return result;
 }
-TString T_CLASS(TString, multy_append)(TString const string, TMessage message)
+/*TString T_CLASS(TString, multy_append)(TString const string, TMessage message)
 {
 	TString result = string;
 	for (size_t index = 0u; index < T_CLASS(TString, size)(message); ++index)
 		result = T_CLASS(TString, append)(result, message[index]);
 	return result;
-}
+}*/
 //TString* T_CLASS(TString, chop)(TMessage string, const size_t quentity) { !chop it! }
 TString T_CLASS(TString, substring)(TMessage message, const size_t index_start, const size_t index_end)
 {
@@ -117,61 +117,28 @@ TString T_CLASS(TString, substring)(TMessage message, const size_t index_start, 
 TString* T_CLASS(TString, split)(TString message, TMessage splitters)
 {
 	size_t array_size = 0u;
-	TString* result = T_FUNCTION(new, TString)(array_size);
+	TString* result = T_MEMORY_MANAGER(allocate, TString)(array_size);
 	// Extract the first token
 	TString token = strtok(message, splitters);
 	// loop through the string to extract all other tokens
 	while(token != nullptr)
 	{
-		result = T_FUNCTION(resize, TString)(result, array_size, array_size + 1u);
-		result[array_size] = T_CLASS(TString, multy_append)(result[array_size], token);
+		result = T_MEMORY_MANAGER(reallocate, TString)(result, array_size, array_size + 1u);
+		result[array_size] = T_CLASS(TString, constructor)("%s", token);
 		array_size += 1;
 		token = strtok(message, splitters);
 	}
-	result = T_FUNCTION(resize, TString)(result, array_size, array_size + 1u);
+	result = T_MEMORY_MANAGER(reallocate, TString)(result, array_size, array_size + 1u);
 	return result;
 }
 
-#define T_THROW_OUT_OF_RANGE(T_CLASS_NAME, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Invalid index in " T_CLASS_NAME, T_CRITICAL, 0xFE000101, return T_RETURN_VALUE;)
-
-TString T_CLASS(TString, insert)(TString const container, const size_t index, const char value)
+int T_CLASS(TString, parser)(TString string, TMessage format, ... )
 {
-	if (index > T_CLASS(TString, size)(container) + 1) T_THROW_OUT_OF_RANGE("TString", false, nullptr);
-	T_CLASS(TString, append)(container, value);
-	if (index != T_CLASS(TString, size)(container))
-		for (size_t i = T_CLASS(TString, size)(container) - 1u; i > index; --i)
-			container[i] = container[i - 1u];
-	container[index] = value;
-	return container;
-}
+	int quantity;
+	va_list ptr;
 
-#define T_THROW_BAD_CONVERTION(T_CLASS_NAME, T_NEW_TYPE, T_CRITICAL, T_RETURN_VALUE) T_THROW_EXCEPTION(T_CLASS_NAME, "Bad convertion from " T_CLASS_NAME " to " T_NEW_TYPE, T_CRITICAL, 0xFE0001CF, return T_RETURN_VALUE;)
-
-/*	Conversions for TMessage (can be used to convert TStrings as well):	*/
-// Not message because 'const' is ignored by gcc. But it is still const!
-TString T_CONVERTER(TFlag, TString)(const TBool flag)
-{
-	return flag == true ? "true" : "false";
-}
-size_t T_CONVERTER(TString, size_t)(TMessage message)
-{
-	size_t result = 0u;
-	for (size_t i = 0u; message[i] != '\0'; ++i)
-	{
-		if (message[i] < '0' || message[i] > '9') T_THROW_BAD_CONVERTION("TSting", "size_t", false, 0u);
-		result = result * 10 + (message[i] % '0');
-	}
-	return result;
-}
-
-T_IMPORT_MATH_DEFINITION(int)
-
-TString T_CONVERTER(int, TString)(const int value)
-{
-	TString result = T_CLASS(TString, default_constructor)();
-	TBool is_negative = value < 0;
-	for (int temp = abs__int(value); temp > 0; temp /= 10)
-		result = T_CLASS(TString, insert)(result, 0u, temp % 10 + '0');
-	if (is_negative) result = T_CLASS(TString, insert)(result, 0u, '-');
-	return result;
+	va_start(ptr, format);
+	quantity = vsscanf(string, format, ptr);
+	va_end(ptr);
+	return quantity;
 }

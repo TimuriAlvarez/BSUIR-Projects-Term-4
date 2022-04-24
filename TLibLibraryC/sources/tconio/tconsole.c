@@ -99,17 +99,8 @@ void T_CLASS(TConsole, set_format)(const TConsoleId id, const TAnsiSgr font, con
 		kSetBrightForegroundColor = '9',	// Color
 		//kSetBrightBackgroundColor // = '10',	// Color
 	};
-
-	TString format = T_CLASS(TString, destructor)(t_console.formats[id]);
-	TMessage message0 = "\033[0;";
-	for (size_t i = 0u; i < T_CLASS(TString, size)(message0); ++i)
-		format = T_CLASS(TString, append)(format, message0[i]);
-	format = T_CLASS(TString, append)(format, (char)font);
-	format = T_CLASS(TString, append)(format, ';');
-	format = T_CLASS(TString, append)(format, fg_bright ? kSetBrightForegroundColor : kSetForegroundColor);
-	format = T_CLASS(TString, append)(format, (char)foreground);
-	format = T_CLASS(TString, append)(format, 'm');
-	t_console.formats[id] = format;
+	T_CLASS(TString, destructor)(t_console.formats[id]);
+	t_console.formats[id] = T_CLASS(TString, constructor)("\033[0;%c;%c%cm", (char)font, fg_bright ? kSetBrightForegroundColor : kSetForegroundColor, (char)foreground);
 }
 
 void T_CLASS(TConsole, format_stream)(const TConsoleId id)
