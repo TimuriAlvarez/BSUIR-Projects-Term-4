@@ -3,7 +3,8 @@
 	.stack 100h
 	.386
 ; Macro
-	ARR_SIZE EQU 5
+	ARR_SIZE EQU 3
+	EXACTNESS EQU 25
 	; Sender macro
 		macro_send macro macro_param_to, macro_param_from
 			push AX
@@ -16,24 +17,27 @@
 			macro_send DS, DGROUP
 			macro_send ES, DGROUP
 		endm
+	; Print message/warning macro
+		macro_message_print macro macro_param_message
+			mov AH, 09h
+			lea DX, macro_param_message
+			int 21h
+		endm
 ;Data
 	.data
 	var_array_of_numbers		dw ARR_SIZE dup(0)
 	var_min						dw ?
 	var_max						dw ?
+	var_delta					dw ?
 	message_enter_number		db 0Ah,0Dh, "Enter num ", '$'
 	message_min_val				db 0Ah,0Dh, "Minimum value: ", '$'
 	message_max_val				db 0Ah,0Dh, "Maximum value: ", '$'
+	message_delta_val			db 0Ah,0Dh, "max - min = ", '$'
+	message_div_val				db 0Ah,0Dh, "(max - min) / max = ", '$'
 	warning_message_overflow	db 0Ah,0Dh, "Overflow detected, number changed to default value (0)", 0Ah,0Dh,'$'
+	warning_message_zero_max	db 0Ah,0Dh, "EXCEPTION: max = 0. Dividing by zero is forbidden!", 0Ah,0Dh,'$'
 ; Functions
 	.code
-	; Procepure that warns about overflow
-		procedure_overflow proc
-			mov AH, 09h
-			lea DX, warning_message_overflow
-			int 21h
-			ret
-		procedure_overflow endp
 	;function to write nums
 		procedure_get_number proc
 			xor DI,DI
@@ -96,7 +100,7 @@
 			RetFunWrite:
 				ret
 			CallBuffOverflow:
-				call procedure_overflow
+				macro_message_print warning_message_overflow
 				mov CX,0
 				ret
 		procedure_get_number endp
@@ -146,36 +150,85 @@
 			; Start
 			; Save registers
 				push AX BX CX DX
-			; Load parameters
-				mov AX, CX
-				mov BL, 10
-				xor CX, CX
 			; Procedure
-				cmp AX, 00h
-				jge proc_number_print_loop_1 ; is greater or equal 0
+				cmp CX, 00h
+				jge proc_number_print_positive ; is positive
 				; is negative
 				mov DL, '-'
 				call proc_char_print
-				neg AX
+				neg CX
 				; now it's positive
-				proc_number_print_loop_1:
-					div BL
-					push AX
-					inc CX
-					xor AH, AH
-					cmp AL, 00h
-					jne proc_number_print_loop_1
-				proc_number_print_loop_2:
-					pop AX
-					mov DL, AH
-					add DL, '0'
-					call proc_char_print
-					loop proc_number_print_loop_2
+					proc_number_print_positive:
+						call procedure_print_number
 			; Restore registers
 				pop DX CX BX AX
 			; Return
 				ret
-			proc_number_print endp
+		proc_number_print endp
+	; Print delta divided by max value
+		proc_print_delta_divided_by_max proc
+			; Start
+				cmp var_max, 00h
+				je label_zero_max_exception
+			; Save registers
+				push AX BX CX DX
+			; Load parameters
+				mov AX, var_delta
+				xor DX, DX
+				mov BX, var_max
+				xor DI, DI
+			; Procedure
+				cmp AX, 00h
+				jge label_delta_divided_by_max_1
+				inc DI
+				neg AX
+				label_delta_divided_by_max_1:
+				cmp BX, 00h
+				jge label_delta_divided_by_max_2
+				inc DI
+				neg BX
+				label_delta_divided_by_max_2:
+				cmp DI, 01h
+				jne label_delta_divided_by_max_3
+				; Print minus
+					push DX
+					mov DL, '-'
+					call proc_char_print
+					pop DX
+				label_delta_divided_by_max_3:
+				div BX
+				; Print quotient
+					mov CX, AX
+					call proc_number_print
+				; Print dot
+					push DX
+					mov DL, '.'
+					call proc_char_print
+					pop DX
+				; Print remainder cycle
+					xor DI, DI
+					label_printing_remainder_cycle:
+						mov CX, DX
+						mov AX, 10
+						mul DX
+						div BX
+						mov CX, AX
+						call proc_number_print
+						inc DI
+						cmp DI, EXACTNESS
+						je label_printing_remainder_cycle_end
+						cmp DX, 00h
+						jne label_printing_remainder_cycle
+			; Restore registers
+				label_printing_remainder_cycle_end:
+					pop DX CX BX AX
+			; Return
+				ret
+			; Zero max exception
+				label_zero_max_exception:
+					macro_message_print warning_message_zero_max
+					ret
+		proc_print_delta_divided_by_max endp
 ; Main function
 	start:
 		; DS ES
@@ -183,74 +236,78 @@
 		; Clear DI, SI
 			mov SI, 0
 			mov DI, 1
-		;++++++++++++++++++++++Enter array++++++++++++++++++++++++
-		loop_enter_array:
-			mov AH, 09h
-			lea DX, message_enter_number
-			int 21h
-
-			mov CX, DI
-			call procedure_print_number
-
-			mov DX, ':'
-			int 21h
-
-			mov DX, 32
-			int 21h
-
-			push DI
-			call procedure_get_number
-			pop DI
-			
-			mov var_array_of_numbers[SI],CX
-			inc SI
-			inc SI
-			inc DI
-			
-			cmp DI,ARR_SIZE
-			jle loop_enter_array
-		;----------------------Enter array------------------------
-		;+++++++++++++++++++++++Logic+++++++++++++++++++++++++++++
-			xor SI, SI
-			xor DI, DI
-			mov DX, var_array_of_numbers[00h]
-			mov var_min, DX
-			mov var_max, DX
-			label_min_max_seek:
-				cmp DI, ARR_SIZE
-				je label_main_procedure_end
-				mov DX, var_array_of_numbers[SI]
-				inc SI
-				inc SI
-				inc DI
-				cmp DX, var_min
-				jl label_update_min
-				label_update_min_return:
-				cmp DX, var_max
-				jg label_update_max
-				label_update_max_return:
-				jmp label_min_max_seek
-			label_update_min:
+		; Enter the array loop
+			loop_enter_array:
+				; Enter number prompt
+					macro_message_print message_enter_number
+					mov CX, DI
+					call procedure_print_number
+					mov DX, ':'
+					int 21h
+					mov DX, 32
+					int 21h
+				; get number
+					push DI
+					call procedure_get_number
+					pop DI
+				; Send number to memory
+					mov var_array_of_numbers[SI],CX
+					inc SI
+					inc SI
+					inc DI
+				; Contunue... or mb not...
+					cmp DI,ARR_SIZE
+					jle loop_enter_array
+		; Min-max search
+			; Preparations
+				xor SI, SI
+				xor DI, DI
+				mov DX, var_array_of_numbers[00h]
 				mov var_min, DX
-				jmp label_update_min_return
-			label_update_max:
 				mov var_max, DX
-				jmp label_update_max_return
-		;-----------------------Logic-----------------------------
-	label_main_procedure_end:
-		mov AH, 09h
-		lea DX, message_min_val
-		int 21h
-		mov CX, var_min
-		call proc_number_print
-
-		mov AH, 09h
-		lea DX, message_max_val
-		int 21h
-		mov CX, var_max
-		call proc_number_print
-
-		mov ax, 4C00h
-		int 21h
+			; Searching loop
+				label_min_max_search:
+					cmp DI, ARR_SIZE
+					je label_min_max_print
+					mov DX, var_array_of_numbers[SI]
+					inc SI
+					inc SI
+					inc DI
+					cmp DX, var_min
+					jl label_update_min
+					label_update_min_return:
+					cmp DX, var_max
+					jg label_update_max
+					label_update_max_return:
+					jmp label_min_max_search
+				; Min value was found
+					label_update_min:
+						mov var_min, DX
+						jmp label_update_min_return
+				; Max value was found
+					label_update_max:
+						mov var_max, DX
+						jmp label_update_max_return
+		; Printin min-max values
+			label_min_max_print:
+				; Min value
+					macro_message_print message_min_val
+					mov CX, var_min
+					call proc_number_print
+				; Max value
+					macro_message_print message_max_val
+					mov CX, var_max
+					call proc_number_print
+		; Print delta value
+			macro_message_print message_delta_val
+			sub CX, var_min
+			mov var_delta, CX
+			call proc_number_print
+		; Print div value
+			macro_message_print message_div_val
+			call proc_print_delta_divided_by_max
+		; Return with exit code 00h
+			mov ax, 4C00h
+			int 21h
 	end start
 ;End of main function
