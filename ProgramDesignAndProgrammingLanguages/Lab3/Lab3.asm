@@ -3,8 +3,8 @@
 	.stack 100h
 	.386
 ; Macro
-	ARR_SIZE EQU 3
-	EXACTNESS EQU 25
+	ARR_SIZE EQU 30
+	EXACTNESS EQU 50
 	; Sender macro
 		macro_send macro macro_param_to, macro_param_from
 			push AX
@@ -34,6 +34,7 @@
 	message_max_val				db 0Ah,0Dh, "Maximum value: ", '$'
 	message_delta_val			db 0Ah,0Dh, "max - min = ", '$'
 	message_div_val				db 0Ah,0Dh, "(max - min) / max = ", '$'
+	warning_message_main_over	db 0Ah,0Dh, "Overflow detected while calculating (max - min) value!", 0Ah,0Dh,'$'
 	warning_message_overflow	db 0Ah,0Dh, "Overflow detected, number changed to default value (0)", 0Ah,0Dh,'$'
 	warning_message_zero_max	db 0Ah,0Dh, "EXCEPTION: max = 0. Dividing by zero is forbidden!", 0Ah,0Dh,'$'
 ; Functions
@@ -299,15 +300,21 @@
 					mov CX, var_max
 					call proc_number_print
 		; Print delta value
-			macro_message_print message_delta_val
 			sub CX, var_min
+			jo label_main_ovefrow
+			macro_message_print message_delta_val
 			mov var_delta, CX
 			call proc_number_print
 		; Print div value
 			macro_message_print message_div_val
 			call proc_print_delta_divided_by_max
 		; Return with exit code 00h
-			mov ax, 4C00h
-			int 21h
+			label_main_return:
+				mov ax, 4C00h
+				int 21h
+		; Main overflow:
+			label_main_ovefrow:
+				macro_message_print warning_message_main_over
+				jmp label_main_return
 	end start
 ;End of main function
