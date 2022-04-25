@@ -5,7 +5,12 @@
 
 void* MK_FP(int, int);
 int inp(int);
-void outp(int,int);
+int outp(int,int);
+
+void enable(void);
+void disable(void);
+void dos_freemem(int);
+void dos_keep(int,int);
 
 void _enable(void);
 void _disable(void);
@@ -51,3 +56,5 @@ union REGS
 };
 #undef T_REGISTER
 void int86(int,union REGS*,union REGS*);
+
+void sleep(unsigned int);
