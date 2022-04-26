@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../../TLibLibraryC/tlib.h"
-#include "../../../TLinuxInterfaceC/tlinux.h"
+#include "../../../TLinuxLibraryC/tlinux.h"
 
 #ifndef PTHREAD_THREADS_MAX
 #define PTHREAD_THREADS_MAX 100

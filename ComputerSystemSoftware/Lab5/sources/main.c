@@ -72,7 +72,6 @@ int* UpdatePidsDecrease(int **old_pids, int count)
 
 int main(void)
 {
-	T_CLASS(TConsole, default_constructor)();
 	T_CLASS(TConsole, debug)(true);
 	struct Circle *BufferCircle = nullptr;
 
@@ -85,7 +84,7 @@ int main(void)
 	sem_t* SemMutex = sem_open("/semmutex", O_CREAT, 0644, 1);
 
 	if(SemProducer == SEM_FAILED || SemTaker == SEM_FAILED || SemMutex == SEM_FAILED)
-		T_THROW_EXCEPTION("Semaphore", "Function sem_open(...) failed to create a semaphore",E_LOCATION,true,0xCE000150,0xCE000150);
+		T_THROW_EXCEPTION("Semaphore", "Function sem_open(...) failed to create a semaphore",true,0xCE000150,);
 
 	//DATA SEG
 	int *ProducerPids, CountProducer=0, CreatedCircles = 0;

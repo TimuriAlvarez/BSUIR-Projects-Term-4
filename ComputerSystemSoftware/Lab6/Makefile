@@ -1,28 +1,51 @@
-default:
-	make clean
-	make build
-	read T_ARG
-	make run
+# Makefile
+CC		= gcc
+VERSION	= c11
+OPTIONS	= -pedantic -W -Wall -Wextra
+FLAGS	=
+SRC		= sources/*.c
+NUMBER	= 1-2
+NAME	= lab$(NUMBER)
+# Arguments to be paseed in programm
+args	=
+
+help:
+	# 	Make options:
+	# about		-	Get general information about the lab;
+	# tor		-	Read Terms of Reference;
+	# build		-	Build binary ready for execution;
+	# run		-	Execute binary;
+	# dbuild	-	Build binary ready for debug;
+	# debug		-	Debug binary;
+	# clean		-	Remove all build and temporary files.
+
+about:
+	# Year:			2nd
+	# Term:			4th
+	# Subject:		Computer System Software
+	# Project:		Lab $(NUMBER)
+	# OS:			Linux (WSL)
+
+tor:
+	nano -v +129 ../README.md
 
 build:
-	gcc -std=gnu11 -pedantic -W -Wall -Wextra sources/*.c -o bin/lab -lpthread
-
-run:
-	bin/lab
-
-
-debug:
-	clear && make dbuild && make drun
+	clear
+	$(CC) -std=$(VERSION) $(OPTIONS) $(SRC) -o bin/$(NAME) $(FLAGS)
 
 dbuild:
-	gcc -g -std=gnu11 -pedantic -W -Wall -Wextra sources/*.c -o bin/lab_debug -lpthread
+	clear
+	$(CC) -std=$(VERSION) $(OPTIONS) $(SRC) -o bin/$(NAME)_debug $(FLAGS) -g
 
-drun:
-	gdb bin/lab_debug
+run:
+	make build
+	bin/$(NAME) $(args)
 
+debug:
+	make dbuild
+	bin/$(NAME)_debug $(args)
 
 clean:
 	clear
 	rm -f bin/*
-	rm -f resources/grey_plain_*.bmp
-	rm -f resources/grey_threads_*.bmp
+	rm -f temp/*

@@ -7,7 +7,7 @@ extern SharedMemory memory;
 struct
 {
 	size_t iteration;
-	TFlag is_allowed_printing;
+	TBool is_allowed_printing;
 	size_t zz, zo, oz, oo;
 } ChildStats;
 struct

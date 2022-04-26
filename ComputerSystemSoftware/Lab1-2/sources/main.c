@@ -4,15 +4,14 @@
 
 #define DEFAULT_DIRECTORY "."
 
-#define T_THROW_INVALID_DIRECTORY T_THROW_EXCEPTION("Dirwalk", "Invalid start directory", E_LOCATION, true, 0xCE00D0, 0xCE00D0)
-#define T_THROW_INACCEPTABLE_TOKEN T_THROW_EXCEPTION("Dirwalk", "Token is not acceptable", E_LOCATION, true, 0xCE00D1, 0xCE00D1)
+#define T_THROW_INVALID_DIRECTORY T_THROW_EXCEPTION("Dirwalk", "Invalid start directory", true, 0xCE00D0, return 0xCE00D0;)
+#define T_THROW_INACCEPTABLE_TOKEN T_THROW_EXCEPTION("Dirwalk", "Token is not acceptable", true, 0xCE00D1, return 0xCE00D1;)
 
 struct DirWalkOptions flags = { false, false, false, false };
 
 int main(const int argc, TMessage* const argv)
 {
 	T_FUNCTION(syscall, clear)();
-	T_CLASS(TConsole, default_constructor)();
 	setlocale(LC_COLLATE, "ru_RU");
 	const char* directory = DEFAULT_DIRECTORY;
 

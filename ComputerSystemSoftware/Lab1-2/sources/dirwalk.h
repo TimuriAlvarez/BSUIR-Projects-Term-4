@@ -8,10 +8,10 @@
 
 struct DirWalkOptions
 {
-	TFlag links;
-	TFlag dirs;
-	TFlag files;
-	TFlag sort;
+	TBool links;
+	TBool dirs;
+	TBool files;
+	TBool sort;
 };
 
 int dir_walk(TMessage directory);

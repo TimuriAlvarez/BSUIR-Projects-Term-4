@@ -1,8 +1,8 @@
 #include "parent.h"
 
-TFlag vector_is_empty(T_CONTAINER(TVector, pid_t, Container) const container)
+TBool vector_is_empty(T_CONTAINER(TVector, pid_t, Container) const container)
 {
-	const TFlag result = T_CONTAINER(TVector, pid_t,is_empty)(container);
+	const TBool result = T_CONTAINER(TVector, pid_t,is_empty)(container);
 	if (result) T_CLASS(TConsole, print)(kError, "Sorry, but the vector of pids is empty. Try to add come children processes.\n");
 	return result;
 }
@@ -33,7 +33,7 @@ void top_bar(T_CONTAINER(TVector, pid_t, Container) const container)
 		T_CLASS(TConsole, print)(kInput, "\t%zu\t%i\n", ++index, *iterator);
 }
 
-void kill_last(T_CONTAINER(TVector, pid_t, Container) const container, const TFlag message)
+void kill_last(T_CONTAINER(TVector, pid_t, Container) const container, const TBool message)
 {
 	if (T_CONTAINER(TVector, pid_t, size)(container) == 0u) return;
 	T_CONTAINER(TVector, pid_t, set_iteration_direction)(container, true);

@@ -1,8 +1,5 @@
 #include "memory.h"
 
-#include <errno.h>
-#include <stdio.h>
-
 #define T_LENGTH sizeof(int)
 
 SharedMemory T_CLASS(SharedMemory, constructor)(void)

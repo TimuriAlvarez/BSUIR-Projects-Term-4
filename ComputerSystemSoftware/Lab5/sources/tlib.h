@@ -1,4 +1,4 @@
 #pragma once
 
 #include "../../../TLibLibraryC/tlib.h"
-#include "../../../TLinuxInterfaceC/tlinux.h"
+#include "../../../TLinuxLibraryC/tlinux.h"

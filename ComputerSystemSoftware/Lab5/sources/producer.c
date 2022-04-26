@@ -51,13 +51,12 @@ void Generate(struct Circle **BufferCircle){
 }
 
 int main(int argc, char *argv[]){
-	T_CLASS(TConsole, default_constructor)();
 	sem_t *SemProducer = sem_open("/semproducer", 0664,0);
 	sem_t *SemTaker = sem_open("/semtaker", 0664,0);
 	sem_t *SemMutex = sem_open("/semmutex", 0664,1);
 
 	if(SemProducer == SEM_FAILED || SemTaker == SEM_FAILED || SemMutex == SEM_FAILED)
-		T_THROW_EXCEPTION("Semaphore", "Function sem_open(...) failed to create a semaphore",E_LOCATION,true,0xCE000150,0xCE000150);
+		T_THROW_EXCEPTION("Semaphore", "Function sem_open(...) failed to create a semaphore",true,0xCE000150,);
 
 	struct sigaction killer;
 	killer.sa_handler = killer_proc;

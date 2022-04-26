@@ -9,12 +9,12 @@
 #endif
 
 #include "../../../TLibLibraryC/tlib.h"
-#include "../../../TLinuxInterfaceC/tlinux.h"
+#include "../../../TLinuxLibraryC/tlinux.h"
 
 typedef struct
 {
 	TString* parameters;
-	TFlag waiting_flag;
+	TBool waiting_flag;
 } MenuParameters;
 
 T_IMPORT_MENU_DECLARATION(MenuParameters)

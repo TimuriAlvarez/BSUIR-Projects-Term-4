@@ -1,22 +1,51 @@
-default:
-	clear && make build && make run
+# Makefile
+CC		= gcc
+VERSION	= c11
+OPTIONS	= -pedantic -W -Wall -Wextra
+FLAGS	= -D_POSIX_C_SOURCE
+SRC		= sources/*.c
+NUMBER	= 4
+NAME	= lab$(NUMBER)
+# Arguments to be paseed in programm
+args	=
+
+help:
+	# 	Make options:
+	# about		-	Get general information about the lab;
+	# tor		-	Read Terms of Reference;
+	# build		-	Build binary ready for execution;
+	# run		-	Execute binary;
+	# dbuild	-	Build binary ready for debug;
+	# debug		-	Debug binary;
+	# clean		-	Remove all build and temporary files.
+
+about:
+	# Year:			2nd
+	# Term:			4th
+	# Subject:		Computer System Software
+	# Project:		Lab $(NUMBER)
+	# OS:			Linux (WSL)
+
+tor:
+	nano -v +62 ../README.md
 
 build:
-	gcc -std=gnu11 -pedantic -W -Wall -Wextra sources/*.c -o bin/lab
-
-run:
-	bin/lab
-
-
-debug:
-	clear && make dbuild && make drun
+	clear
+	$(CC) -std=$(VERSION) $(OPTIONS) $(SRC) -o bin/$(NAME) $(FLAGS)
 
 dbuild:
-	gcc -g -std=gnu11 -pedantic -W -Wall -Wextra sources/*.c -o bin/lab_debug
+	clear
+	$(CC) -std=$(VERSION) $(OPTIONS) $(SRC) -o bin/$(NAME)_debug $(FLAGS) -g
 
-drun:
-	gdb bin/lab_debug
+run:
+	make build
+	bin/$(NAME) $(args)
 
+debug:
+	make dbuild
+	bin/$(NAME)_debug $(args)
 
 clean:
-	clear && rm bin/*
+	clear
+	rm -f bin/*
+	rm -f temp/*

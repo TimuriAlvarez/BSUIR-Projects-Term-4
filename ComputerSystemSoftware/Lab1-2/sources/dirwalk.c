@@ -7,7 +7,7 @@ void special_sort(T_CONTAINER(TList, DirEnt_p, T_CONTAINER_POSTFIX) container)
 	const size_t size = T_CONTAINER(TList, DirEnt_p, size)(container);
 	for (size_t gap = size / 2; gap > 0; gap /= 2)
 	{
-		TFlag flag = true;
+		TBool flag = true;
 		while (flag)
 		{
 			flag = false;
@@ -29,18 +29,12 @@ void special_sort(T_CONTAINER(TList, DirEnt_p, T_CONTAINER_POSTFIX) container)
 	}
 }
 
-TString make_path(TMessage directory, TMessage syb_directory)
-{
-	TString result = T_CLASS(TString, constructor)(directory);
-	result = T_CLASS(TString, append)(result, '/');
-	return T_CLASS(TString, multy_append)(result, syb_directory);
-}
 int dir_walk(TMessage directory)
 {
 	T_CONTAINER(TList, DirEnt_p, T_CONTAINER_POSTFIX) container = T_CONTAINER(TList, DirEnt_p, constructor)();
 	DirEnt_p entry;
 	DIR* dp = opendir(directory);
-	if (dp == NULL)
+	if (dp == nullptr)
 	{
 		perror("DIR_WALK_WARNING");
 		return -1;
@@ -72,7 +66,7 @@ int dir_walk(TMessage directory)
 		}
 		if (type == DIR_TYPE)
 		{
-			TString const path = make_path(directory, (*iterator)->d_name);
+			TString const path = T_CLASS(TString, constructor)("%s/%s", directory, (*iterator)->d_name);
 			dir_walk(path);
 			T_CLASS(TString, destructor)(path);
 		}

@@ -17,7 +17,7 @@ typedef struct
 	TFile fp, fo;
 	uchar imageHeader[54];
 	uchar colorTable[1024];
-	TFlag colorTableFlag;
+	TBool colorTableFlag;
 	ullint imgDataSize;
 	rgb_t* buffer;
 	//Threads:
@@ -28,7 +28,7 @@ Parameters parameters;
 
 T_IMPORT_MEMORY_DEFINITION(rgb_t)
 
-void rgb_start(const TFlag plain)
+void rgb_start(const TBool plain)
 {
 	parameters.timer = T_CLASS(TTimer, default_constructor)();
 	TString result = T_CLASS(TString, constructor)("resources/");
@@ -57,7 +57,7 @@ void rgb_read(void)
 		if(parameters.colorTableFlag) fread(parameters.colorTable, sizeof(uchar), 1024, parameters.fp); // COLOR TABLE Present: read the 1024-byte from fp to colorTable
 		T_CLASS(TConsole, print)(kOutput, "Image header content:\n\tW: %u,\tH: %u,\tD: %u,\tT: %s.\n", width, height, bitDepth, T_CONVERTER(TFlag, TString)(parameters.colorTableFlag));
 		parameters.imgDataSize = width * height;		//calculate image size
-		parameters.buffer = T_FUNCTION(new, rgb_t)(parameters.imgDataSize);
+		parameters.buffer = T_MEMORY_MANAGER(allocate, rgb_t)(parameters.imgDataSize);
 		for(ullint i = 0u; i < parameters.imgDataSize; ++i)
 		{
 			parameters.buffer[i].blue = getc(parameters.fp);
@@ -98,7 +98,7 @@ void rgb_write(void)
 }
 void rgb_end(void)
 {
-	T_FUNCTION(delete, rgb_t)(parameters.buffer);
+	T_MEMORY_MANAGER(deallocate, rgb_t)(parameters.buffer);
 	fclose(parameters.fo);
 	fclose(parameters.fp);
 }
@@ -122,7 +122,7 @@ void rgb_thread_calc(void)
 {
 	T_CLASS(TTimer, start)(parameters.timer);
 	{
-		pthread_t* threads = T_FUNCTION(new, pthread_t)(parameters.quantity);
+		pthread_t* threads = T_MEMORY_MANAGER(allocate, pthread_t)(parameters.quantity);
 		for (ullint i = 0u; i < parameters.quantity; ++i)
 		{
 			// thread's id, default attributes, procedure
@@ -130,13 +130,13 @@ void rgb_thread_calc(void)
 			//T_CLASS(TConsole, print)(kLog, "Creating thread No %Lu (%Lu)...\n", i, threads[i]);
 			if (status != 0)
 			{
-				T_FUNCTION(delete, pthread_t)(threads);
-				T_THROW_EXCEPTION("Threads", "Function 'pthread_create' failed to create a new thread correctly", E_LOCATION, true, 0xCE0001C1,)
+				T_MEMORY_MANAGER(deallocate, pthread_t)(threads);
+				T_THROW_EXCEPTION("Threads", "Function 'pthread_create' failed to create a new thread correctly", true, 0xCE0001C1,)
 			}
 		}
 		for (ullint i = 0u; i < parameters.quantity; ++i)
 		   pthread_join(threads[i], nullptr);
-		T_FUNCTION(delete, pthread_t)(threads);
+		T_MEMORY_MANAGER(deallocate, pthread_t)(threads);
 	}
 	T_CLASS(TTimer, stop)(parameters.timer);
 	T_CLASS(TConsole, print)(kLog, "Thread Calculations are over:\t%Lf ms\n", T_CLASS(TTimer, miliseconds)(parameters.timer));
@@ -144,7 +144,6 @@ void rgb_thread_calc(void)
 
 int main(void)
 {
-	T_CLASS(TConsole, default_constructor)();
 	parameters.quantity = 1u;
 	while (true)
 	{
@@ -174,7 +173,7 @@ int main(void)
 			TString result = T_CLASS(TString, constructor)("resources/");
 			result = T_CLASS(TString, multy_append)(result, parameters.file_name);
 			if (!T_CLASS(TFile, exists)(result)) T_CLASS(TConsole, print)(kError, "There is no file with the name you provided!\n");
-			else for (TFlag plain_mode = true; true; plain_mode = false)
+			else for (TBool plain_mode = true; true; plain_mode = false)
 			{
 				rgb_start(plain_mode);
 				rgb_read();

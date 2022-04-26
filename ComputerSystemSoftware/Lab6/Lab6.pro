@@ -7,13 +7,12 @@ SOURCES += \
 	sources/*.c \
 	sources/threads.c
 
-DISTFILES += \
-	README.md \
-	Makefile
-
 HEADERS += \
 	sources/*.h \
 	sources/threads.h
 
-RESOURCES += \
-	resources/*
+DISTFILES += \
+	resources/* \
+	temp/* \
+	README.md \
+	Makefile

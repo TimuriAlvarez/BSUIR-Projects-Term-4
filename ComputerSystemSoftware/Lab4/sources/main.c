@@ -2,12 +2,11 @@
 
 #include "parent.h"
 #include "child.h"
-#include <errno.h>
 #include "memory.h"
 
 #define DELAY 1
 
-#define T_THROW_BADFORK T_THROW_EXCEPTION("Fork", "Fork failed to start a child process", E_LOCATION, true, 0xCE0100, 0xCE0100)
+#define T_THROW_BADFORK T_THROW_EXCEPTION("Fork", "Fork failed to start a child process", true, 0xCE0100,)
 
 SharedMemory memory;
 
@@ -26,8 +25,7 @@ int main(void)
 	memory = T_CLASS(SharedMemory, constructor)();
 	T_FUNCTION(syscall, atexit)(shmem_clear);
 
-	T_CLASS(TConsole, default_constructor)();
-	T_CONTAINER(TVector, pid_t, Container) container = T_CONTAINER(TVector, pid_t, constructor)();
+	T_CONTAINER(TVector, pid_t, Container) container = T_CONTAINER(TVector, pid_t, default_constructor)();
 
 	TString string = T_CLASS(TString, default_constructor)();
 	while (true)
