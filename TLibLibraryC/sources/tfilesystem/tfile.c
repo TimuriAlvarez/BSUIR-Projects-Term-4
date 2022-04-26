@@ -18,8 +18,8 @@
 #define T_THROW_FAILED_OPENING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to open the file", terminate, 0xFE00F0, return file;)
 #define T_THROW_SELF_COPYING T_THROW_EXCEPTION("TFilesystem::TFile", "Self-copying is a forbidden behaviour", terminate, 0xFE00F5, )
 #define T_THROW_FAILED_CLOSING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to close the file", terminate, 0xFE00F9, return file;)
-#define T_THROW_FAILED_REMOVING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to create the file", terminate, 0xFE00FD, )
-#define T_THROW_FAILED_CREATING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to create the file", terminate, 0xFE00FC, )
+#define T_THROW_FAILED_REMOVING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to create the file", terminate, 0xFE00FD, return; )
+#define T_THROW_FAILED_CREATING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to create the file", terminate, 0xFE00FC, return; )
 #define T_THROW_EXISTANCE_EXPECTED(E_RETURN) T_THROW_EXCEPTION("TFilesystem::TFile", "Failed does not exist which was unexpected", terminate, 0xFE00FE, return E_RETURN;)
 #define T_THROW_EXISTANCE_UNEXPECTED(E_RETURN) T_THROW_EXCEPTION("TFilesystem::TFile", "Failed does exist which was not expected", terminate, 0xFE00FE, return E_RETURN;)
 

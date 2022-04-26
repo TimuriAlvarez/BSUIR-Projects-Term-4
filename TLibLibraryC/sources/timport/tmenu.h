@@ -29,7 +29,7 @@
 			do \
 			{ \
 				TString const string = T_CLASS(TConsole, getline)("option number", false); \
-				option = T_CONVERTER(TString, size_t)(string); \
+				T_CLASS(TString, parser)(string, "%zu", &option); \
 				T_CLASS(TString, clear)(string); \
 			} while (option == 0u || option > size); \
 			if (option == size) return; \

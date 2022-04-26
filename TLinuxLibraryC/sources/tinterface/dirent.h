@@ -31,12 +31,51 @@ typedef struct DIR DIR;     /*A type representing a directory stream. The DIR ty
 			   be an incomplete type.
 
 	   It shall also define the structure dirent which shall include the
-	   following members:*/
+	   following members:
+
+	   In the glibc implementation, the dirent structure is defined as
+	   follows:*/
 
 struct dirent
 {
-		   ino_t  d_ino;       //File serial number.
-		   char   d_name[];    //Filename string of entry.
+	ino_t          d_ino;       /* This is the inode number of the file. */
+	off_t          d_off;       /* The value returned in d_off is the same as would be
+								   returned by calling telldir(3) at the current position in
+								   the directory stream.  Be aware that despite its type and
+								   name, the d_off field is seldom any kind of directory
+								   offset on modern filesystems.  Applications should treat
+								   this field as an opaque value, making no assumptions about
+								   its contents; see also telldir(3). */
+	unsigned short d_reclen;    /* This is the size (in bytes) of the returned record.  This
+								   may not match the size of the structure definition shown
+								   above; see NOTES. */
+	unsigned char  d_type;      /* Type of file; not supported
+								   by all filesystem types
+								   This field contains a value indicating the file type,
+								   making it possible to avoid the expense of calling
+								   lstat(2) if further actions depend on the type of the
+								   file.
+								   When a suitable feature test macro is defined
+								   (_DEFAULT_SOURCE on glibc versions since 2.19, or
+								   _BSD_SOURCE on glibc versions 2.19 and earlier), glibc
+								   defines the following macro constants for the value
+								   returned in d_type:
+
+								   DT_BLK		This is a block device.
+								   DT_CHR		This is a character device.
+								   DT_DIR		This is a directory.
+								   DT_FIFO		This is a named pipe (FIFO).
+								   DT_LNK		This is a symbolic link.
+								   DT_REG		This is a regular file.
+								   DT_SOCK		This is a UNIX domain socket.
+								   DT_UNKNOWN	The file type could not be determined.
+
+								   Currently, only some filesystems (among them: Btrfs, ext2,
+								   ext3, and ext4) have full support for returning the file
+								   type in d_type.  All applications must properly handle a
+								   return of DT_UNKNOWN. */
+	char           d_name[256]; /* This field contains the null terminated filename.  See
+								   NOTES. */
 };
 
 /*	   The <dirent.h> header shall define the ino_t type as described in
@@ -55,13 +94,9 @@ struct dirent
 		   DIR           *fdopendir(int);
 		   DIR           *opendir(const char *);
 		   struct dirent *readdir(DIR *);
-		   int            readdir_r(DIR *restrict, struct dirent *restrict_2,
-							  struct dirent **restrict_3);
+		   int            readdir_r(DIR *restrict, struct dirent *restrict_2, struct dirent **restrict_3);
 		   void           rewinddir(DIR *);
-		   int            scandir(const char *, struct dirent ***,
-							  int (*)(const struct dirent *),
-							  int (*)(const struct dirent **,
-							  const struct dirent **));
+		   int            scandir(const char *, struct dirent ***, int (*)(const struct dirent *), int (*)(const struct dirent **, const struct dirent **));
 		   void           seekdir(DIR *, long);
 		   long           telldir(DIR *);
 
