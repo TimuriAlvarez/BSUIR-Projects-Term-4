@@ -8,7 +8,7 @@
 | Term        | 4th                             |
 | Discipline  | Personal Computer Architecture  |
 | Quantity    | 8                               |
-| OS          | DOS (if other is not mentioned) |
+| OS          | Linux + DOS (VirtualBox)        |
 
 # Lab 1
 
