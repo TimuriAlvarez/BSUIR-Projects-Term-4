@@ -4,7 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-		*.c
+		*.c \
+		sources/main.c
 
 HEADERS += \
 		*.h \
@@ -16,8 +17,7 @@ HEADERS += \
 		sources/timport/*.h
 
 DISTFILES += \
-		*.c \
-		sources/*.c \
+		sources/t*.c \
 		sources/tbasic/*.c \
 		sources/tconio/*.c \
 		sources/tfilesystem/*.c \

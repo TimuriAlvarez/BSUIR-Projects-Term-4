@@ -6,6 +6,8 @@
 #include "sources/tconio.c"
 #include "sources/ttimer.c"
 
+#include "../TLinuxLibraryC/tlinux.c"
+
 void T_CLASS(TLib, constructor)(void)
 {
 	T_CLASS(TConsole, default_constructor)();
