@@ -4,23 +4,35 @@
 
 #include "tbasic.h"
 
-/*	Static Const part of TString (aka TMessage)	*/
-size_t T_CLASS(TString, size)(TMessage message);
-TComparison T_CLASS(TString, compare)(TMessage message1, TMessage message2);
-TBool T_CLASS(TString, equal)(TMessage message1, TMessage message2);
-TBool T_CLASS(TString, empty)(TMessage message);
-TBool T_CLASS(TString, contains)(TMessage message, const char character);
+#define CONTAINER_TYPE TString
+#define CONTAINER_DATA_TYPE char
+#define CONST_CONTAINER_TYPE TMessage
 
-/*	Dynamic Mutable part of TString (TString itself)	*/
-TString T_CLASS(TString, constructor)(TMessage format, ... );
-TString T_CLASS(TString, default_constructor)(void);
-TString T_CLASS(TString, clear)(TString const string);
-TString T_CLASS(TString, destructor)(TString const string);
-TString T_CLASS(TString, resize)(TString const string);
-TString T_CLASS(TString, append)(TString const string, const char character);
-//TString T_CLASS(TString, multy_append)(TString const string, TMessage message);
-//TString* T_CLASS(TString, chop)(TMessage string, const size_t quentity) { !chop it! }
-TString T_CLASS(TString, substring)(TMessage message, const size_t index_start, const size_t index_end);
-TString* T_CLASS(TString, split)(TString message, TMessage splitters);
+typedef CONTAINER_DATA_TYPE* T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX);
 
-int T_CLASS(TString, parser)(TString string, TMessage format, ... );
+/*	Static Const part of CONTAINER_TYPE (aka CONST_CONTAINER_TYPE)	*/
+size_t T_CLASS(CONTAINER_TYPE, size)(CONST_CONTAINER_TYPE message);
+TComparison T_CLASS(CONTAINER_TYPE, compare)(CONST_CONTAINER_TYPE message1, CONST_CONTAINER_TYPE message2);
+TBool T_CLASS(CONTAINER_TYPE, equal)(CONST_CONTAINER_TYPE message1, CONST_CONTAINER_TYPE message2);
+TBool T_CLASS(CONTAINER_TYPE, empty)(CONST_CONTAINER_TYPE message);
+TBool T_CLASS(CONTAINER_TYPE, contains)(CONST_CONTAINER_TYPE message, const CONTAINER_DATA_TYPE CONTAINER_DATA_TYPEacter);
+
+/*	Dynamic Mutable part of CONTAINER_TYPE (CONTAINER_TYPE itself)	*/
+CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, constructor)(CONST_CONTAINER_TYPE format, ... );
+CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, default_constructor)(void);
+CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, clear)(CONTAINER_TYPE const string);
+CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, destructor)(CONTAINER_TYPE const string);
+CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, resize)(CONTAINER_TYPE const string);
+CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, append)(CONTAINER_TYPE const string, const CONTAINER_DATA_TYPE CONTAINER_DATA_TYPEacter);
+//CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, multy_append)(CONTAINER_TYPE const string, CONST_CONTAINER_TYPE message);
+//CONTAINER_TYPE* T_CLASS(CONTAINER_TYPE, chop)(CONST_CONTAINER_TYPE string, const size_t quentity) { !chop it! }
+CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, substring)(CONST_CONTAINER_TYPE message, const size_t index_start, const size_t index_end);
+CONTAINER_TYPE* T_CLASS(CONTAINER_TYPE, split)(CONTAINER_TYPE message, CONST_CONTAINER_TYPE splitters);
+
+void T_CLASS(CONTAINER_TYPE, parser)(CONTAINER_TYPE string, CONST_CONTAINER_TYPE format, ... );
+
+#ifndef T_SOURCE_FILE
+#undef CONTAINER_TYPE
+#undef CONTAINER_DATA_TYPE
+#undef CONST_CONTAINER_TYPE
+#endif

@@ -1,5 +1,6 @@
 #include <stdarg.h>
 
+#define T_SOURCE_FILE
 #include "tstring.h"
 #include "timport.h"
 
@@ -132,7 +133,7 @@ TString* T_CLASS(TString, split)(TString message, TMessage splitters)
 	return result;
 }
 
-int T_CLASS(TString, parser)(TString string, TMessage format, ... )
+void T_CLASS(TString, parser)(TString string, TMessage format, ... )
 {
 	int quantity;
 	va_list ptr;
@@ -140,5 +141,5 @@ int T_CLASS(TString, parser)(TString string, TMessage format, ... )
 	va_start(ptr, format);
 	quantity = vsscanf(string, format, ptr);
 	va_end(ptr);
-	return quantity;
+	/*	TODO:	'%' checking!*/
 }
