@@ -101,6 +101,16 @@ class HashMapKeyAbsenceException extends CalculatorException {
 class UnitsRecognitionException extends CalculatorException {
 	public UnitsRecognitionException(String units) {
 		super("Units '" + units + "' recognition failure", "/calculator");
-		LoggingRestController.logDebug("PostParameterException.PostParameterException");
+		LoggingRestController.logDebug("UnitsRecognitionException.UnitsRecognitionException");
+	}
+}
+
+/**
+ * Exception class for Units absence.
+ */
+class UnitsAbsenceException extends CalculatorException {
+	public UnitsAbsenceException() {
+		super("Units absence", "/calculator");
+		LoggingRestController.logDebug("UnitsAbsenceException.UnitsAbsenceException");
 	}
 }

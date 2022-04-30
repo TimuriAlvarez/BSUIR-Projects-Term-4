@@ -20,6 +20,7 @@ public class PostParameterClass {
 	 * POST-request parameter getters.
 	 */
 	public String getUnits() {
+		if (units == null) throw new UnitsAbsenceException();
 		return units;
 	}
 	public double getValue() {

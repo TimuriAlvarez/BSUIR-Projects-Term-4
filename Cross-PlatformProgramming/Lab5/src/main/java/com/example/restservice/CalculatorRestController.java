@@ -85,7 +85,7 @@ public class CalculatorRestController {
 		new CounterServiceThread();
 		List<String> result = new LinkedList<>();
 		list.forEach((element) -> {
-			try { result.add(cache.requestCache(element.getUnits(), element.getValue())); }
+			try { result.add(cache.requestCache(element)); }
 			catch (RuntimeException exception) { result.add(exception.getMessage()); }
 		});
 		LoggingRestController.logEnd("/calculator");

@@ -60,13 +60,12 @@ public final class CalculatorCacheService {
 	}
 	/**
 	 * Service class interface for cache management.
-	 * @param units String that contains measurement units.
-	 * @param value Value of these units.
+	 * @param element PostParameter representation that contains units and their value.
 	 * @return Value of these units in the opposite measurement system.
 	 */
 	@Contract(pure = true)
-	public @NotNull String requestCache(@NotNull String units, double value) {
-		return requestCache(units, String.valueOf(value));
+	public @NotNull String requestCache(@NotNull PostParameterClass element) {
+		return requestCache(element.getUnits(), String.valueOf(element.getValue()));
 	}
 	/**
 	 * Service class interface for cache management.
