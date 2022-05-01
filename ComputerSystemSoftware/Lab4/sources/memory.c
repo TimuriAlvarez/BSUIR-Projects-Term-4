@@ -1,28 +1,34 @@
 #include "memory.h"
+#include <sys/shm.h>
 
 #define T_LENGTH sizeof(int)
 
-SharedMemory T_CLASS(SharedMemory, constructor)(void)
+SharedMemoryID T_CLASS(SharedMemory, constructor)(void)
 {
-	SharedMemory map = mmap(nullptr, T_LENGTH, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_PRIVATE, 0, 0);
-	if (map == MAP_FAILED) perror("Error mapping the file");
-	return map;
+	const SharedMemoryID id = shmget(IPC_PRIVATE, sizeof(int), 0666 | IPC_CREAT);
+	if (id < 0) T_THROW_EXCEPTION("SharedMemory", "Functtion shmget failed to allocate shared memory", true, 0xCE00015C,)
+	return id;
 }
 
-void T_CLASS(SharedMemory, write)(SharedMemory memory, int value)
+void T_CLASS(SharedMemory, write)(SharedMemoryID id, int value)
 {
-	printf("1\n");
-	memory[0] = value;
+	SharedMemory memory = shmat(id, nullptr, 0);
+	(*memory) = value;
+	shmdt(memory);
 }
 
-int T_CLASS(SharedMemory, read)(SharedMemory memory)
+int T_CLASS(SharedMemory, read)(SharedMemoryID id)
 {
-	printf("2\n");
-	return memory[0];
+	SharedMemory memory = shmat(id, nullptr, 0);
+	const int value = (*memory);
+	shmdt(memory);
+	return value;
 }
 
-SharedMemory T_CLASS(SharedMemory, destructor)(SharedMemory memory)
+SharedMemoryID T_CLASS(SharedMemory, destructor)(SharedMemoryID id)
 {
-	munmap(memory, T_LENGTH);
-	return nullptr;
+	SharedMemoryID result = shmctl(id, IPC_RMID, nullptr);
+	if (result < 0)
+		T_THROW_EXCEPTION("SharedMemory", "Functtion shmctl failed to deallocate shared memory", true, 0xCE00015C,)
+	return result;
 }

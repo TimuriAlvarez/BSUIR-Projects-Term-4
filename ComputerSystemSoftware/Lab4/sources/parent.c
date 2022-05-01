@@ -1,5 +1,7 @@
 #include "parent.h"
 
+extern SharedMemoryID memory_id;
+
 TBool vector_is_empty(T_CONTAINER(TVector, pid_t, Container) const container)
 {
 	const TBool result = T_CONTAINER(TVector, pid_t,is_empty)(container);
@@ -133,11 +135,14 @@ pid_t get_pid(T_CONTAINER(TVector, pid_t, Container) const container, TString me
 
 void parent_handler(const int signal)
 {
-	int pid = 0;
 	switch(signal)
 	{
 	case SIGUSR1:
+	{
+		const int pid = T_CLASS(SharedMemory, read)(memory_id);
+		T_CLASS(SharedMemory, write)(memory_id, SHMEM_PRINT_PROCESS);
 		kill(pid, SIGUSR1);
+	}
 		return;
 	default:
 		return;

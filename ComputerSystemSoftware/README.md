@@ -137,6 +137,12 @@ dirwalk [dir] [options]
 * Also you should do it without using threads
 * Check time that it takes to make it with threads and without threads and show this infromation
 
+# Lab 7
+
+## Взаимодействие и синхронизация потоков
+
+### 
+
 # Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

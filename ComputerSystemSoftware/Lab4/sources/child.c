@@ -2,7 +2,7 @@
 
 #define CYCLE 10
 
-extern SharedMemory memory;
+extern SharedMemoryID memory_id;
 
 struct
 {
@@ -31,10 +31,14 @@ void signal_handler(const int signal)
 		}
 		alarm(1);
 		++ChildStats.iteration;
-		//if (ChildStats.is_allowed_printing && ChildStats.iteration % CYCLE == 0) kill(getppid(), SIGUSR1);
+		if (ChildStats.iteration % CYCLE == 0)
+		{
+			T_CLASS(SharedMemory, write)(memory_id, getpid());
+			kill(getppid(), SIGUSR1);
+		}
 		return;
 	case SIGUSR1:
-		switch (T_CLASS(SharedMemory, read)(memory))
+		switch (T_CLASS(SharedMemory, read)(memory_id))
 		{
 		case SHMEM_MUTE_PROCESS:
 			ChildStats.is_allowed_printing = false;
@@ -43,6 +47,7 @@ void signal_handler(const int signal)
 			ChildStats.is_allowed_printing = true;
 			return;
 		case SHMEM_PRINT_PROCESS:
+			if (ChildStats.is_allowed_printing == false) return;
 			T_CLASS(TConsole, print)(kLog, "ppid: %d; pid: %d; ", getppid(), getpid());
 			T_CLASS(TConsole, print)(kLog, "'00': %zu\t\t'01': %zu\t\t", ChildStats.zz, ChildStats.zo);
 			T_CLASS(TConsole, print)(kLog, "'10': %zu\t\t'11': %zu.\n", ChildStats.oz, ChildStats.oo);
@@ -60,6 +65,7 @@ void child_function(void)
 	struct sigaction sigaction_handler;
 	sigaction_handler.sa_handler = signal_handler;
 	sigaction(SIGUSR1, &sigaction_handler, nullptr);
+	sigaction(SIGUSR2, &sigaction_handler, nullptr);
 	sigaction(SIGALRM, &sigaction_handler, nullptr);
 
 	ChildStats.iteration = 0u;

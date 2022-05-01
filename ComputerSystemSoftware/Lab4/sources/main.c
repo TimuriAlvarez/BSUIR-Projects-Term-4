@@ -4,15 +4,15 @@
 #include "child.h"
 #include "memory.h"
 
-#define DELAY 1
+#define DELAY 0
 
 #define T_THROW_BADFORK T_THROW_EXCEPTION("Fork", "Fork failed to start a child process", true, 0xCE0100,)
 
-SharedMemory memory;
+SharedMemoryID memory_id;
 
 void shmem_clear(void)
 {
-	memory = T_CLASS(SharedMemory, destructor)(memory);
+	memory_id = T_CLASS(SharedMemory, destructor)(memory_id);
 }
 
 int main(void)
@@ -21,8 +21,9 @@ int main(void)
 	struct sigaction sigaction_handler;
 	sigaction_handler.sa_handler = parent_handler;
 	sigaction(SIGUSR1, &sigaction_handler, nullptr);
+	sigaction(SIGUSR2, &sigaction_handler, nullptr);
 
-	memory = T_CLASS(SharedMemory, constructor)();
+	memory_id = T_CLASS(SharedMemory, constructor)();
 	T_FUNCTION(syscall, atexit)(shmem_clear);
 
 	T_CONTAINER(TVector, pid_t, Container) container = T_CONTAINER(TVector, pid_t, default_constructor)();
@@ -31,8 +32,8 @@ int main(void)
 	while (true)
 	{
 		top_bar(container);
-		T_CLASS(TString, clear)(string);
 		T_CLASS(TConsole, print)(kOutput, "> ");
+		T_CLASS(TString, destructor)(string);
 		string = T_CLASS(TConsole, getline)(nullptr, true);
 		//	Empty string
 		if (T_CLASS(TString, empty)(string))
@@ -77,7 +78,7 @@ int main(void)
 			else if (T_CLASS(TString, equal)(string, "m"))
 			{
 				T_CLASS(TConsole, print)(kOutput, "Muting all children processes...\n");
-				T_CLASS(SharedMemory, write)(memory, SHMEM_MUTE_PROCESS);
+				T_CLASS(SharedMemory, write)(memory_id, SHMEM_MUTE_PROCESS);
 				FOR_EACH_ITERATOR_FROM(iterator, TVector, pid_t, container)
 						kill(*iterator, SIGUSR1);
 				T_CLASS(TConsole, print)(kOutput, "All children processes are muted.\n");
@@ -86,7 +87,7 @@ int main(void)
 			else if (T_CLASS(TString, equal)(string, "u"))
 			{
 				T_CLASS(TConsole, print)(kOutput, "Unmuting all children processes...\n");
-				T_CLASS(SharedMemory, write)(memory, SHMEM_UNMUTE_PROCESS);
+				T_CLASS(SharedMemory, write)(memory_id, SHMEM_UNMUTE_PROCESS);
 				FOR_EACH_ITERATOR_FROM(iterator, TVector, pid_t, container)
 						kill(*iterator, SIGUSR1);
 				T_CLASS(TConsole, print)(kOutput, "All children processes are unmuted.\n");
@@ -97,12 +98,10 @@ int main(void)
 				T_CLASS(TConsole, print)(kOutput, "Printing stats for all children process...\n");
 				FOR_EACH_ITERATOR_FROM(iterator, TVector, pid_t, container)
 				{
-					T_CLASS(SharedMemory, write)(memory, *iterator);
+					T_CLASS(SharedMemory, write)(memory_id, *iterator);
 					raise(SIGUSR1);
+					sleep(DELAY);
 				}
-				T_CLASS(TConsole, echo)(false);
-				sleep(DELAY);
-				T_CLASS(TConsole, echo)(true);
 				T_CLASS(TConsole, print)(kOutput, "Done.\n");
 			}
 			else if (string[1u] == ' ')
@@ -117,17 +116,23 @@ int main(void)
 					break;
 				case 'm':
 					T_CLASS(TConsole, print)(kOutput, "Muting %d processes...\n", pid);
+					T_CLASS(SharedMemory, write)(memory_id, SHMEM_MUTE_PROCESS);
 					kill(pid, SIGUSR1);
+					sleep(DELAY);
 					T_CLASS(TConsole, print)(kOutput, "Processes %d is muted.\n", pid);
 					break;
 				case 'u':
 					T_CLASS(TConsole, print)(kOutput, "Unmuting %d processes...\n", pid);
+					T_CLASS(SharedMemory, write)(memory_id, SHMEM_UNMUTE_PROCESS);
 					kill(pid, SIGUSR1);
+					sleep(DELAY);
 					T_CLASS(TConsole, print)(kOutput, "Processes %d is unmuted.\n", pid);
 					break;
 				case 'p':
 					T_CLASS(TConsole, print)(kOutput, "Printing stats for %d process...\n", pid);
+					T_CLASS(SharedMemory, write)(memory_id, pid);
 					raise(SIGUSR1);
+					sleep(DELAY);
 					T_CLASS(TConsole, print)(kOutput, "Done.\n");
 					break;
 				default:
