@@ -16,6 +16,9 @@ size_t T_CLASS(TString, size)(TMessage message)
 }
 TComparison T_CLASS(TString, compare)(TMessage message1, TMessage message2)
 {
+	if (message1 == message2) return kEqual;
+	if (message1 == nullptr) return kLess;
+	if (message2 == nullptr) return kGreater;
 	const size_t size1 = T_CLASS(TString, size)(message1), size2 = T_CLASS(TString, size)(message2);
 	for (size_t index = 0u; index < size1 && index < size2; ++index)
 	{
@@ -135,7 +138,7 @@ TString* T_CLASS(TString, split)(TString message, TMessage splitters)
 
 void T_CLASS(TString, parser)(TString string, TMessage format, ... )
 {
-	int quantity;
+	__attribute__((unused)) int quantity;
 	va_list ptr;
 
 	va_start(ptr, format);

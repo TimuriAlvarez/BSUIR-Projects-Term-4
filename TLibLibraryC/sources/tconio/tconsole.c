@@ -184,7 +184,7 @@ void T_CLASS(TConsole, clear)(void)
 }
 TString T_CLASS(TConsole, getline)(TMessage message, const TBool can_be_empty)
 {
-	TString string = nullptr;
+	TString string = T_CLASS(TString, default_constructor)();
 	int character = '\0';
 	do
 	{
