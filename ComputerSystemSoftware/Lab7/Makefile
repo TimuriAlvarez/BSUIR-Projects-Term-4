@@ -2,9 +2,9 @@
 CC		= gcc
 VERSION	= c11
 OPTIONS	= -pedantic -W -Wall -Wextra
-FLAGS	=
+FLAGS	= -pthread
 SRC		= sources/*.c
-NUMBER	= 6
+NUMBER	= 7
 NAME	= lab$(NUMBER)
 # Arguments to be paseed in programm
 args	=
@@ -27,7 +27,7 @@ about:
 	# OS:			Linux (WSL)
 
 tor:
-	nano -v +129 ../README.md
+	nano -v +140 ../README.md
 
 build:
 	clear
@@ -43,7 +43,7 @@ run:
 
 debug:
 	make dbuild
-	bin/$(NAME)_debug $(args)
+	gdb bin/$(NAME)_debug $(args)
 
 clean:
 	clear

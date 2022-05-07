@@ -31,14 +31,11 @@ T_IMPORT_MEMORY_DEFINITION(rgb_t)
 void rgb_start(const TBool plain)
 {
 	parameters.timer = T_CLASS(TTimer, default_constructor)();
-	TString result = T_CLASS(TString, constructor)("resources/");
-	result = T_CLASS(TString, multy_append)(result, parameters.file_name);
+	TString result = T_CLASS(TString, constructor)("resources/%s", parameters.file_name);
 	parameters.fp = T_CLASS(TFile, open)(result, "rb", true);   //read the file//
 	T_CLASS(TString, destructor)(result);
-	result = T_CLASS(TString, constructor)("resources/");
-	if (plain) result = T_CLASS(TString, multy_append)(result, "grey_plain_");
-	else result = T_CLASS(TString, multy_append)(result, "grey_threads_");
-	result = T_CLASS(TString, multy_append)(result, parameters.file_name);
+	if (plain) result = T_CLASS(TString, constructor)("resources/grey_plain_%s", parameters.file_name);
+	else result = T_CLASS(TString, constructor)("resources/grey_threads_%s", parameters.file_name);
 	if (T_CLASS(TFile, exists)(result)) T_CLASS(TFile, remove)(result, true);
 	T_CLASS(TFile, create)(result, true);
 	parameters.fo = T_CLASS(TFile, open)(result, "wb", true);
@@ -55,7 +52,7 @@ void rgb_read(void)
 		uint bitDepth = *(uint*)&parameters.imageHeader[28];
 		parameters.colorTableFlag = bitDepth <= 8;
 		if(parameters.colorTableFlag) fread(parameters.colorTable, sizeof(uchar), 1024, parameters.fp); // COLOR TABLE Present: read the 1024-byte from fp to colorTable
-		T_CLASS(TConsole, print)(kOutput, "Image header content:\n\tW: %u,\tH: %u,\tD: %u,\tT: %s.\n", width, height, bitDepth, T_CONVERTER(TFlag, TString)(parameters.colorTableFlag));
+		T_CLASS(TConsole, print)(kOutput, "Image header content:\n\tW: %u,\tH: %u,\tD: %u,\tT: %s.\n", width, height, bitDepth, T_CONVERTER(TString, TFlag)(parameters.colorTableFlag));
 		parameters.imgDataSize = width * height;		//calculate image size
 		parameters.buffer = T_MEMORY_MANAGER(allocate, rgb_t)(parameters.imgDataSize);
 		for(ullint i = 0u; i < parameters.imgDataSize; ++i)
@@ -113,7 +110,7 @@ void* rgb_greyshale(void *tid)
 		parameters.buffer[i].red = parameters.buffer[i].green = parameters.buffer[i].blue =
 				(parameters.buffer[i].red*0.299083) + (parameters.buffer[i].green*0.585841) + (parameters.buffer[i].blue*0.114076); //conversion formula of rgb to gray;
 	//T_CLASS(TConsole, print)(kLog, "Thread No.%Lu finished\n", pthread_self());
-	pthread_yield();
+	sched_yield();
 	pthread_exit(nullptr);
 	return nullptr;
 }
@@ -131,7 +128,7 @@ void rgb_thread_calc(void)
 			if (status != 0)
 			{
 				T_MEMORY_MANAGER(deallocate, pthread_t)(threads);
-				T_THROW_EXCEPTION("Threads", "Function 'pthread_create' failed to create a new thread correctly", true, 0xCE0001C1,)
+				T_THROW_EXCEPTION("Threads", "Function 'pthread_create' failed to create a new thread correctly", true, 0xCE0001C1, return;)
 			}
 		}
 		for (ullint i = 0u; i < parameters.quantity; ++i)
@@ -161,7 +158,7 @@ int main(void)
 			{
 				T_CLASS(TString, destructor)(quantity);
 				quantity = T_CLASS(TConsole, getline)("new threads quantity", false);
-				parameters.quantity = T_CONVERTER(TString, size_t)(quantity);
+				T_CLASS(TString, parser)(quantity, "%zu", &parameters.quantity);
 				if (parameters.quantity > PTHREAD_THREADS_MAX) T_CLASS(TConsole, print)(kError, "Quantity must be smaller than %Lu!\n", PTHREAD_THREADS_MAX);
 				else if (parameters.quantity != 0) break;
 				else T_CLASS(TConsole, print)(kError, "Quantity must be diffrent from zero!\n");
@@ -170,8 +167,7 @@ int main(void)
 		}
 		else
 		{
-			TString result = T_CLASS(TString, constructor)("resources/");
-			result = T_CLASS(TString, multy_append)(result, parameters.file_name);
+			TString result = T_CLASS(TString, constructor)("resources/%s", parameters.file_name);
 			if (!T_CLASS(TFile, exists)(result)) T_CLASS(TConsole, print)(kError, "There is no file with the name you provided!\n");
 			else for (TBool plain_mode = true; true; plain_mode = false)
 			{
