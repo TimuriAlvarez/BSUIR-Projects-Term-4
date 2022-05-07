@@ -136,13 +136,13 @@ TString* T_CLASS(TString, split)(TString message, TMessage splitters)
 	return result;
 }
 
-void T_CLASS(TString, parser)(TString string, TMessage format, ... )
+void T_CLASS(TString, parser)(TMessage message, TMessage format, ... )
 {
 	__attribute__((unused)) int quantity;
 	va_list ptr;
 
 	va_start(ptr, format);
-	quantity = vsscanf(string, format, ptr);
+	quantity = vsscanf(message, format, ptr);
 	va_end(ptr);
 	/*	TODO:	'%' checking!*/
 }

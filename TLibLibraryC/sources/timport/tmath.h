@@ -18,10 +18,6 @@
 	{ \
 		return a < b? a : b; \
 	} \
-	T_MATH_TYPE T_FUNCTION(abs, T_MATH_TYPE)(const T_MATH_TYPE a) \
-	{ \
-		return a >= 0 ? a : (-1) * a; \
-	} \
 	TComparison T_FUNCTION(compare, T_MATH_TYPE)(const T_MATH_TYPE a, const T_MATH_TYPE b) \
 	{ \
 		if (a > b) return kGreater; \

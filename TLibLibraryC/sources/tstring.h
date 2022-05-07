@@ -29,7 +29,7 @@ CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, append)(CONTAINER_TYPE const string, cons
 CONTAINER_TYPE T_CLASS(CONTAINER_TYPE, substring)(CONST_CONTAINER_TYPE message, const size_t index_start, const size_t index_end);
 CONTAINER_TYPE* T_CLASS(CONTAINER_TYPE, split)(CONTAINER_TYPE message, CONST_CONTAINER_TYPE splitters);
 
-void T_CLASS(CONTAINER_TYPE, parser)(CONTAINER_TYPE string, CONST_CONTAINER_TYPE format, ... );
+void T_CLASS(CONTAINER_TYPE, parser)(CONST_CONTAINER_TYPE message, CONST_CONTAINER_TYPE format, ... );
 
 #ifndef T_SOURCE_FILE
 #undef CONTAINER_TYPE

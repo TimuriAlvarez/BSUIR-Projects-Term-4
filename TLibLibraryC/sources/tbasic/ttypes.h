@@ -1,8 +1,9 @@
 #pragma once
 
 #include <stdio.h>
-#include <stdbool.h>
+#include <stddef.h>
 #include <uchar.h>
+#include <stdbool.h>
 
 typedef enum
 {
@@ -44,6 +45,7 @@ typedef uchar					byte;
 typedef int						TFileDescriptor;
 
 				//Pointers:
+typedef void*                   TPointer;
 typedef FILE*					TFile;
 typedef char*					TString;
 typedef const char* const		TMessage;

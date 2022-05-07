@@ -12,9 +12,9 @@ int main(void)
 	TString string = T_CLASS(TString, constructor)("%d fu %f aa aa aa %c d", i, f, c);
 	T_CLASS(TConsole, print)(kLog, "%s\n", string);
 
-	int result = T_CLASS(TString, parser)(string, "%d fu %f aa aa aa %c d", &i2, &f2, &c2);
+	T_CLASS(TString, parser)(string, "%d fu %f aa aa aa %c d", &i2, &f2, &c2);
 
-	T_CLASS(TConsole, print)(kOutput, "i: %d\nf: %f\nc: %c\nresult: %d\n", i2, f2, c2, result);
+	T_CLASS(TConsole, print)(kOutput, "i: %d\nf: %f\nc: %c\n", i2, f2, c2);
 
 	return 0;
 }

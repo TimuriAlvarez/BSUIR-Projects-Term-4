@@ -7,4 +7,5 @@ void T_CLASS(TLinux, destructor)(void) {};
 void T_CLASS(TLinux, constructor)(void) {}
 void T_CLASS(TLinux, destructor)(void) {}
 #include "sources/tfilesystem.c"
+#include "sources/tipc.c"
 #endif
