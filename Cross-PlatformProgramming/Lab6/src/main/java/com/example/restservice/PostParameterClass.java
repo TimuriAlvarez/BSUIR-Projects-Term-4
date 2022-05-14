@@ -7,12 +7,6 @@ package com.example.restservice;
  */
 public record PostParameterClass(String units, double value) {
     /**
-     * POST-request parameter constructor.
-     */
-    public PostParameterClass {
-    }
-
-    /**
      * POST-request parameter getters.
      */
     public String units() {
