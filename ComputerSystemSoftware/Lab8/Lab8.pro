@@ -7,7 +7,8 @@ SOURCES += \
 		sources/*.c
 
 HEADERS += \
-		sources/*.h
+		sources/*.h \
+		sources/thread.h
 
 DISTFILES += \
 		Makefile \

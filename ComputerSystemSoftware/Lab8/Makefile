@@ -27,7 +27,7 @@ about:
 	# OS:			Linux (WSL)
 
 tor:
-	nano -v +140 ../README.md
+	nano -v +93 ../README.md
 
 build:
 	clear
