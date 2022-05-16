@@ -55,6 +55,7 @@ T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) T_CONTAINE
 }
 TBool T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, is_empty)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container)
 {
+	if (container == nullptr) return true;
 	if (container->head == nullptr)
 	{
 		if (container->tail == nullptr) return true;

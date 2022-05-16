@@ -43,3 +43,6 @@
 		T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_start)(var_container);\
 		var_iterator != T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_end)();\
 		var_iterator = T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_iterate)(var_container, var_iterator))
+
+/*	ISO C compatible return void with expression	*/
+#define T_RETURN_VOID(T_RETURN_EXPRESSION) { T_RETURN_EXPRESSION return; }

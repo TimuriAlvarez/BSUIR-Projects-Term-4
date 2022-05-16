@@ -55,6 +55,7 @@ TBool T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, is_empty)(T_CONTAINER(CON
 // OK Was not removed for code-compatibility
 size_t T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, size)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container)
 {
+	if (container == nullptr) return 0u;
 	return container->size;
 }
 // +-OK

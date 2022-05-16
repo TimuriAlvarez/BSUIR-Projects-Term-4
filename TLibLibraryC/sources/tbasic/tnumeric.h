@@ -17,40 +17,42 @@ typedef enum
 	round_toward_neg_infinity	=  3,
 } float_round_style;
 
+#define T_NUMERIC_LIMITS(T_TYPE, T_METHOD) T_CONTAINER(TNumeric, T_TYPE, T_METHOD)
+
 #define T_NUMERIC_TABLE_DECLARATION(T_TYPE) \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, is_specialized)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, is_signed)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, is_unsigned)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, is_integer)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, is_exact)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, has_infinity)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, has_quiet_NaN)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, has_signaling_NaN)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, has_denorm_loss)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, is_iec559)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, is_bounded)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, is_modulo)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, traps)(void); \
-	TBool				T_CONTAINER(TNumeric, T_TYPE, tinyness_before)(void); \
-	float_denorm_style	T_CONTAINER(TNumeric, T_TYPE, has_denorm)(void); \
-	float_round_style	T_CONTAINER(TNumeric, T_TYPE, round_style)(void); \
-	int					T_CONTAINER(TNumeric, T_TYPE, digits)(void); \
-	int					T_CONTAINER(TNumeric, T_TYPE, digits10)(void); \
-	int					T_CONTAINER(TNumeric, T_TYPE, max_digits10)(void); \
-	int					T_CONTAINER(TNumeric, T_TYPE, radix)(void); \
-	int					T_CONTAINER(TNumeric, T_TYPE, min_exponent)(void); \
-	int					T_CONTAINER(TNumeric, T_TYPE, min_exponent10)(void); \
-	int					T_CONTAINER(TNumeric, T_TYPE, max_exponent)(void); \
-	int					T_CONTAINER(TNumeric, T_TYPE, max_exponent10)(void); \
-	T_TYPE				T_CONTAINER(TNumeric, T_TYPE, min)(void); \
-	T_TYPE				T_CONTAINER(TNumeric, T_TYPE, max)(void); \
-	T_TYPE				T_CONTAINER(TNumeric, T_TYPE, lowest)(void); \
-	T_TYPE				T_CONTAINER(TNumeric, T_TYPE, epsilon)(void); \
-	T_TYPE				T_CONTAINER(TNumeric, T_TYPE, round_error)(void); \
-	T_TYPE				T_CONTAINER(TNumeric, T_TYPE, infinity)(void); \
-	T_TYPE				T_CONTAINER(TNumeric, T_TYPE, quiet_NaN)(void); \
-	T_TYPE				T_CONTAINER(TNumeric, T_TYPE, signaling_NaN)(void); \
-	T_TYPE				T_CONTAINER(TNumeric, T_TYPE, denorm_min)(void);
+	TBool				T_NUMERIC_LIMITS(T_TYPE, is_specialized)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, is_signed)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, is_unsigned)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, is_integer)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, is_exact)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, has_infinity)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, has_quiet_NaN)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, has_signaling_NaN)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, has_denorm_loss)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, is_iec559)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, is_bounded)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, is_modulo)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, traps)(void); \
+	TBool				T_NUMERIC_LIMITS(T_TYPE, tinyness_before)(void); \
+	float_denorm_style	T_NUMERIC_LIMITS(T_TYPE, has_denorm)(void); \
+	float_round_style	T_NUMERIC_LIMITS(T_TYPE, round_style)(void); \
+	int					T_NUMERIC_LIMITS(T_TYPE, digits)(void); \
+	int					T_NUMERIC_LIMITS(T_TYPE, digits10)(void); \
+	int					T_NUMERIC_LIMITS(T_TYPE, max_digits10)(void); \
+	int					T_NUMERIC_LIMITS(T_TYPE, radix)(void); \
+	int					T_NUMERIC_LIMITS(T_TYPE, min_exponent)(void); \
+	int					T_NUMERIC_LIMITS(T_TYPE, min_exponent10)(void); \
+	int					T_NUMERIC_LIMITS(T_TYPE, max_exponent)(void); \
+	int					T_NUMERIC_LIMITS(T_TYPE, max_exponent10)(void); \
+	T_TYPE				T_NUMERIC_LIMITS(T_TYPE, min)(void); \
+	T_TYPE				T_NUMERIC_LIMITS(T_TYPE, max)(void); \
+	T_TYPE				T_NUMERIC_LIMITS(T_TYPE, lowest)(void); \
+	T_TYPE				T_NUMERIC_LIMITS(T_TYPE, epsilon)(void); \
+	T_TYPE				T_NUMERIC_LIMITS(T_TYPE, round_error)(void); \
+	T_TYPE				T_NUMERIC_LIMITS(T_TYPE, infinity)(void); \
+	T_TYPE				T_NUMERIC_LIMITS(T_TYPE, quiet_NaN)(void); \
+	T_TYPE				T_NUMERIC_LIMITS(T_TYPE, signaling_NaN)(void); \
+	T_TYPE				T_NUMERIC_LIMITS(T_TYPE, denorm_min)(void);
 
 				//Fundamental arithmetic types:
 	//Integral types:
