@@ -44,7 +44,7 @@ public class CounterServiceThread extends Thread {
 	 * Overridden method that calls counter incrementation.
 	 */
 	@Override
-	synchronized public void run() {
+	public void run() {
 		LoggingRestController.logStartThread(getName());
 		CounterService.increment();
 		LoggingRestController.logEnd(getName());
