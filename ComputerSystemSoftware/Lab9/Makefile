@@ -1,10 +1,10 @@
 # Makefile
 CC		= gcc
-VERSION	= c11
+VERSION	= gnu11
 OPTIONS	= -pedantic -W -Wall -Wextra
 FLAGS	= -pthread
 SRC		= sources/*.c
-NUMBER	= 8
+NUMBER	= 9
 NAME	= lab$(NUMBER)
 # Arguments to be paseed in programm
 args	=
@@ -27,7 +27,7 @@ about:
 	# OS:			Linux (WSL)
 
 tor:
-	nano -v +148 ../README.md
+	nano -v +156 ../README.md
 
 build:
 	clear
@@ -49,3 +49,6 @@ clean:
 	clear
 	rm -f bin/*
 	rm -f temp/*
+
+generate:
+	cp -f templates/* temp

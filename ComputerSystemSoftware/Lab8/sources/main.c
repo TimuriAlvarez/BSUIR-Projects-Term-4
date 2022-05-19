@@ -22,6 +22,7 @@ int main(void)
 										  "\t s)\tShow statistic for circles;\n"
 										  "\t p)\tCreate one more producer-thread;\n"
 										  "\t t)\tCreate one more taker-thread;\n"
+										  "\t f)\tFree run (let producers/takers do their jobs);\n"
 										  "\t-p)\tKill last created producer-thread;\n"
 										  "\t-t)\tKill last created taker-thread;\n"
 										  "\t q)\tQuit programm.\n"
@@ -37,12 +38,13 @@ int main(void)
 			T_CLASS(TMutex, unlock)(lock);
 			break;
 		}
-		if (T_CLASS(TString, equal)(get_line, "c")) append_circle();
-		else if (T_CLASS(TString, equal)(get_line, "s")) print_circle();
-		else if (T_CLASS(TString, equal)(get_line, "p")) add_producer();
-		else if (T_CLASS(TString, equal)(get_line, "t")) add_taker();
-		else if (T_CLASS(TString, equal)(get_line, "-p")) kill_producer();
-		else if (T_CLASS(TString, equal)(get_line, "-t")) kill_taker();
+		if (T_CLASS(TString, equal)(get_line, "f")) {}
+		elif (T_CLASS(TString, equal)(get_line, "c")) append_circle();
+		elif (T_CLASS(TString, equal)(get_line, "s")) print_circle();
+		elif (T_CLASS(TString, equal)(get_line, "p")) add_producer();
+		elif (T_CLASS(TString, equal)(get_line, "t")) add_taker();
+		elif (T_CLASS(TString, equal)(get_line, "-p")) kill_producer();
+		elif (T_CLASS(TString, equal)(get_line, "-t")) kill_taker();
 		else T_CLASS(TConsole, print)(kError, "No such option.\n");
 		T_FUNCTION(syscall, pause)();
 	}

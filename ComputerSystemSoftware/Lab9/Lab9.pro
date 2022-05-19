@@ -4,14 +4,14 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-		sources/circle.c \
 		sources/main.c \
-		sources/producer.c \
-		sources/taker.c \
-		sources/tlib.c
+		sources/menu.c \
+		sources/tlib.c \
+		sources/tthread.c
 
 HEADERS += \
-		sources/*.h
+		sources/*.h \
+		sources/tthread.h
 
 DISTFILES += \
 		Makefile \

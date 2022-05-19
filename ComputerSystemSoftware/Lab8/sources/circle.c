@@ -38,7 +38,7 @@ void produce_message(T_CONTAINER(TList, Circle, T_ITERATOR_POSTFIX) const iterat
 	T_CLASS(TMutex, lock)(lock);
 	if (iterator->message != nullptr) T_RETURN_VOID(T_CLASS(TMutex, unlock)(lock););
 	//creating message
-	int size = rand() % 255;
+	int size = rand() % 255 / 2;
 	for(int i = 0; i < size;i++)
 		iterator->message = T_CLASS(TString, append)(iterator->message, 'a' + rand() % ('z' - 'a' + 1));
 	//creating checksum
@@ -48,7 +48,9 @@ void produce_message(T_CONTAINER(TList, Circle, T_ITERATOR_POSTFIX) const iterat
 		iterator->checksum = iterator->checksum + num * i;
 	}
 	iterator->added++;
-	T_CLASS(TConsole, print)(kInput, "Produser %lu setted message\n", pthread_self());
+	T_CLASS(TConsole, print)(kInput, "Produser ");
+	T_CLASS(TConsole, print)(kLog, "%lu", pthread_self());
+	T_CLASS(TConsole, print)(kInput, " setted message\n");
 	T_CLASS(TMutex, unlock)(lock);
 }
 void take_message(T_CONTAINER(TList, Circle, T_ITERATOR_POSTFIX) const iterator)
@@ -63,7 +65,10 @@ void take_message(T_CONTAINER(TList, Circle, T_ITERATOR_POSTFIX) const iterator)
 		check_checksum = check_checksum + num * i;
 	}
 	if(check_checksum != iterator->checksum) T_CLASS(TConsole, print)(kError, "Checksum wasnt correct!\n");
-	T_CLASS(TConsole, print)(kInput, "Taker %lu read: %s\n", pthread_self(), iterator->message);
+	T_CLASS(TConsole, print)(kInput, "Taker\t ");
+	T_CLASS(TConsole, print)(kLog, "%lu", pthread_self());
+	T_CLASS(TConsole, print)(kInput, " read:\t");
+	T_CLASS(TConsole, print)(kOutput, "%s.\n", iterator->message);
 	iterator->message = T_CLASS(TString, destructor)(iterator->message);
 	iterator->checksum = 0;
 	iterator->deleted++;
