@@ -13,7 +13,7 @@ T_IMPORT_MEMORY_DEFINITION(T_CLASS(TTimer, T_ALLOCATOR_POSTFIX))
 
 TTimer T_CLASS(TTimer, default_constructor)(void)
 {
-	return T_MEMORY_MANAGER(allocate, T_CLASS(TTimer, T_ALLOCATOR_POSTFIX))(1);
+	return T_MEMORY_MANAGER(T_CLASS(TTimer, T_ALLOCATOR_POSTFIX), allocate)(1);
 }
 TTimer T_CLASS(TTimer, constructor)(void)
 {
@@ -23,7 +23,7 @@ TTimer T_CLASS(TTimer, constructor)(void)
 }
 TTimer T_CLASS(TTimer, destructor)(TTimer const timer)
 {
-	return T_MEMORY_MANAGER(deallocate, T_CLASS(TTimer, T_ALLOCATOR_POSTFIX))(timer);
+	return T_MEMORY_MANAGER(T_CLASS(TTimer, T_ALLOCATOR_POSTFIX), deallocate)(timer);
 }
 
 void T_CLASS(TTimer, start)(TTimer const timer)

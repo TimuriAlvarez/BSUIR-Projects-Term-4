@@ -45,7 +45,7 @@ T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) T_CONTAINER
 //OK
 T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, default_constructor)(void)
 {
-	return T_MEMORY_MANAGER(allocate, T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ALLOCATOR_POSTFIX))(1u);
+	return T_MEMORY_MANAGER(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ALLOCATOR_POSTFIX), allocate)(1u);
 }
 //OK
 TBool T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, is_empty)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container)
@@ -73,14 +73,14 @@ void T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, set_iteration_direction)(T
 //OK
 void T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, clear)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container)
 {
-	container->data = T_MEMORY_MANAGER(deallocate, CONTAINER_DATA_TYPE)(container->data);
+	container->data = T_MEMORY_MANAGER(CONTAINER_DATA_TYPE, deallocate)(container->data);
 	container->size = 0u;
 }
 //OK
 T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, destructor)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container)
 {
 	T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, clear)(container);
-	return T_MEMORY_MANAGER(deallocate, T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ALLOCATOR_POSTFIX))(container);
+	return T_MEMORY_MANAGER(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ALLOCATOR_POSTFIX), deallocate)(container);
 }
 
 
@@ -88,7 +88,7 @@ T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) T_CONTAINE
 void T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, append)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container, const CONTAINER_DATA_TYPE value, const TBool append_back)
 {
 	/*	TODO:	Reversed	*/
-	container->data = T_MEMORY_MANAGER(reallocate, CONTAINER_DATA_TYPE)(container->data, container->size, container->size + 1);
+	container->data = T_MEMORY_MANAGER(CONTAINER_DATA_TYPE, reallocate)(container->data, container->size, container->size + 1);
 	if (append_back) container->data[container->size] = value;
 	else
 	{
@@ -134,7 +134,7 @@ void T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, chop)(T_CONTAINER(CONTAINE
 	if (!chop_back)
 		for (size_t index = 1u; index < container->size; ++index)
 			container->data[index - 1u] = container->data[index];
-	container->data = T_MEMORY_MANAGER(reallocate, CONTAINER_DATA_TYPE)(container->data, container->size, container->size - 1u);
+	container->data = T_MEMORY_MANAGER(CONTAINER_DATA_TYPE, reallocate)(container->data, container->size, container->size - 1u);
 	container->size  = container->size - 1u;
 }
 void T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, erase)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container, const size_t index)
@@ -143,7 +143,7 @@ void T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, erase)(T_CONTAINER(CONTAIN
 	if (index >= container->size) return; /*	TODO:	Exception	*/
 	for (size_t i = index + 1u; i < container->size; ++i)
 		container->data[i - 1u] = container->data[i];
-	container->data = T_MEMORY_MANAGER(reallocate, CONTAINER_DATA_TYPE)(container->data, container->size, container->size - 1u);
+	container->data = T_MEMORY_MANAGER(CONTAINER_DATA_TYPE, reallocate)(container->data, container->size, container->size - 1u);
 	container->size = container->size - 1u;
 }
 

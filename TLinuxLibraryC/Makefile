@@ -2,7 +2,7 @@
 CC		= gcc
 VERSION	= c11
 OPTIONS	= -pedantic -W -Wall -Wextra
-FLAGS	= -lpthread
+FLAGS	= -pthread
 SRC		= sources/main.c sources/tlib.c
 NAME	= tlinux
 # Arguments to be paseed in programm

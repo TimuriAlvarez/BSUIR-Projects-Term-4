@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../tbasic.h"
+#include "../tconio.h"
+
+void T_FUNCTION(syscall, execute)(TMessage command);
 
 void T_FUNCTION(syscall, pause)(void);
 void T_FUNCTION(syscall, clear)(void);

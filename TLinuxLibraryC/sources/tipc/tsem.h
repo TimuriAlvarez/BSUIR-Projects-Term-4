@@ -2,7 +2,8 @@
 
 #include "../tipc.h"
 
-typedef struct TSemaphore TSemaphore;
+typedef struct TSemaphoreAllocator TSemaphoreAllocator;
+typedef TSemaphoreAllocator* TSemaphore;
 
 TSemaphore T_CLASS(TSemaphore, constructor)(TMessage name, const uint default_value);
 TSemaphore T_CLASS(TSemaphore, default_constructor)(TMessage name);

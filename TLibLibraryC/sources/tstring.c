@@ -76,7 +76,7 @@ TString T_CLASS(TString, constructor)(TMessage format, ... )
 
 TString T_CLASS(TString, clear)(TString const string)
 {
-	return T_MEMORY_MANAGER(deallocate, char)(string);
+	return T_MEMORY_MANAGER(char, deallocate)(string);
 }
 TString T_CLASS(TString, destructor)(TString const string)
 {
@@ -87,7 +87,7 @@ TString T_CLASS(TString, destructor)(TString const string)
 TString T_CLASS(TString, resize)(TString const string)
 {
 	const size_t old_size = T_CLASS(TString, size)(string) + 1;
-	return T_MEMORY_MANAGER(reallocate, char)(string, old_size, old_size + block_size);
+	return T_MEMORY_MANAGER(char, reallocate)(string, old_size, old_size + block_size);
 }
 
 TString T_CLASS(TString, append)(TString const string, const char character)
@@ -121,18 +121,18 @@ TString T_CLASS(TString, substring)(TMessage message, const size_t index_start, 
 TString* T_CLASS(TString, split)(TString message, TMessage splitters)
 {
 	size_t array_size = 0u;
-	TString* result = T_MEMORY_MANAGER(allocate, TString)(array_size);
+	TString* result = T_MEMORY_MANAGER(TString, allocate)(array_size);
 	// Extract the first token
 	TString token = strtok(message, splitters);
 	// loop through the string to extract all other tokens
 	while(token != nullptr)
 	{
-		result = T_MEMORY_MANAGER(reallocate, TString)(result, array_size, array_size + 1u);
+		result = T_MEMORY_MANAGER(TString, reallocate)(result, array_size, array_size + 1u);
 		result[array_size] = T_CLASS(TString, constructor)("%s", token);
 		array_size += 1;
 		token = strtok(message, splitters);
 	}
-	result = T_MEMORY_MANAGER(reallocate, TString)(result, array_size, array_size + 1u);
+	result = T_MEMORY_MANAGER(TString, reallocate)(result, array_size, array_size + 1u);
 	return result;
 }
 

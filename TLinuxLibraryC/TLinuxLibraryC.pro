@@ -4,15 +4,18 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+		tlinux.c \
+		sources/main.c \
+		sources/tlib.c
+
+DISTFILES += \
 		*.c \
 		sources/*.c \
 		sources/tfilesystem/*.c \
 		sources/tinterface/*.c \
 		sources/tinterface/sys/*.c \
-		sources/tipc.c \
 		sources/tipc/*.c \
-		sources/tipc/tmux.c \
-		sources/tipc/tsem.c
+		sources/tthreads/*.c
 
 HEADERS += \
 		*.h \
@@ -20,9 +23,8 @@ HEADERS += \
 		sources/tfilesystem/*.h \
 		sources/tinterface/*.h \
 		sources/tinterface/sys/*.h \
-		sources/tipc.h \
 		sources/tipc/*.h \
-		sources/tipc/tipc.h
+		sources/tthreads/*.h
 
 DISTFILES += \
 		Makefile

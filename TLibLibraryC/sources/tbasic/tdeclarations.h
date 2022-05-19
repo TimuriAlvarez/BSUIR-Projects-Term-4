@@ -46,3 +46,5 @@
 
 /*	ISO C compatible return void with expression	*/
 #define T_RETURN_VOID(T_RETURN_EXPRESSION) { T_RETURN_EXPRESSION return; }
+
+#define elif else if

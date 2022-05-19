@@ -123,7 +123,7 @@ void T_CLASS(TConsole, print)(const TConsoleId id, TMessage format, ... )
 	if (file == nullptr) T_THROW_CLOSED_STREM
 
 	T_CLASS(TConsole, format_stream)(id);
-	if (id == kDebug) fprintf(file, "T_DEBUG{");
+	if (id == kDebug) fprintf(file, "T_DEBUG{ ");
 	else if (id == kLibrary) fprintf(file, "T_LIBRARY{ ");
 	va_list ptr;
 	va_start(ptr, format);
