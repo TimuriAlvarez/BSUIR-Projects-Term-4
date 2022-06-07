@@ -5,17 +5,14 @@
 #include <uchar.h>
 #include <stdbool.h>
 
+#include "tdeclarations.h"
+
 typedef enum
 {
 	kLess = -1,
 	kEqual,
 	kGreater
 } TComparison;
-typedef enum
-{
-	kNormalIteration,
-	kRevercedIteration
-} TIterationDirection;
 
 				//Fundamental arithmetic types:
 	//Integral types:
@@ -47,7 +44,13 @@ typedef int						TFileDescriptor;
 				//Pointers:
 typedef void*                   TPointer;
 typedef FILE*					TFile;
+
+				//Strings:
 typedef char*					TString;
+typedef TString					T_CONTAINER(TString, char, T_CONTAINER_POSTFIX);
 typedef const char* const		TMessage;
+typedef TMessage				T_CONTAINER(TMessage, char, T_CONTAINER_POSTFIX);
 typedef wchar*					TWideString;
+typedef TWideString				T_CONTAINER(TString, wchar, T_CONTAINER_POSTFIX);
 typedef const wchar* const		TWideMessage;
+typedef TWideMessage			T_CONTAINER(TMessage, wchar, T_CONTAINER_POSTFIX);

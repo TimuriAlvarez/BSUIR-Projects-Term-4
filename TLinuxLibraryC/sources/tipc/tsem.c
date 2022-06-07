@@ -24,7 +24,7 @@ TSemaphore T_CLASS(TSemaphore, open)(TMessage name)
 		T_THROW_EXCEPTION("TSemaphore", nullptr, false, 0x00,
 						  {
 							  real_name = T_CLASS(TString, destructor)(real_name);
-							  pointer = nullptr;
+							  return nullptr;
 						  } )
 	TSemaphore result = T_MEMORY_MANAGER(TSemaphoreAllocator, allocate)(1);
 	result->name = real_name;
@@ -48,7 +48,7 @@ TSemaphore T_CLASS(TSemaphore, constructor)(TMessage name, const uint default_va
 		T_THROW_EXCEPTION("TSemaphore", nullptr, false, 0x00,
 						  {
 							  real_name = T_CLASS(TString, destructor)(real_name);
-							  pointer = nullptr;
+							  return nullptr;
 						  } )
 	TSemaphore result = T_MEMORY_MANAGER(TSemaphoreAllocator, allocate)(1);
 	result->name = real_name;

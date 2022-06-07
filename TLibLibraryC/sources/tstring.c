@@ -1,8 +1,43 @@
 #include <stdarg.h>
 
-#define T_SOURCE_FILE
 #include "tstring.h"
 #include "timport.h"
+
+#define CONTAINER_TYPE TString
+#define CONTAINER_DATA_TYPE char
+#define CONST_CONTAINER_TYPE TMessage
+
+/*	String as container (iterators)	*/
+
+TBool reversed_iteration_of_TString_char = false;
+
+T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_next)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) const iterator)
+{
+	return iterator + 1;
+}
+T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_previous)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) const iterator)
+{
+	return iterator - 1;
+}
+T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_start)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container)
+{
+	return container;
+}
+T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_end)(void)
+{
+	return nullptr;
+}
+TBool T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_last)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container, T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) const iterator)
+{
+	return iterator == (container + (reversed_iteration_of_TString_char ? 0u : T_CLASS(TString, size)(container) - 1u));
+}
+T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_iterate)(T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_CONTAINER_POSTFIX) const container, T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, T_ITERATOR_POSTFIX) const iterator)
+{
+	if (T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_last)(container, iterator))
+		return T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_end)();
+	return reversed_iteration_of_TString_char ? T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_previous)(iterator) :
+												T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_next)(iterator);
+}
 
 //	Size of allocation block (number of characters to be allocated/reallocated int the string)
 static const size_t block_size = 16u;
@@ -138,11 +173,22 @@ TString* T_CLASS(TString, split)(TString message, TMessage splitters)
 
 void T_CLASS(TString, parser)(TMessage message, TMessage format, ... )
 {
-	__attribute__((unused)) int quantity;
+	int quantity, theoretical_quantity = 0;
+	FOR_EACH_ITERATOR_FROM(character, TString, char, (TString)format)
+	{
+		if (*character == '%') theoretical_quantity = theoretical_quantity + 1;
+		T_CONTAINER(TString, char, T_ITERATOR_POSTFIX) next_character = T_CONTAINER(CONTAINER_TYPE, CONTAINER_DATA_TYPE, Iterator_iterate)((TString)format, character);
+		if (next_character != nullptr && *next_character == '%') theoretical_quantity = theoretical_quantity - 1;
+	}
 	va_list ptr;
-
 	va_start(ptr, format);
 	quantity = vsscanf(message, format, ptr);
 	va_end(ptr);
-	/*	TODO:	'%' checking!*/
+	T_CLASS(TConsole, print)(kDebug, "TString parser() notification: expected %d - detected %d", theoretical_quantity, quantity);
+	if (theoretical_quantity != quantity)
+		T_THROW_EXCEPTION("TString", "TString's parser() has failed to parse a string", false, 0xFF00005A,)
 }
+
+#undef CONTAINER_TYPE
+#undef CONTAINER_DATA_TYPE
+#undef CONST_CONTAINER_TYPE

@@ -33,3 +33,8 @@ int T_FUNCTION(syscall, atexit)(void(*function)(void))
 {
 	return atexit(function);
 }
+
+void T_FUNCTION(syscall, exit)(const int  exit_code)
+{
+	exit(exit_code);
+}

@@ -22,3 +22,4 @@ DISTFILES += \
 		sources/tconio/*.c \
 		sources/tfilesystem/*.c \
 		sources/timport/*.c
+		Makefile
