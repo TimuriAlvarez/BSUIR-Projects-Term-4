@@ -4,7 +4,7 @@
 
 typedef enum
 {
-	kInput,
+	kInput = 0,
 	kOutput,
 	kError,
 	kLog,
@@ -50,4 +50,5 @@ void T_CLASS(TConsole, library)(const TBool enabled);
 void T_CLASS(TConsole, scan)(TMessage format, ...);
 void T_CLASS(TConsole, clear)(void);
 TString T_CLASS(TConsole, getline)(TMessage message, const TBool can_be_empty);
+TString T_CLASS(TConsole, getfile)(TFile const file, TMessage message, const TBool can_be_empty);
 TBool T_CLASS(TConsole, confirmation)(TMessage message);

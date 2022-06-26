@@ -18,5 +18,6 @@ void T_CLASS(TFile, create)(TMessage file_path, const TBool terminate);
 void T_CLASS(TFile, remove)(TMessage file_path, const TBool terminate);
 void T_CLASS(TFile, erase)(TMessage file_path, const TBool terminate);
 void T_CLASS(TFile, touch)(TMessage file_path);
+void T_CLASS(TFile, untouch)(TMessage file_path, const TBool terminate);
 void T_CLASS(TFile, copy)(TMessage old_file_path, TMessage new_file_path, const TBool terminate);
 void T_CLASS(TFile, move)(TMessage old_file_path, TMessage new_file_path, const TBool terminate);

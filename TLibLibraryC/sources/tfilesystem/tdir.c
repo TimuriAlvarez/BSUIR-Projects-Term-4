@@ -13,3 +13,8 @@ TBool T_CLASS(TDir, exists)(TMessage dir_path)
 	T_CLASS(TFile, close)(dir, false);
 	return result;
 }
+
+TBool T_CLASS(TDir, isDir)(TMessage dir_path)
+{
+	return T_CLASS(TDir, exists)(dir_path);
+}

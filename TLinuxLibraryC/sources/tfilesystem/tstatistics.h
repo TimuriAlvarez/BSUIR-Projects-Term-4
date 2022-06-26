@@ -40,6 +40,7 @@ typedef struct
 	TFilesystemType			type;
 	TFilesystemPermissions	permissions;
 	ullint					size;
+	TString					reserved;
 } TFilesystemStats;
 
 #define CONTAINER_DATA_TYPE TFilesystemStats
@@ -55,4 +56,4 @@ TDirContent T_CLASS(TDirContent, destructor)(TDirContent content);
 void T_CLASS(TDirContent, print)(TDirContent const content, const TConsoleId id);
 
 void T_CLASS(TFilesystemStats, print)(const TFilesystemStats* const entity);
-void T_CLASS(TDirContent, dirwalk)(TDirContent const content, const TBool follow_dirs, void (*action)(const TFilesystemStats* const));
+void T_CLASS(TDirContent, dirwalk)(TDirContent const content, const TBool follow_dirs, void (*action)(const TFilesystemStats* const), const TBool dirs_before_files);

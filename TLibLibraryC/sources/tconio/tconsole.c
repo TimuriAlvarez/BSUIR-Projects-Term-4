@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdarg.h>
 #include <stdio.h>
 #ifdef __linux__
 #include <termios.h>
@@ -10,6 +9,8 @@
 #include <Windows.h>
 #include <conio.h>
 #endif
+
+#include <stdarg.h>
 
 #include "../tconio.h"
 #include "../tstring.h"
@@ -197,6 +198,20 @@ TString T_CLASS(TConsole, getline)(TMessage message, const TBool can_be_empty)
 	} while (can_be_empty == false && T_CLASS(TString, empty)(string));
 	return string;
 }
+TString T_CLASS(TConsole, getfile)(TFile const file, TMessage message, const TBool can_be_empty)
+{
+	TString string = T_CLASS(TString, default_constructor)();
+	int character = '\0';
+	do
+	{
+		if (character != '\0') T_CLASS(TConsole, print)(kOutput, "An empty string is not allowed!\n");
+		/**/if (message != nullptr) T_CLASS(TConsole, print)(kOutput, "Enter the %s: ", message);/**/
+		while ((character = fgetc(file)) != '\n' && character != EOF)
+			string = T_CLASS(TString, append)(string, (char)character);
+	} while (can_be_empty == false && T_CLASS(TString, empty)(string));
+	return string;
+}
+
 TBool T_CLASS(TConsole, confirmation)(TMessage message)
 {
 	if (message != nullptr) T_CLASS(TConsole, print)(kOutput, "Are you sure you want to %s? [Y/N] ", message);

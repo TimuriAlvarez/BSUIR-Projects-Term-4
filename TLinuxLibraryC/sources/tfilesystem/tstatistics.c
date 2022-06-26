@@ -81,7 +81,7 @@ TFilesystemPermissions T_CLASS(TFilesystemPermissions, constructor)(const struct
 
 TFilesystemStats T_CLASS(TFilesystemStats, constructor)(TMessage parent_path, const TDirEntity entity)
 {
-	TFilesystemStats stats = { nullptr, kFSTypeUnknown, T_CLASS(TFilesystemPermissions, default_constructor)(), 0 };
+	TFilesystemStats stats = { nullptr, kFSTypeUnknown, T_CLASS(TFilesystemPermissions, default_constructor)(), 0, nullptr };
 	if (parent_path) stats.path = T_CLASS(TString, constructor)("%s/%s", parent_path, entity->d_name);
 	else stats.path = T_CLASS(TString, constructor)("%s", entity->d_name);
 	struct stat extra_stats;
@@ -108,7 +108,10 @@ TDirContent T_CLASS(TDirContent, constructor)(TMessage path)
 void T_CLASS(TDirContent, clear)(TDirContent const content)
 {
 	FOR_EACH_ITERATOR_FROM(entity, TVector, TFilesystemStats, content)
+	{
 		T_CLASS(TString, destructor)(entity->path);
+		T_CLASS(TString, destructor)(entity->reserved);
+	}
 }
 
 TDirContent T_CLASS(TDirContent, destructor)(TDirContent const content)
@@ -156,17 +159,28 @@ void T_CLASS(TFilesystemStats, print)(const TFilesystemStats* const entity)
 	T_CLASS(TConsole, print)(kLog, "\n");
 }
 
-void T_CLASS(TDirContent, dirwalk)(TDirContent const content, const TBool follow_dirs, void (*action)(const TFilesystemStats* const))
+TString parce_path(TMessage path);
+
+void T_CLASS(TDirContent, dirwalk)(TDirContent const content, const TBool follow_dirs, void (*action)(const TFilesystemStats* const), const TBool dirs_before_files)
 {
 	if (T_CONTAINER(TVector, TFilesystemStats, is_empty)(content))
 		T_RETURN_VOID(T_CLASS(TConsole, print)(kLog, "Directory is empty!\n");)
 	FOR_EACH_ITERATOR_FROM(entity, TVector, TFilesystemStats, content)
 	{
-		if (follow_dirs && entity->type == kFSTypeDirectory) {
-			TDirContent temp_dir_content = T_CLASS(TDirContent, constructor)(entity->path);
-			T_CLASS(TDirContent, dirwalk)(temp_dir_content, true, action);
-			T_CLASS(TDirContent, destructor)(temp_dir_content);
+		TString temp = parce_path(entity->path);
+		//T_CLASS(TConsole, print)(kDebug, "PARCED: '%-50s' - '%-50s'", entity->path, temp);
+		if (temp == nullptr || T_CLASS(TString, equal)(temp, ".") || T_CLASS(TString, equal)(temp, "..")) {}
+		else
+		{
+			if (dirs_before_files) action(entity);
+			if (follow_dirs && entity->type == kFSTypeDirectory)
+			{
+				TDirContent temp_dir_content = T_CLASS(TDirContent, constructor)(entity->path);
+				T_CLASS(TDirContent, dirwalk)(temp_dir_content, true, action, dirs_before_files);
+				T_CLASS(TDirContent, destructor)(temp_dir_content);
+			}
+			if (!dirs_before_files) action(entity);
 		}
-		action(entity);
+		T_CLASS(TString, destructor)(temp);
 	}
 }

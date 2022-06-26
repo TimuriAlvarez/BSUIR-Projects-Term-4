@@ -1,7 +1,5 @@
 #pragma once
 
-//#include <sys/stat.h>
-
 #include "tfile.h"
 #include "../tstring.h"
 #include "../tconio.h"
@@ -17,7 +15,7 @@
 
 #define T_THROW_FAILED_OPENING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to open the file", terminate, 0xFE00F0, return file;)
 #define T_THROW_SELF_COPYING T_THROW_EXCEPTION("TFilesystem::TFile", "Self-copying is a forbidden behaviour", terminate, 0xFE00F5, )
-#define T_THROW_FAILED_CLOSING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to close the file", terminate, 0xFE00F9, return file;)
+#define T_THROW_FAILED_CLOSING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to close the file", terminate, 0xFE00F9, )
 #define T_THROW_FAILED_REMOVING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to create the file", terminate, 0xFE00FD, return; )
 #define T_THROW_FAILED_CREATING T_THROW_EXCEPTION("TFilesystem::TFile", "Failed to create the file", terminate, 0xFE00FC, return; )
 #define T_THROW_EXISTANCE_EXPECTED(E_RETURN) T_THROW_EXCEPTION("TFilesystem::TFile", "Failed does not exist which was unexpected", terminate, 0xFE00FE, return E_RETURN;)
@@ -70,6 +68,11 @@ void T_CLASS(TFile, touch)(TMessage file_path)
 {
 	if (!T_CLASS(TFile, exists)(file_path))
 		T_CLASS(TFile, create)(file_path, true);
+}
+void T_CLASS(TFile, untouch)(TMessage file_path, const TBool terminate)
+{
+	if (T_CLASS(TFile, exists)(file_path))
+		T_CLASS(TFile, remove)(file_path, terminate);
 }
 void T_CLASS(TFile, copy)(TMessage old_file_path, TMessage new_file_path, const TBool terminate)
 {

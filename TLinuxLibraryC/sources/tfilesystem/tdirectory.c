@@ -1,5 +1,7 @@
 #include "tdirectory.h"
 
+#include <unistd.h>
+
 #define T_THROW_DIR_FAILED_OPENING T_THROW_EXCEPTION("TFilesystem::TDir", "Failed to open the directory", terminate, 0xFE00F0, return dir;)
 #define T_THROW_DIR_SELF_COPYING T_THROW_EXCEPTION("TFilesystem::TDir", "Self-copying is a forbidden behaviour", terminate, 0xFE00F5, )
 #define T_THROW_DIR_FAILED_CLOSING T_THROW_EXCEPTION("TFilesystem::TDir", "Failed to close the directory", terminate, 0xFE00F9, )
@@ -33,40 +35,29 @@ void T_CLASS(TDir, remove)(TMessage dir_path, const TBool terminate)
 {
 	if (dir_path == nullptr) return;
 	if (!T_CLASS(TDir, exists)(dir_path)) T_THROW_DIR_EXISTANCE_EXPECTED()
-	if (remove(dir_path) != 0) T_THROW_DIR_FAILED_REMOVING
+	T_CLASS(TDir, erase)(dir_path, true);
+	rmdir(dir_path);
 }
-/*void T_CLASS(TDir, erase)(TMessage dir_path, const TBool terminate)
+
+void T_CLASS(TDir, erase_helper)(const TFilesystemStats* const entity)
 {
-	if (!T_CLASS(TDir, exists)(dir_path)) T_THROW_EXISTANCE_EXPECTED()
-	T_CLASS(TDir, remove)(dir_path, terminate);
-	T_CLASS(TDir, create)(dir_path, terminate);
-}*/
+	if (entity->type == kFSTypeDirectory) T_CLASS(TDir, remove)(entity->path, true);
+	else T_CLASS(TFile, remove)(entity->path, true);
+}
+void T_CLASS(TDir, erase)(TMessage dir_path, const TBool terminate)
+{
+	if (!T_CLASS(TDir, exists)(dir_path)) T_THROW_DIR_EXISTANCE_EXPECTED()
+	TDirContent content = T_CLASS(TDirContent, constructor)(dir_path);
+	T_CLASS(TDirContent, dirwalk)(content, true, T_CLASS(TDir, erase_helper), false);
+	T_CLASS(TDirContent, destructor)(content);
+}
 void T_CLASS(TDir, touch)(TMessage dir_path, const mode_t dir_mode)
 {
 	if (!T_CLASS(TDir, exists)(dir_path))
 		T_CLASS(TDir, create)(dir_path, dir_mode, true);
 }
-/*void T_CLASS(TDir, copy)(TMessage old_dir_path, TMessage new_dir_path, const TBool terminate)
+void T_CLASS(TDir, untouch)(TMessage dir_path)
 {
-	if (T_CLASS(TString, equal)(old_dir_path, new_dir_path)) T_THROW_SELF_COPYING
-	if (!T_CLASS(TDir, exists)(old_dir_path)) T_THROW_EXISTANCE_EXPECTED()
-	if (T_CLASS(TDir, exists)(new_dir_path)) T_THROW_EXISTANCE_UNEXPECTED()
-	T_CLASS(TDir, create)(new_dir_path, terminate);
-	if (!T_CLASS(TDir, exists)(new_dir_path)) T_THROW_EXISTANCE_EXPECTED()
-	TDir const old_file = T_CLASS(TDir, open)(old_dir_path, "rb", true);
-	TDir const new_file = T_CLASS(TDir, open)(new_dir_path, "wb", true);
-	while (true)
-	{
-		char temp;
-		fread(&temp, sizeof(char), 1u, old_file);
-		if (feof(old_file)) break;
-		fwrite(&temp, sizeof(char), 1u, new_file);
-	}
-	T_CLASS(TDir, close)(old_file, terminate);
-	T_CLASS(TDir, close)(new_file, terminate);
-}*/
-/*void T_CLASS(TDir, move)(TMessage old_dir_path, TMessage new_dir_path, const TBool terminate)
-{
-	T_CLASS(TDir, copy)(old_dir_path, new_dir_path, terminate);
-	T_CLASS(TDir, remove)(old_dir_path, terminate);
-}*/
+	if (T_CLASS(TDir, exists)(dir_path))
+		T_CLASS(TDir, remove)(dir_path, true);
+}

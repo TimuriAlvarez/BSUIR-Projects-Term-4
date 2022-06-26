@@ -1,6 +1,6 @@
 # Makefile
 CC		= gcc
-VERSION	= c11
+VERSION	= gnu11
 OPTIONS	= -pedantic -W -Wall -Wextra
 FLAGS	= -pthread
 SRC		= sources/main.c sources/tlib.c
