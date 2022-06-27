@@ -3,16 +3,12 @@ lab	=
 
 default:
 	make clean
-	cp -f Lab$(lab)/*.asm bin
-	cp -f Lab$(lab)/*.bat bin
-	cp -f run.bat dosbox
-
-	#
-	# In DOSBOX type: `run`
-	#
-
+	cp -f run.bat dos
+	cp -f Lab$(lab)/*.asm dos/BIN
+	cp -f Lab$(lab)/*.bat dos/BIN
 	dosbox
 
 clean:
 	clear
-	rm -f bin/*
+	rm -f dos/run.bat
+	rm -f dos/BIN/*
