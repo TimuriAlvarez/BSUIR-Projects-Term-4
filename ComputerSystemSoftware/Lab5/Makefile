@@ -1,18 +1,18 @@
 # Makefile
 CC		= gcc
-VERSION	= c11
+VERSION	= gnu11
 OPTIONS	= -pedantic -W -Wall -Wextra
-FLAGS	= -pthread
-SRC		= sources/circle.c sources/tlib.c
-SRC1	= sources/main.c $(SRC)
-SRC2	= sources/producer.c $(SRC)
-SRC3	= sources/taker.c $(SRC)
+FLAGS	= 
+SRC		= src/circle.c src/tlib.c
+SRC1	= $(SRC) src/main.c
+SRC2	= $(SRC) src/producer.c
+SRC3	= $(SRC) src/taker.c
 NUMBER	= 5
 NAME1	= lab$(NUMBER)
 NAME2	= producer
 NAME3	= taker
 # Arguments to be paseed in programm
-args	=
+args	= 
 
 help:
 	# 	Make options:
@@ -57,4 +57,4 @@ debug:
 clean:
 	clear
 	rm -f bin/*
-	rm -f temp/*
+	rm -f tmp/*

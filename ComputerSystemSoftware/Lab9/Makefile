@@ -2,12 +2,12 @@
 CC		= gcc
 VERSION	= gnu11
 OPTIONS	= -pedantic -W -Wall -Wextra
-FLAGS	= -pthread
-SRC		= sources/*.c
+FLAGS	= 
+SRC		= src/*.c
 NUMBER	= 9
 NAME	= lab$(NUMBER)
 # Arguments to be paseed in programm
-args	=
+args	= 
 
 help:
 	# 	Make options:
@@ -18,6 +18,8 @@ help:
 	# dbuild	-	Build binary ready for debug;
 	# debug		-	Debug binary;
 	# clean		-	Remove all build and temporary files.
+	#
+	# generate	-	Generate all required files
 
 about:
 	# Year:			2nd
@@ -48,7 +50,7 @@ debug:
 clean:
 	clear
 	rm -f bin/*
-	rm -f temp/*
+	rm -f tmp/*
 
 generate:
-	cp -f templates/* temp
+	cp -f res/* tmp

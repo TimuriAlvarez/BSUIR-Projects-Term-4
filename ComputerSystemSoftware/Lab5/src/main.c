@@ -14,32 +14,6 @@
 
 #include "circle.h"
 
-// 123 -> "123\0"
-char* IntToChar(int num){
-	char *line = (char*)malloc(sizeof(char)); int size = 0;
-	int rev_x = 0;
-	if(num < 0){
-		line[0] = '-';
-		line = (char*)realloc(line,2*sizeof(char));
-		size++; rev_x++;
-	}
-	while(num != 0){
-		char temp = num%10+48;
-		num/=10;
-		line[size] = temp;
-		size++;
-		line = (char*)realloc(line,(size+2)*sizeof(char));
-	}
-	line[size] = '\0';
-	size--;
-	for(;rev_x < size;rev_x++,size--){
-		char temp = line[rev_x];
-		line[rev_x] = line[size];
-		line[size] = temp;
-	}
-	return line;
-}
-
 //creates new array of pids that larger by one than old and returns it
 int* UpdatePidsIncrease(int **old_pids, int count)
 {
@@ -83,8 +57,9 @@ int main(void)
 	sem_t* SemTaker = sem_open("/semtaker", O_CREAT, 0644, 0);
 	sem_t* SemMutex = sem_open("/semmutex", O_CREAT, 0644, 1);
 
-	if(SemProducer == SEM_FAILED || SemTaker == SEM_FAILED || SemMutex == SEM_FAILED)
-		T_THROW_EXCEPTION("Semaphore", "Function sem_open(...) failed to create a semaphore",true,0xCE000150,);
+	if(SemProducer == SEM_FAILED || SemTaker == SEM_FAILED || SemMutex == SEM_FAILED ||
+	   SemProducer == nullptr || SemTaker == nullptr || SemMutex == nullptr)
+		T_THROW_EXCEPTION("Semaphore", "Function sem_open(...) failed to create a semaphore",true,0xCE000150, return -1; );
 
 	//DATA SEG
 	int *ProducerPids, CountProducer=0, CreatedCircles = 0;
@@ -136,12 +111,12 @@ int main(void)
 				}
 				else
 				{
-					char *send_shmid = IntToChar(BufferCircle->current_shmid);
+					TString send_shmid = T_CLASS(TString, constructor)("%i", BufferCircle->current_shmid);
 					execl("bin/producer",send_shmid, nullptr);
-					free(send_shmid);
 					T_CLASS(TConsole, print)(kError, "Critical\n");
+					T_CLASS(TString, destructor)(send_shmid);
 				}
-							break;
+				break;
 			}
 			case 't':
 			{
@@ -166,9 +141,10 @@ int main(void)
 						}
 						else
 						{
-							char* send_shmid = IntToChar(BufferCircle->current_shmid);
+							TString send_shmid = T_CLASS(TString, constructor)("%i", BufferCircle->current_shmid);
 							execl("bin/taker",send_shmid, nullptr);
 							T_CLASS(TConsole, print)(kError, "Critical\n");
+							T_CLASS(TString, destructor)(send_shmid);
 						}
 						break;
 			}

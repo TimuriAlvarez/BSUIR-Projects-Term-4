@@ -47,13 +47,14 @@ void Read(struct Circle **BufferCircle){
 	(*BufferCircle)->deleted++;
 }
 
-int main(int argc, char *argv[]){
+int main(__attribute__((unused))int argc, char *argv[]){
 	sem_t *SemProducer = sem_open("/semproducer", 0664,0);
 	sem_t *SemTaker = sem_open("/semtaker", 0664,0);
 	sem_t *SemMutex = sem_open("/semmutex", 0664,1);
 
-	if(SemProducer == SEM_FAILED || SemTaker == SEM_FAILED || SemMutex == SEM_FAILED)
-		T_THROW_EXCEPTION("Semaphore", "Function sem_open(...) failed to create a semaphore",true,0xCE000150,);
+	if(SemProducer == SEM_FAILED || SemTaker == SEM_FAILED || SemMutex == SEM_FAILED ||
+	   SemProducer == nullptr || SemTaker == nullptr || SemMutex == nullptr)
+		T_THROW_EXCEPTION("Semaphore", "Function sem_open(...) failed to create a semaphore",true,0xCE000150, return -1; );
 
 	struct sigaction killer;
 	killer.sa_handler = killer_proc;

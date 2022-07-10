@@ -31,16 +31,23 @@ T_IMPORT_MEMORY_DEFINITION(rgb_t)
 void rgb_start(const TBool plain)
 {
 	parameters.timer = T_CLASS(TTimer, default_constructor)();
-	TString result = T_CLASS(TString, constructor)("resources/%s", parameters.file_name);
+	TString result = T_CLASS(TString, constructor)("res/%s", parameters.file_name);
 	parameters.fp = T_CLASS(TFile, open)(result, "rb", true);   //read the file//
 	T_CLASS(TString, destructor)(result);
-	if (plain) result = T_CLASS(TString, constructor)("resources/grey_plain_%s", parameters.file_name);
-	else result = T_CLASS(TString, constructor)("resources/grey_threads_%s", parameters.file_name);
+	if (plain) result = T_CLASS(TString, constructor)("tmp/grey_plain_%s", parameters.file_name);
+	else result = T_CLASS(TString, constructor)("tmp/grey_threads_%s", parameters.file_name);
 	if (T_CLASS(TFile, exists)(result)) T_CLASS(TFile, remove)(result, true);
 	T_CLASS(TFile, create)(result, true);
 	parameters.fo = T_CLASS(TFile, open)(result, "wb", true);
 	T_CLASS(TString, destructor)(result);
 }
+
+TString T_CONVERTER(TString, TBool)(const TBool flag)
+{
+	static TString result[] = { "false", "true" };
+	return result[flag];
+}
+
 void rgb_read(void)
 {
 	T_CLASS(TTimer, start)(parameters.timer);
@@ -52,9 +59,9 @@ void rgb_read(void)
 		uint bitDepth = *(uint*)&parameters.imageHeader[28];
 		parameters.colorTableFlag = bitDepth <= 8;
 		if(parameters.colorTableFlag) fread(parameters.colorTable, sizeof(uchar), 1024, parameters.fp); // COLOR TABLE Present: read the 1024-byte from fp to colorTable
-		T_CLASS(TConsole, print)(kOutput, "Image header content:\n\tW: %u,\tH: %u,\tD: %u,\tT: %s.\n", width, height, bitDepth, T_CONVERTER(TString, TFlag)(parameters.colorTableFlag));
+		T_CLASS(TConsole, print)(kOutput, "Image header content:\n\tW: %u,\tH: %u,\tD: %u,\tT: %s.\n", width, height, bitDepth, T_CONVERTER(TString, TBool)(parameters.colorTableFlag));
 		parameters.imgDataSize = width * height;		//calculate image size
-		parameters.buffer = T_MEMORY_MANAGER(allocate, rgb_t)(parameters.imgDataSize);
+		parameters.buffer = T_MEMORY_MANAGER(rgb_t, allocate)(parameters.imgDataSize);
 		for(ullint i = 0u; i < parameters.imgDataSize; ++i)
 		{
 			parameters.buffer[i].blue = getc(parameters.fp);
@@ -95,7 +102,7 @@ void rgb_write(void)
 }
 void rgb_end(void)
 {
-	T_MEMORY_MANAGER(deallocate, rgb_t)(parameters.buffer);
+	T_MEMORY_MANAGER(rgb_t, deallocate)(parameters.buffer);
 	fclose(parameters.fo);
 	fclose(parameters.fp);
 }
@@ -119,7 +126,7 @@ void rgb_thread_calc(void)
 {
 	T_CLASS(TTimer, start)(parameters.timer);
 	{
-		pthread_t* threads = T_MEMORY_MANAGER(allocate, pthread_t)(parameters.quantity);
+		pthread_t* threads = T_MEMORY_MANAGER(pthread_t, allocate)(parameters.quantity);
 		for (ullint i = 0u; i < parameters.quantity; ++i)
 		{
 			// thread's id, default attributes, procedure
@@ -127,13 +134,13 @@ void rgb_thread_calc(void)
 			//T_CLASS(TConsole, print)(kLog, "Creating thread No %Lu (%Lu)...\n", i, threads[i]);
 			if (status != 0)
 			{
-				T_MEMORY_MANAGER(deallocate, pthread_t)(threads);
+				T_MEMORY_MANAGER(pthread_t, deallocate)(threads);
 				T_THROW_EXCEPTION("Threads", "Function 'pthread_create' failed to create a new thread correctly", true, 0xCE0001C1, return;)
 			}
 		}
 		for (ullint i = 0u; i < parameters.quantity; ++i)
 		   pthread_join(threads[i], nullptr);
-		T_MEMORY_MANAGER(deallocate, pthread_t)(threads);
+		T_MEMORY_MANAGER(pthread_t, deallocate)(threads);
 	}
 	T_CLASS(TTimer, stop)(parameters.timer);
 	T_CLASS(TConsole, print)(kLog, "Thread Calculations are over:\t%Lf ms\n", T_CLASS(TTimer, miliseconds)(parameters.timer));
@@ -146,7 +153,7 @@ int main(void)
 	{
 		T_FUNCTION(syscall, clear)();
 		T_CLASS(TConsole, print)(kOutput, "Available images:\n");
-		system("ls resources -1 | grep -v 'grey_*'");
+		system("ls res -1 && echo "" && ls tmp -1");
 		T_CLASS(TConsole, print)(kOutput, "Type 'q' to quit\nType 's' to set number of threads\nCurrent number of threads: %d\n", parameters.quantity);
 		T_CLASS(TString, destructor)(parameters.file_name);
 		parameters.file_name = T_CLASS(TConsole, getline)("file name", false);
@@ -167,7 +174,7 @@ int main(void)
 		}
 		else
 		{
-			TString result = T_CLASS(TString, constructor)("resources/%s", parameters.file_name);
+			TString result = T_CLASS(TString, constructor)("res/%s", parameters.file_name);
 			if (!T_CLASS(TFile, exists)(result)) T_CLASS(TConsole, print)(kError, "There is no file with the name you provided!\n");
 			else for (TBool plain_mode = true; true; plain_mode = false)
 			{

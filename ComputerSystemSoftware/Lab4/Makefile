@@ -1,13 +1,13 @@
 # Makefile
 CC		= gcc
-VERSION	= c11
+VERSION	= gnu11
 OPTIONS	= -pedantic -W -Wall -Wextra
-FLAGS	= -D_POSIX_C_SOURCE
-SRC		= sources/*.c
+FLAGS	= 
+SRC		= src/*.c
 NUMBER	= 4
 NAME	= lab$(NUMBER)
 # Arguments to be paseed in programm
-args	=
+args	= 
 
 help:
 	# 	Make options:
@@ -48,4 +48,4 @@ debug:
 clean:
 	clear
 	rm -f bin/*
-	rm -f temp/*
+	rm -f tmp/*

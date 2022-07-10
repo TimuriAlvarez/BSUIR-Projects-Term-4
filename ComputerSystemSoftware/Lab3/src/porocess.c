@@ -33,7 +33,7 @@ void menu_remove(MenuParameters* const parameters)
 	if (parameters->parameters != nullptr)
 		for (size_t i = 0u; parameters->parameters[i] != nullptr; ++i)
 			T_CLASS(TString, clear)(parameters->parameters[i]);
-	T_MEMORY_MANAGER(deallocate, TString)(parameters->parameters);
+	T_MEMORY_MANAGER(TString, deallocate)(parameters->parameters);
 }
 void menu_set(MenuParameters* const parameters)
 {
@@ -43,7 +43,7 @@ void menu_set(MenuParameters* const parameters)
 	TString const string = T_CLASS(TConsole, getline)("number of parameters", false);  // NOLINT(misc-misplaced-const)
 	size_t size;
 	T_CLASS(TString, parser)(string, "%z", &size);
-	parameters->parameters = T_MEMORY_MANAGER(allocate, TString)(size + 1u);
+	parameters->parameters = T_MEMORY_MANAGER(TString, allocate)(size + 1u);
 	for (size_t i = 0u; i < size; ++i)
 	{
 		T_CLASS(TConsole, print)(kOutput, "Enter parameter %zu: ", i + 1u);
