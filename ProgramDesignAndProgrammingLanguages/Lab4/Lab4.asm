@@ -46,10 +46,12 @@
 	; Declarations
 		.const
 		CR			EQU	0Dh			; Carrige return character
-		NL			EQU 0Ah			; New line charecter
-		NUL			EQU 00h			; Null character
+		NL			EQU	0Ah			; New line charecter
+		NUL			EQU	00h			; Null character
 		BCKSPC		EQU	08h			; Backspace character
 		SPC			EQU	20h			; Space character
+		SCP			EQU	1Bh			; Escape character
+		TAB			EQU	09h			; Tab character
 	; Constants
 		.const
 	; Variables
@@ -113,20 +115,34 @@
 				mp_loop_name:
 					dec mp_index
 			endm
+		; Switch-case construction
+			; Swich part
+				m_switch macro mp_value
+					SWITCH_VALUE EQU mp_value
+				endm
+			; Case part
+				m_case macro mp_value, mp_label
+					cmp SWITCH_VALUE, mp_value
+					je mp_label
+				endm
+			; Default case part
+				m_default_case macro mp_label
+					jmp mp_label
+				endm
 	; Procedures
 		.code
 ; Strings area
 	; Declarations
 		.const
-		ARG1		EQU 02h			; 'Ret' value for		1 procedure argument
-		ARG1_1		EQU [BP+04h]	; Procedure argument		1 out of 1 value
-		ARG2		EQU 04h			; 'Ret' value for		2 procedure arguments
-		ARG1_2		EQU [BP+06h]	; Procedure argument		1 out of 2 value
-		ARG2_2		EQU [BP+04h]	; Procedure argument		2 out of 2 value
-		ARG3		EQU 06h			; 'Ret' value for		3 procedure arguments
-		ARG1_3		EQU [BP+08h]	; Procedure argument		1 out of 3 value
-		ARG2_3		EQU [BP+06h]	; Procedure argument		2 out of 3 value
-		ARG3_3		EQU [BP+04h]	; Procedure argument		3 out of 3 value
+		ARG1		EQU	02h			; 'Ret' value for		1 procedure argument
+		ARG1_1		EQU	[BP+04h]	; Procedure argument		1 out of 1 value
+		ARG2		EQU	04h			; 'Ret' value for		2 procedure arguments
+		ARG1_2		EQU	[BP+06h]	; Procedure argument		1 out of 2 value
+		ARG2_2		EQU	[BP+04h]	; Procedure argument		2 out of 2 value
+		ARG3		EQU	06h			; 'Ret' value for		3 procedure arguments
+		ARG1_3		EQU	[BP+08h]	; Procedure argument		1 out of 3 value
+		ARG2_3		EQU	[BP+06h]	; Procedure argument		2 out of 3 value
+		ARG3_3		EQU	[BP+04h]	; Procedure argument		3 out of 3 value
 		ENDL		EQU	CR, NL		; 'Enter' key equivalent: "\r\n" characters
 	; Constants
 		.const
@@ -339,7 +355,7 @@
 	; Declarations
 		.const
 		STRSIZE		EQU	0Fh
-		VM_ADDR		EQU 0B800h
+		VM_ADDR		EQU	0B800h
 		; Attributes:
 			; Colours
 				CLR_BLK	EQU	00h		; Black		colour
@@ -372,28 +388,69 @@
 			BX_H	EQU	00CDh		; plain line			horizontal
 			BX_V	EQU	00BAh		; plain line			vertical
 		; Special characters
-			SCH_I	EQU 'l'			; Character		'I'		representation
-			SCH_XCL	EQU '!'			; Character		'!'		representation
-			SCH_ARU	EQU 1Eh			; Arrow up		'^'		representation
-			SCH_ARD	EQU 1Fh			; Arrow down	'v'		representation
-			SCH_ARL	EQU 11h			; Arrow left	'<'		representation
-			SCH_ARR	EQU 10h			; Arrow right	'>'		representation
+			SCH_I	EQU	'l'			; Character		'I'		representation
+			SCH_XCL	EQU	'!'			; Character		'!'		representation
+			SCH_ARU	EQU	001Eh		; Arrow up		'^'		representation
+			SCH_ARD	EQU	001Fh		; Arrow down	'v'		representation
+			SCH_ARL	EQU	0011h		; Arrow left	'<'		representation
+			SCH_ARR	EQU	0010h		; Arrow right	'>'		representation
+			SCH_QOP	EQU	00B5h		; Quotation		open	representation
+			SCH_QCL	EQU	00C6h		; Quotation		close	representation
+		; Game actions
+			A_START	EQU	0000h		; Start	game
+			A_QUIT	EQU	0000h		; Quit	game
+			A_PAUSE	EQU	0000h		; Pause	game
+			A_UP	EQU	0000h		; Move	up
+			A_DOWN	EQU	0000h		; Move	down
+			A_LEFT	EQU	0000h		; Move	left
+			A_RIGHT	EQU	0000h		; Move	right
+		; Game conditions
+			COND_WA	EQU	1			; Launching (waiting)
+			COND_RU	EQU	2			; Running (launched)
+			COND_PA	EQU	3			; Paused
+			COND_GO	EQU	4			; Game over
 	; Constants
 		.const
 		ci_lim_x_r	dw	79													; Real limit of X-axis
 		ci_lim_y_r	dw	24													; Real limit of Y-axis
-		ci_lim_x_g	dw	77													; Game limit of X-axis
-		ci_lim_y_g	dw	?													; Game limit of Y-axis
+		ci_lim_x_g	dw	39													; Game limit of X-axis
+		ci_lim_y_g	dw	14													; Game limit of Y-axis
 		; Messages
 			cs_cnt1	db	"~  Welcome to          ~", NUL
 			cs_snak	db	"SNAK E", NUL
-			cs_cnt2	db	"~    Score:            ~", NUL
+			cs_cnt2	db	"~   Score:             ~", NUL
 			cs_lft1	db	"Move, eat, grow and", NUL
 			cs_lft2	db	"try to beat the score.", NUL
 			cs_rgh1	db	"The author:", NUL
 			cs_rgh2	db	"Thanks to :", NUL
 			cs_tmur	db	"T MUR", NUL
 			cs_rakx	db	"RA K 99X", NUL
+			cs_bt0t	db	"[ENTER]    ", NUL
+			cs_bt0b	db	"Start    ", NUL
+			cs_bt1t	db	"[SPACE TAB]", NUL
+			cs_bt1b	db	"Pause    ", NUL
+			cs_bt2t	db	"[", SCH_ARU," W]", NUL
+			cs_bt2b	db	"Up", NUL
+			cs_bt3t	db	"[", SCH_ARD," S]", NUL
+			cs_bt3b	db	"Down", NUL
+			cs_bt4t	db	"[", SCH_ARL," A]", NUL
+			cs_bt4b	db	"Left", NUL
+			cs_bt5t	db	"[", SCH_ARR," D]", NUL
+			cs_bt5b	db	"Right", NUL
+			cs_bt6t	db	"[ESCAPE Q]", NUL
+			cs_bt6b	db	"Quit", NUL
+			cs_bt00	db	"Restart ", NUL
+			cs_bt11	db	"Continue", NUL
+			cs_st_w	db	SCH_QOP, " Status:              ", SCH_QCL, NUL
+			cs_st_k	db	SCH_QOP, " Key logger:          ", SCH_QCL, NUL
+		; Status
+			stat_wa	db	"Waiting... ", NUL
+			stat_ru	db	"Running... ", NUL
+			stat_pa	db	"Paused.    ", NUL
+			stat_go	db	"Game over. ", NUL
+			stat_tp	db	"Teleported.", NUL
+			stat_ap	db	"+ Apple... ", NUL
+			stat_ns	db	"New score! ", NUL
 	; Variables
 		.data
 		vi_loc		dw	?													; Location of character in video memory
@@ -412,6 +469,9 @@
 			style_gmbox	dw	?
 			style_snake	dw	?
 			style_apple	dw	?
+		; Game variables
+			vi_key		dw	?
+			vi_cond		dw	?
 	; Macro
 		; Change video mode
 			m_vmode macro mp_mode
@@ -462,6 +522,25 @@
 				mov mp_attr_loc, DX	; Save attributes
 				pop DX
 			endm
+		; Set status
+			m_set_status macro mp_status
+				m_place_s_by_xy mp_status, style_simpl,	12,	24
+			endm
+		; Place character in the game
+			m_place_in_game macro mp_char, mp_style, mp_game_x, mp_game_y
+				push AX DX
+				mov AX, mp_game_x
+				mov DL, 02h
+				mul DL
+				mov DX, mp_game_y
+				add DX, 06h
+				xor AH, AH
+				xor DH, DH
+				m_place_c_by_xy mp_char, mp_style, AX, DX
+				inc AX
+				m_place_c_by_xy mp_char, mp_style, AX, DX
+				pop DX AX
+			endm
 	; Procedures
 		.code
 		start:
@@ -481,8 +560,8 @@
 					m_style_calc CLR_BRW, CLR_NOT, CLR_BLK, CLR_NOT, style_timur
 					m_style_calc CLR_GRA, CLR_BRG, CLR_BLK, CLR_NOT, style_activ
 					m_style_calc CLR_GRA, CLR_BRG, CLR_BLK, CLR_BLN, style_blink
-					m_style_calc CLR_BLK, CLR_BRG, CLR_BRW, CLR_NOT, style_gmbox
-					m_style_calc CLR_BLK, CLR_BRG, CLR_GRN, CLR_NOT, style_snake
+					m_style_calc CLR_BLK, CLR_NOT, CLR_BRW, CLR_NOT, style_gmbox
+					m_style_calc CLR_BLK, CLR_NOT, CLR_GRN, CLR_NOT, style_snake
 					m_style_calc CLR_RED, CLR_BRG, CLR_BLK, CLR_NOT, style_apple
 				; Print the frameboox
 					; Printing lines macro
@@ -511,10 +590,10 @@
 					; Print unique characters
 						m_place_c_by_xy BX_TL, style_frame,		0,	0
 						m_place_c_by_xy BX_TR, style_frame,		79,	0
-						m_place_c_by_xy BX_ML, style_frame,		0,	5
-						m_place_c_by_xy BX_MR, style_frame,		79,	5
-						m_place_c_by_xy BX_ML, style_frame,		0,	21
-						m_place_c_by_xy BX_MR, style_frame,		79,	21
+						m_place_c_by_xy BX_BL, style_frame,		0,	5
+						m_place_c_by_xy BX_BR, style_frame,		79,	5
+						m_place_c_by_xy BX_TL, style_frame,		0,	21
+						m_place_c_by_xy BX_TR, style_frame,		79,	21
 						m_place_c_by_xy BX_BL, style_frame,		0,	24
 						m_place_c_by_xy BX_BR, style_frame,		79,	24
 						m_place_c_by_xy BX_TB, style_frame,		25,	0
@@ -535,39 +614,182 @@
 						m_place_s_by_xy cs_rgh1, style_simpl,	57,	2
 						m_place_s_by_xy cs_rgh2, style_simpl,	57,	3
 						m_place_s_by_xy cs_tmur, style_timur,	69,	2
-						m_place_c_by_xy SCH_I,   style_i_stl	70,	2
-						m_place_c_by_xy SCH_I,   style_i_stl	74,	2
+						m_place_c_by_xy SCH_I,   style_i_stl,	70,	2
+						m_place_c_by_xy SCH_I,   style_i_stl,	74,	2
 						m_place_s_by_xy cs_rakx, style_title,	69,	3
-						m_place_c_by_xy SCH_I,   style_i_stl	71,	3
-						m_place_c_by_xy SCH_I,   style_i_stl	73,	3
+						m_place_c_by_xy SCH_I,   style_i_stl,	71,	3
+						m_place_c_by_xy SCH_I,   style_i_stl,	73,	3
 					; Bottomn box
+						; Start
+							m_place_s_by_xy cs_bt0t, style_activ,	2,	22
+							;m_place_c_by_xy '/',    style_simpl,	8,	22
+							m_place_s_by_xy cs_bt0b, style_simpl,	2,	23
+						; Up
+							m_place_s_by_xy cs_bt2t, style_activ,	15,	22
+							m_place_c_by_xy '/',     style_simpl,	17,	22
+							m_place_s_by_xy cs_bt2b, style_simpl,	15,	23
+						; Down
+							m_place_s_by_xy cs_bt3t, style_activ,	28,	22
+							m_place_c_by_xy '/',     style_simpl,	30,	22
+							m_place_s_by_xy cs_bt3b, style_simpl,	28,	23
+						; Left
+							m_place_s_by_xy cs_bt4t, style_activ,	41,	22
+							m_place_c_by_xy '/',     style_simpl,	43,	22
+							m_place_s_by_xy cs_bt4b, style_simpl,	41,	23
+						; Right
+							m_place_s_by_xy cs_bt5t, style_activ,	54,	22
+							m_place_c_by_xy '/',     style_simpl,	56,	22
+							m_place_s_by_xy cs_bt5b, style_simpl,	54,	23
+						; Quit
+							m_place_s_by_xy cs_bt6t, style_activ,	67,	22
+							m_place_c_by_xy '/',     style_simpl,	74,	22
+							m_place_s_by_xy cs_bt6b, style_simpl,	67,	23
 					; Status bar
+						; Status
+							m_place_s_by_xy cs_st_w, style_frame,	2,	24
+						; Key
+							m_place_s_by_xy cs_st_k, style_frame,	54,	24
 				; Print the game:
 					; Game box
 						; Printing lines macro
 							; Print horisontal lines macro
 							m_print_horizontal_line macro mp_loop_name, mp_from_x, mp_to_x, mp_const_y
 								m_from_to_loop mp_loop_name, mp_from_x, mp_to_x, DI
-									m_place_c_by_xy ' ', style_gmbox, DI, mp_const_y
+									m_place_c_by_xy ' ', style_snake, DI, mp_const_y
 								loop mp_loop_name
 							endm
 							; Print vertical lines macro
 							m_print_vertical_line macro mp_loop_name, mp_from_y, mp_to_y, mp_const_x
 								m_from_to_loop mp_loop_name, mp_from_y, mp_to_y, DI
-									m_place_c_by_xy ' ', style_gmbox, mp_const_x, DI
+									m_place_c_by_xy ' ', style_snake, mp_const_x, DI
 								loop mp_loop_name
 							endm
 						; Printing lines
 							m_print_horizontal_line	l_y__6_loop,	1,	78,	6
 							m_print_horizontal_line	l_y_20_loop,	1,	78,	20
+							m_print_vertical_line	l_x__0_loop2,	6,	20,	0
 							m_print_vertical_line	l_x__1_loop,	6,	20,	1
 							m_print_vertical_line	l_x_78_loop,	6,	20,	78
+							m_print_vertical_line	l_x_79_loop2,	6,	20,	79
+						; REMOVE BEFORE
+						; Printing lines macro
+							; Print horisontal lines macro
+							m_print_horizontal_line macro mp_loop_name, mp_from_x, mp_to_x, mp_const_y
+								m_from_to_loop mp_loop_name, mp_from_x, mp_to_x, DI
+									m_place_in_game ' ', style_gmbox, DI, mp_const_y
+								loop mp_loop_name
+							endm
+							; Print vertical lines macro
+							m_print_vertical_line macro mp_loop_name, mp_from_y, mp_to_y, mp_const_x
+								m_from_to_loop mp_loop_name, mp_from_y, mp_to_y, DI
+									m_place_in_game ' ', style_gmbox, mp_const_x, DI
+								loop mp_loop_name
+							endm
+						; Printing lines
+							;m_print_horizontal_line	l_game_y__0_loop,	0,	39,	0
+							;m_print_horizontal_line	l_game_y_14_loop,	0,	39,	14
+							;m_print_vertical_line	l_game_x__0_loop,	0,	14,	0
+							;m_print_vertical_line	l_game_x_39_loop,	0,	14,	39
 					; Game
-			; Upload results
-			; Return
-				m_get_c AX
-				m_print_s cs_end
-				m_return NUL
+				; Launch the game
+					; Set starting condition
+						mov vi_cond, COND_WA
+						m_set_status stat_wa
+					; Infinite loop
+						l_game_loop:
+							; Get key
+								call p_get_key
+							; Process key (switch-case)
+								m_switch vi_key
+									cmp vi_cond, COND_RU
+									je l_skip_enter
+									cmp vi_cond, COND_PA
+									je l_skip_enter
+								m_case CR, l_enter_label
+									l_skip_enter:
+									cmp vi_cond, COND_RU
+									jne l_skip_pause
+								m_case SPC, l_pause_label
+								m_case TAB, l_pause_label
+									l_skip_pause:
+									cmp vi_cond, COND_PA
+									jne l_skip_continue
+								m_case SPC, l_continue_label
+								m_case TAB, l_continue_label
+									l_skip_continue:
+								m_case SCP, l_pre_esc_label
+								m_case 'Q', l_pre_esc_label
+								m_case 'q', l_pre_esc_label
+									cmp vi_cond, COND_RU
+									jne l_skip_controls
+								m_case SCH_ARU, l_w_key_label
+								m_case 'W', l_w_key_label
+								m_case 'w', l_w_key_label
+								m_case SCH_ARD, l_w_key_label
+								m_case 'S', l_s_key_label
+								m_case 's', l_s_key_label
+								m_case SCH_ARL, l_w_key_label
+								m_case 'A', l_a_key_label
+								m_case 'a', l_a_key_label
+								m_case SCH_ARD, l_w_key_label
+								m_case 'D', l_d_key_label
+								m_case 'd', l_d_key_label
+									l_skip_controls:
+								m_default_case l_game_loop
+					; Cases
+						; Controls
+							l_w_key_label:
+							l_s_key_label:
+							l_a_key_label:
+							l_d_key_label:
+								jmp l_game_loop
+						; Enter trigger
+							l_enter_label:
+								mov vi_cond, COND_RU
+								m_set_status stat_ru
+								; Print "pause"
+									m_place_s_by_xy cs_bt1t, style_activ,	2,	22
+									m_place_c_by_xy '/',     style_simpl,	8,	22
+									m_place_s_by_xy cs_bt1b, style_simpl,	2,	23
+								jmp l_game_loop
+						; Pause-continue trigger
+							l_pause_label:
+								mov vi_cond, COND_PA
+								m_set_status stat_pa
+								; Print "continue"
+									m_place_s_by_xy cs_bt1t, style_activ,	2,	22
+									m_place_c_by_xy '/',     style_simpl,	8,	22
+									m_place_s_by_xy cs_bt11, style_simpl,	2,	23
+								jmp l_game_loop
+							l_continue_label:
+								mov vi_cond, COND_RU
+								m_set_status stat_ru
+								; Print "pause"
+									m_place_s_by_xy cs_bt1t, style_activ,	2,	22
+									m_place_c_by_xy '/',     style_simpl,	8,	22
+									m_place_s_by_xy cs_bt1b, style_simpl,	2,	23
+								jmp l_game_loop
+						; Escape trigger
+							l_pre_esc_label:
+								mov AX, vi_cond
+								; Print "restart"
+									m_place_s_by_xy cs_bt0t, style_activ,	2,	22
+									;m_place_c_by_xy '/',    style_simpl,	8,	22
+									m_place_s_by_xy cs_bt00, style_simpl,	2,	23
+								mov vi_cond, COND_GO
+								m_set_status stat_go
+								cmp AX, COND_WA
+								je l_quit_label
+								cmp AX, COND_GO
+								je l_quit_label
+								jmp l_game_loop
+				; Quit the game
+					l_quit_label:
+						; Set video mode
+							m_vmode VM_CL
+						; Return
+							m_print_s cs_end
+							m_return NUL
 		; Convert coordinates to location
 			p_conv_xy2loc proc near
 					push BP
@@ -643,6 +865,33 @@
 					pop BP
 					ret ARG3
 			p_place_s_by_loc endp
+		; Get key from the keyboard buffer
+			p_get_key proc near
+				; Start
+				; Save registers
+					push AX
+				; Load parameters
+				; Procedure
+					; Check if there is a key available in buffer
+						mov AH, 01h
+						mov AL, 00h
+						int 16h
+						m_clear AL
+						jnz l_get_key_end
+					; Get the key if available
+						mov AH, 00h
+						mov AL, 00h
+						int 16h
+				; Upload results
+					l_get_key_end:
+						m_clear AH
+						mov vi_key, AX
+						m_place_c_by_xy vi_key, style_simpl, 68, 24
+				; Restore registers
+					pop AX
+				; Return
+					ret
+			p_get_key endp
 		; [Description]
 			;p_[name] proc near
 				; Start
