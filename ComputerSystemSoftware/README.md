@@ -171,12 +171,6 @@ dirwalk [dir] [options]
 
 Суть обработки — любая асинхронная работа, например перестановка пар длинных беззнаковых целых по возрастанию (частичная сортировка). Оставшиеся байты последнего раунда остаются как есть.
 
-# Lab 10
-
-## 
-
-### Terms of reference 
-
 # Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
