@@ -159,7 +159,16 @@ void T_CLASS(TFilesystemStats, print)(const TFilesystemStats* const entity)
 	T_CLASS(TConsole, print)(kLog, "\n");
 }
 
-TString parce_path(TMessage path);
+TString parce_path(TMessage path)
+{
+	size_t start = 0u, index = 0u;
+	FOR_EACH_ITERATOR_FROM(character, TString, char, (TString)path)
+	{
+		if (*character == '/') start = index + 1;
+		++index;
+	}
+	return T_CLASS(TString, substring)(path, start, T_CLASS(TString, size)(path));
+}
 
 void T_CLASS(TDirContent, dirwalk)(TDirContent const content, const TBool follow_dirs, void (*action)(const TFilesystemStats* const), const TBool dirs_before_files)
 {
